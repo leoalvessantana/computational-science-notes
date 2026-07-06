@@ -43,9 +43,9 @@ A classical bit is represented as:
 
 A qubit is represented as a linear combination of basis states:
 
-\[
+$
 |\psi\rangle = \alpha |0\rangle + \beta |1\rangle
-\]
+$
 
 where:
 

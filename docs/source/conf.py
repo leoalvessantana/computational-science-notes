@@ -35,3 +35,6 @@ pygments_style = "monokai"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 html_theme = 'furo'  # Visual moderno e clean
 html_static_path = ['_static']
+
+def setup(app):
+    app.add_css_file('custom.css')

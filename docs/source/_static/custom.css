@@ -1,0 +1,5 @@
+/* Esconde o bloco de anúncios do Read the Docs */
+.ethical-sidebar,
+[id^="ethicalads"] {
+    display: none !important;
+}
