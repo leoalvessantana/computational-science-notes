@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="prev" title="Computational Science Notes" href="../index.html">
 
     <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
-        <title>Chapter 1: Introduction to Quantum Computing - Computational Science Notes 0.1 documentation</title>
+        <title>Chapter 1 — Introduction - Computational Science Notes 0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5349f25f" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
@@ -195,7 +195,7 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Quantum Computing</span></p>
 <ul class="current">
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Chapter 1: Introduction to Quantum Computing</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Chapter 1 — Introduction</a></li>
 </ul>
 
 </div>
@@ -234,89 +234,337 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="chapter-1-introduction-to-quantum-computing">
-<h1>Chapter 1: Introduction to Quantum Computing<a class="headerlink" href="#chapter-1-introduction-to-quantum-computing" title="Link to this heading">¶</a></h1>
-<hr class="docutils" />
-<section id="motivation">
-<h2>1. Motivation<a class="headerlink" href="#motivation" title="Link to this heading">¶</a></h2>
-<p>Classical computers have transformed the modern world, but they still struggle with certain types of problems such as:</p>
-<ul class="simple">
-<li><p>Simulating quantum systems</p></li>
-<li><p>Factoring large numbers efficiently</p></li>
-<li><p>Searching unstructured databases at scale</p></li>
-</ul>
-<p>Quantum computing emerges as a new computational paradigm that leverages the principles of quantum mechanics to process information in fundamentally different ways.</p>
+          <section id="chapter-1-introduction">
+<h1>Chapter 1 — Introduction<a class="headerlink" href="#chapter-1-introduction" title="Link to this heading">¶</a></h1>
+<!-- ```{contents}
+:local:
+:depth: 2
+``` -->
+<section id="why-another-book">
+<h2>1. Why Another Book?<a class="headerlink" href="#why-another-book" title="Link to this heading">¶</a></h2>
+<p>Quantum computing is one of the most fascinating fields in modern science. It brings together physics, mathematics, computer science, and information theory into a completely new way of thinking about computation.</p>
+<p>Unfortunately, many learning resources assume too much prior knowledge or present the subject in a highly mathematical way from the very beginning.</p>
+<p>This book takes a different approach. The goal is to build intuition first, introduce mathematics when it becomes necessary, and always connect abstract concepts to practical examples.</p>
 </section>
-<hr class="docutils" />
-<section id="intuition">
-<h2>2. Intuition<a class="headerlink" href="#intuition" title="Link to this heading">¶</a></h2>
-<p>In classical computing, the basic unit of information is a <strong>bit</strong>, which can be either:</p>
-<ul class="simple">
-<li><p>0</p></li>
-<li><p>1</p></li>
-</ul>
-<p>In quantum computing, the basic unit is a <strong>qubit</strong>, which behaves differently.</p>
-<p>A qubit is not limited to being just 0 or 1. Instead, it can exist in a <strong>superposition</strong> of both states at the same time.</p>
-<p>A helpful intuition is:</p>
-<blockquote>
-<div><p>A classical bit is like a coin lying on a table (heads or tails).
-A qubit is like a spinning coin — not yet decided.</p>
-</div></blockquote>
-<p>However, when we measure a qubit, we always get a classical result: 0 or 1.</p>
-</section>
-<hr class="docutils" />
-<section id="mathematical-formulation">
-<h2>3. Mathematical Formulation<a class="headerlink" href="#mathematical-formulation" title="Link to this heading">¶</a></h2>
-<p>A classical bit is represented as:</p>
-<ul class="simple">
-<li><p>0</p></li>
-<li><p>1</p></li>
-</ul>
-<p>A qubit is represented as a linear combination of basis states:</p>
-<p>$
-|\psi\rangle = \alpha |0\rangle + \beta |1\rangle
-$</p>
-<p>where:</p>
-<ul class="simple">
-<li><p>( \alpha ) and ( \beta ) are complex numbers</p></li>
-<li><p>( |\alpha|^2 ) is the probability of measuring 0</p></li>
-<li><p>( |\beta|^2 ) is the probability of measuring 1</p></li>
-</ul>
-<p>Normalization condition:</p>
-<p>[
-|\alpha|^2 + |\beta|^2 = 1
-]</p>
-<p>This ensures that total probability is always 1.</p>
-</section>
-<hr class="docutils" />
-<section id="visualization">
-<h2>4. Visualization<a class="headerlink" href="#visualization" title="Link to this heading">¶</a></h2>
-<p>We can visualize a qubit using the <strong>Bloch Sphere</strong> representation.</p>
-<ul class="simple">
-<li><p>The north pole corresponds to |0⟩</p></li>
-<li><p>The south pole corresponds to |1⟩</p></li>
-<li><p>Any point on the sphere surface represents a valid qubit state</p></li>
-</ul>
-<p>This geometric interpretation helps us understand quantum operations as rotations on a sphere.</p>
-</section>
-<hr class="docutils" />
-<section id="python-example">
-<h2>5. Python Example<a class="headerlink" href="#python-example" title="Link to this heading">¶</a></h2>
-<p>We can simulate a simple qubit using NumPy.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<section id="from-classical-physics-to-quantum-mechanics">
+<h2>2. From Classical Physics to Quantum Mechanics<a class="headerlink" href="#from-classical-physics-to-quantum-mechanics" title="Link to this heading">¶</a></h2>
+<section id="the-rise-of-classical-physics">
+<h3>2.1 The Rise of Classical Physics<a class="headerlink" href="#the-rise-of-classical-physics" title="Link to this heading">¶</a></h3>
+<p>For centuries, our understanding of the universe was shaped by <strong>Classical Physics</strong>. Its foundations were laid in the seventeenth century, when Isaac Newton introduced a mathematical framework capable of describing the motion of objects with remarkable precision.</p>
+<p>Newton’s laws of motion and his law of universal gravitation explained phenomena ranging from the fall of an apple to the orbits of the planets. For the first time, nature appeared to obey a small set of elegant mathematical laws.</p>
+<p>This success inspired a powerful idea: if we know the current state of a system and the laws governing it, we should be able to predict its future. The universe came to be viewed as a vast deterministic clockwork, where every event followed inevitably from previous conditions.</p>
+<!-- ```{figure} /_static/figures/ch1_fig2-1.png
+:name: fig-2-1
+:alt: Newton's deterministic universe
 
-<span class="c1"># define amplitudes</span>
-<span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">beta</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+Newton's deterministic universe. Illustration showing Newton, planetary motion.
+``` -->
+</section>
+<section id="the-expansion-of-classical-physics">
+<h3>2.2 The Expansion of Classical Physics<a class="headerlink" href="#the-expansion-of-classical-physics" title="Link to this heading">¶</a></h3>
+<p>Over the next two centuries, classical physics continued to expand. Thermodynamics described heat and energy, while James Clerk Maxwell unified electricity and magnetism into a single theory.</p>
+<p>Maxwell’s equations not only explained electrical and magnetic phenomena but also revealed that light itself is an electromagnetic wave. This remarkable unification demonstrated that seemingly unrelated natural phenomena could be described by a single mathematical framework.</p>
+<p>By the end of the nineteenth century, classical physics had achieved extraordinary success. It accurately described the motion of celestial bodies, the behavior of heat engines, the propagation of light, and countless everyday phenomena.</p>
+<p>Many scientists believed that physics was essentially complete, with only a few unresolved questions remaining.</p>
+<!-- ```{figure} /_static/figures/ch1_fig2-2.png
+:name: fig-2-2
+:alt: The triumph of Classical Physics
 
-<span class="c1"># probabilities</span>
-<span class="n">p0</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-<span class="n">p1</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+The triumph of Classical Physics. Illustration combining steam engines, electricity, magnetism, and electromagnetic waves.
+``` -->
+<p>However, nature still had a few surprises in store.</p>
+</section>
+<section id="the-first-cracks">
+<h3>2.3 The First Cracks<a class="headerlink" href="#the-first-cracks" title="Link to this heading">¶</a></h3>
+<p>Despite its extraordinary success, classical physics could not explain several experimental observations.</p>
+<p>At first, these discrepancies appeared to be isolated problems. However, they would eventually reveal that the classical description of nature was fundamentally incomplete.</p>
+<p>The first major challenge came from the study of <strong>blackbody radiation</strong>.</p>
+<p>According to classical physics, a hot object should emit an infinite amount of energy at very short wavelengths — an impossible prediction known as the <strong>ultraviolet catastrophe</strong>.</p>
+<p>Only a few years later, another puzzle emerged: the <strong>photoelectric effect</strong>, where light could eject electrons from a metal surface in ways that classical wave theory failed to explain.</p>
+<p>At nearly the same time, physicists struggled to understand why atoms are stable. According to classical electromagnetism, orbiting electrons should continuously lose energy and collapse into the nucleus. Yet atoms clearly exist.</p>
+<p>These and other puzzles suggested that something was fundamentally missing from our understanding of nature.</p>
+<!-- ```{figure} /_static/figures/ch1_fig2-3.png
+:name: fig-2-3
+:alt: The limitations of Classical Physics -->
+<!-- The limitations of Classical Physics. Timeline highlighting the blackbody radiation problem, the photoelectric effect, and atomic stability.
+``` -->
+</section>
+<section id="the-birth-of-quantum-mechanics">
+<h3>2.4 The Birth of Quantum Mechanics<a class="headerlink" href="#the-birth-of-quantum-mechanics" title="Link to this heading">¶</a></h3>
+<p>In 1900, Max Planck proposed a bold solution to the blackbody radiation problem. He suggested that energy is exchanged in discrete packets, later called <strong>quanta</strong>. Although introduced as a mathematical assumption, this idea marked the birth of quantum theory.</p>
+<p>Only five years later, Albert Einstein extended Planck’s hypothesis to explain the photoelectric effect, proposing that light itself behaves as if it were composed of individual particles, now known as <strong>photons</strong>.</p>
+<p>In 1913, Niels Bohr introduced a new model of the atom in which electrons occupy discrete energy levels, providing the first successful explanation for atomic stability.</p>
+<p>The revolution continued when Louis de Broglie proposed that matter, like light, also possesses wave-like properties. This surprising idea was later confirmed experimentally and became known as <strong>wave-particle duality</strong>.</p>
+<p>Building on these discoveries, Erwin Schrödinger developed the wave equation describing the evolution of quantum systems, while Werner Heisenberg introduced matrix mechanics and formulated the uncertainty principle. Finally, Paul Dirac unified many of these ideas into a powerful mathematical framework and developed the notation still widely used today.</p>
+<!-- ```{figure} /_static/figures/ch1_fig2-4.png
+:name: fig-2-4
+:alt: Timeline of the birth of Quantum Mechanics -->
+<!-- Timeline of the birth of Quantum Mechanics: Planck → Einstein → Bohr → de Broglie → Schrödinger → Heisenberg → Dirac.
+``` -->
+</section>
+<section id="a-new-picture-of-reality">
+<h3>2.5 A New Picture of Reality<a class="headerlink" href="#a-new-picture-of-reality" title="Link to this heading">¶</a></h3>
+<p>Together, these discoveries transformed our understanding of nature.</p>
+<p>The universe was no longer viewed as a perfectly predictable clockwork governed solely by classical laws. Instead, it became clear that, at microscopic scales, reality follows principles that differ profoundly from our everyday intuition.</p>
+<p>Concepts such as quantization, wave-particle duality, superposition, uncertainty, and probability became fundamental ingredients of the new theory.</p>
+<p>Quantum mechanics was not the result of a single discovery or the work of one scientist. It emerged over decades through the contributions of many researchers, forming one of the most successful scientific theories ever developed.</p>
+<p>Today, quantum mechanics provides the foundation for countless modern technologies, including lasers, semiconductors, magnetic resonance imaging, atomic clocks, and, ultimately, quantum computing.</p>
+<!-- ```{figure} /_static/figures/ch1_fig2-5.png
+:name: fig-2-5
+:alt: From Classical Physics to Quantum Mechanics
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Probability of 0:&quot;</span><span class="p">,</span> <span class="n">p0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Probability of 1:&quot;</span><span class="p">,</span> <span class="n">p1</span><span class="p">)</span>
+From Classical Physics to Quantum Mechanics.
+``` -->
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Classical Physics
+       │
+       ▼
+Unexplained Experiments
+       │
+       ▼
+Quantum Theory
+       │
+       ▼
+Quantum Mechanics
+       │
+       ▼
+Modern Quantum Technologies
 </pre></div>
 </div>
+</section>
+</section>
+<section id="from-quantum-mechanics-to-quantum-computing">
+<h2>3. From Quantum Mechanics to Quantum Computing<a class="headerlink" href="#from-quantum-mechanics-to-quantum-computing" title="Link to this heading">¶</a></h2>
+<section id="computation-is-physical">
+<h3>3.1 Computation Is Physical<a class="headerlink" href="#computation-is-physical" title="Link to this heading">¶</a></h3>
+<p>The development of quantum mechanics revolutionized our understanding of nature. But for several decades, these discoveries seemed to belong exclusively to physics.</p>
+<p>At first glance, quantum mechanics and computation appear to be unrelated fields. One describes the behavior of matter and energy at microscopic scales, while the other focuses on processing information.</p>
+<p>In reality, however, computation has always been constrained by the laws of physics.</p>
+<p>Every computer, from the earliest mechanical calculators to today’s most advanced supercomputers, is ultimately a physical machine. Every stored bit, every electrical signal, and every logical operation is implemented by a physical system obeying the laws of nature.</p>
+<p>The first electronic computers were built using vacuum tubes and, later, transistors. Although their architecture evolved dramatically over time, they all relied on the principles of classical physics and classical electronics.</p>
+<p>For decades, this distinction hardly mattered. Classical computers were extraordinarily successful, and classical physics provided an accurate description of the devices used to build them.</p>
+<p>But a natural question eventually emerged:</p>
+<blockquote class="epigraph">
+<div><p>If nature itself behaves according to the laws of quantum mechanics, shouldn’t computation also follow those same laws?</p>
+</div></blockquote>
+<p>This seemingly simple question would give rise to an entirely new model of computation.</p>
+<!-- ```{figure} /_static/figures/ch1_fig3-1.png
+:name: fig-3-1
+:alt: Computation as a physical process
+
+Computation as a physical process. Illustration showing the evolution from mechanical gears to vacuum tubes, transistors, integrated circuits, and finally quantum processors.
+``` -->
+</section>
+<hr class="docutils" />
+<section id="the-birth-of-quantum-computing">
+<h3>3.2 The Birth of Quantum Computing<a class="headerlink" href="#the-birth-of-quantum-computing" title="Link to this heading">¶</a></h3>
+<p>The first ideas connecting quantum mechanics and computation appeared in the early 1980s.</p>
+<p>In 1980, <strong>Paul Benioff</strong> demonstrated that a computer could, in principle, be described using the mathematical framework of quantum mechanics.</p>
+<p>Shortly afterward, in 1981, <strong>Richard Feynman</strong> made a profound observation. He argued that simulating quantum systems on classical computers becomes exponentially difficult as the size of the system increases. Since nature itself is quantum mechanical, he proposed building computers that operate according to quantum principles instead.</p>
+<p>This idea represented a radical shift in perspective. Rather than forcing classical computers to imitate quantum systems, why not build computers that are quantum from the beginning?</p>
+<p>A few years later, in 1985, <strong>David Deutsch</strong> introduced the concept of a universal quantum computer, providing the theoretical foundations for a completely new model of computation.</p>
+<p>Together, these ideas marked the birth of quantum computing as a scientific discipline.</p>
+<!-- ```{figure} /_static/figures/ch1_fig3-2.png
+:name: fig-3-2
+:alt: The birth of quantum computing
+
+The birth of quantum computing. Timeline: Benioff (1980) → Feynman (1981) → Deutsch (1985).
+``` -->
+</section>
+<hr class="docutils" />
+<section id="a-new-model-of-computation">
+<h3>3.3 A New Model of Computation<a class="headerlink" href="#a-new-model-of-computation" title="Link to this heading">¶</a></h3>
+<p>Quantum computers are not simply faster versions of classical computers.</p>
+<p>Instead, they process information using the principles of quantum mechanics. Their fundamental unit of information, the <strong>qubit</strong>, behaves according to quantum laws rather than classical ones.</p>
+<p>This allows quantum algorithms to exploit phenomena such as superposition, interference, and entanglement to solve certain problems in ways that have no classical counterpart.</p>
+<p>It is important to emphasize, however, that quantum computers are <strong>not intended to replace classical computers</strong>. Classical computers remain the best choice for the overwhelming majority of everyday computational tasks.</p>
+<p>Instead, quantum computers are specialized devices designed to tackle problems that become prohibitively difficult for classical machines, such as quantum simulation, integer factorization, certain optimization problems, and other computational challenges that arise naturally in science and engineering.</p>
+<p>The following chapters will gradually introduce the concepts needed to understand how these remarkable machines work, beginning with the fundamental question:</p>
+<blockquote>
+<div><p><strong>What makes a quantum computer different from a classical one?</strong></p>
+</div></blockquote>
+<!-- ```{figure} /_static/figures/ch1_fig3-3.png
+:name: fig-3-3
+:alt: From Physics to Computation
+
+From Physics to Computation. A conceptual diagram illustrating how new physical principles gave rise to a new model of computation.
+``` -->
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Classical Physics
+         │
+         ▼
+Classical Computers
+         │
+         ▼
+Quantum Mechanics
+         │
+         ▼
+Quantum Computing
+</pre></div>
+</div>
+</section>
+</section>
+<section id="why-do-we-need-quantum-computers">
+<h2>4. Why Do We Need Quantum Computers?<a class="headerlink" href="#why-do-we-need-quantum-computers" title="Link to this heading">¶</a></h2>
+<p>If quantum computers are based on fundamentally different physical principles, an important question naturally follows:</p>
+<p><strong>Why do we need them?</strong></p>
+<p>The answer is not that classical computers are inadequate. On the contrary, they are among the greatest technological achievements in human history. From smartphones and laptops to satellites and supercomputers, classical computers solve billions of problems every day with extraordinary efficiency.</p>
+<p>For the overwhelming majority of computational tasks, classical computers are exactly the right tool.</p>
+<p>However, not every problem scales gracefully.</p>
+<p>As problems become larger and more complex, the number of possible solutions often grows exponentially. This phenomenon, known as the <strong>combinatorial explosion</strong>, quickly makes many computational tasks intractable, even for the world’s most powerful supercomputers.</p>
+<p>For some problems, adding more processors or building faster hardware is simply not enough.</p>
+<p>This is where quantum computing becomes interesting.</p>
+<p>By exploiting the laws of quantum mechanics, quantum computers offer fundamentally different ways of processing information. For specific classes of problems, this approach may dramatically reduce the computational resources required.</p>
+<p>Some of the most promising applications include:</p>
+<ul class="simple">
+<li><p>Integer factorization, which has important implications for modern cryptography.</p></li>
+<li><p>Quantum simulation of molecules and materials, enabling advances in chemistry, physics, and drug discovery.</p></li>
+<li><p>Certain optimization problems arising in logistics, finance, and engineering.</p></li>
+<li><p>Selected machine learning and data analysis tasks, although this remains an active area of research.</p></li>
+</ul>
+<p>It is important to keep realistic expectations.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Quantum computers are not replacements for classical computers.</p>
+</div>
+<p>They are <strong>specialized computers designed for specific kinds of problems</strong>. Just as graphics processing units (GPUs) complement traditional CPUs rather than replacing them, quantum processors are expected to work alongside classical computers, each being used where it performs best.</p>
+<!-- ```{figure} /_static/figures/ch1_fig4-1.png
+:name: fig-4-1
+:alt: Classical vs. Quantum Computing
+
+Classical vs. Quantum Computing. Quantum computers complement rather than replace classical computers. -->
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+```text
+Everyday Tasks
+         │
+         ▼
+Classical Computers
+
+Extremely Complex Problems
+         │
+         ▼
+Quantum Computers
+</pre></div>
+</div>
+</section>
+<section id="bits-and-qubits-a-first-look">
+<h2>5. Bits and Qubits: A First Look<a class="headerlink" href="#bits-and-qubits-a-first-look" title="Link to this heading">¶</a></h2>
+<p>Every model of computation is built upon a fundamental unit of information.</p>
+<p>In classical computing, this unit is the <strong>bit</strong>.</p>
+<p>A bit can exist in one of two possible states, conventionally represented as <strong>0</strong> or <strong>1</strong>. Every piece of digital information — from text and images to videos and software — is ultimately encoded as long sequences of bits.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Bit
+
+0
+
+1
+</pre></div>
+</div>
+<p>Quantum computers, however, are built from a different unit of information known as the <strong>qubit</strong>, or <strong>quantum bit</strong>.</p>
+<p>Unlike a classical bit, a qubit is governed by the laws of quantum mechanics. Rather than being limited to only two discrete states, its state can be represented geometrically as a point on the surface of a sphere known as the <strong>Bloch Sphere</strong>.</p>
+<!-- ```{figure} /_static/figures/ch1_fig5-1.png
+:name: fig-5-1
+:alt: A classical bit and a qubit
+
+A classical bit and a qubit. Illustration comparing a classical bit (0 or 1) with a qubit represented on the Bloch Sphere.
+``` -->
+<p>At this stage, there is no need to understand the mathematics behind this representation. The Bloch Sphere simply provides a useful way to visualize the state of a single qubit.</p>
+<p>The mathematical meaning of qubits, quantum states, and the Bloch Sphere will be developed progressively throughout the following chapters.</p>
+</section>
+<section id="how-do-quantum-computers-compute">
+<h2>6. How Do Quantum Computers Compute?<a class="headerlink" href="#how-do-quantum-computers-compute" title="Link to this heading">¶</a></h2>
+<p>Although quantum computers rely on very different physical principles, their overall computational workflow is surprisingly similar to that of classical computers.</p>
+<p>A computation begins with classical information provided by the user. This information is then encoded into the state of one or more qubits.</p>
+<p>Next, the quantum processor applies a sequence of operations — known as <strong>quantum gates</strong> — that manipulate the quantum state according to the desired algorithm.</p>
+<p>Finally, the qubits are measured, converting the quantum information back into classical information that can be interpreted by the user.</p>
+<p>The overall process can be summarized as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Classical Input
+        │
+        ▼
+Encode into Qubits
+        │
+        ▼
+Quantum Gates
+        │
+        ▼
+Measurement
+        │
+        ▼
+Classical Output
+</pre></div>
+</div>
+<p>At first glance, this workflow may appear simple. However, the behavior of qubits during computation is fundamentally different from that of classical bits, allowing quantum algorithms to exploit uniquely quantum phenomena.</p>
+<p>The following chapters will gradually introduce each stage of this process in detail.</p>
+<!-- 
+```{figure} /_static/figures/ch1_fig6-1.png
+:name: fig-6-1
+:alt: The quantum computation workflow
+
+The quantum computation workflow.
+``` -->
+</section>
+<section id="what-you-will-learn">
+<h2>7. What You Will Learn<a class="headerlink" href="#what-you-will-learn" title="Link to this heading">¶</a></h2>
+<p>This book is designed to build your understanding progressively.</p>
+<p>Rather than assuming prior knowledge of quantum mechanics or advanced mathematics, we will introduce each concept exactly when it becomes necessary, always moving from intuition toward formalism — never the other way around.</p>
+<p>To keep this progression easy to navigate, the book is organized into six parts. Each part groups a set of closely related chapters around a single guiding question.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Part</p></th>
+<th class="head"><p>Guiding Question</p></th>
+<th class="head"><p>Topics Covered</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>I. Motivation</strong></p></td>
+<td><p>Why does quantum computing matter?</p></td>
+<td><p>Why Quantum Computing?</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>II. Mathematical Foundations</strong></p></td>
+<td><p>What language do we need to describe quantum states?</p></td>
+<td><p>Linear Algebra · Complex Numbers · Vector Spaces · Dirac Notation</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>III. Quantum Information</strong></p></td>
+<td><p>What is a qubit, and how does it differ from a bit?</p></td>
+<td><p>Classical Bits · Qubits · Bloch Sphere · Quantum Gates</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>IV. Multi-Qubit Systems</strong></p></td>
+<td><p>What happens when qubits interact?</p></td>
+<td><p>Multiple Qubits · Tensor Products · Entanglement · Measurement · Quantum Circuits · No-Cloning Theorem</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>V. Quantum Algorithms</strong></p></td>
+<td><p>How do quantum computers gain an advantage?</p></td>
+<td><p>Computational Theory · Algorithm Analysis · Grover’s Algorithm · Deutsch–Jozsa · Quantum Fourier Transform · Shor’s Algorithm</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>VI. Quantum Applications</strong></p></td>
+<td><p>Where is this heading?</p></td>
+<td><p>Quantum Optimization · Variational Quantum Algorithms · Quantum Machine Learning · Quantum Neural Networks</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>At a high level, this progression looks as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Motivation → Mathematics → Quantum Information → Multi-Qubit Systems → Algorithms → Applications
+</pre></div>
+</div>
+<p>Each part builds strictly on the ones before it: the mathematics introduced in Part II is what makes qubits (Part III) precise; qubits are what make entanglement and circuits (Part IV) meaningful; and only once circuits are understood do algorithms (Part V) and their applications (Part VI) start to make real sense.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This structure is a <strong>map</strong>, not a strict contract — some chapters may be reordered or expanded as the book evolves, but the overall logic (concept before formalism, formalism before algorithm) will remain the guiding principle throughout.</p>
+</div>
+</section>
+<section id="prerequisites">
+<h2>8. Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">¶</a></h2>
+<p>One of the goals of this book is to make quantum computing accessible to readers from different backgrounds.</p>
+<p>You do <strong>not</strong> need prior knowledge of quantum mechanics to follow the material.</p>
+<p>Likewise, the mathematical concepts required throughout the book — including linear algebra, complex numbers, and vector spaces — will be introduced progressively as they become relevant.</p>
+<p>A basic familiarity with high school mathematics and elementary programming concepts will be helpful, but curiosity and willingness to learn are far more important than prior expertise.</p>
+</section>
+<section id="final-thoughts">
+<h2>9. Final Thoughts<a class="headerlink" href="#final-thoughts" title="Link to this heading">¶</a></h2>
+<p>Quantum computing challenges many of the intuitions we develop from everyday life.</p>
+<p>Concepts such as <strong>superposition</strong>, <strong>interference</strong>, and <strong>entanglement</strong> may initially seem strange or even counterintuitive. Yet these ideas emerge naturally from the mathematical framework of quantum mechanics and have been confirmed by decades of experimental evidence.</p>
+<p>Throughout this book, our goal is not merely to present equations or describe algorithms. Instead, we aim to develop an intuitive understanding of why quantum computing works, how its mathematical foundations arise, and what makes it fundamentally different from classical computation.</p>
+<p>Learning quantum computing is not simply about mastering a new technology — it is about discovering a new way of thinking about information, computation, and the physical world.</p>
+<p>Welcome to the beginning of that journey.</p>
 </section>
 </section>
 
@@ -367,12 +615,28 @@ $</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Chapter 1: Introduction to Quantum Computing</a><ul>
-<li><a class="reference internal" href="#motivation">1. Motivation</a></li>
-<li><a class="reference internal" href="#intuition">2. Intuition</a></li>
-<li><a class="reference internal" href="#mathematical-formulation">3. Mathematical Formulation</a></li>
-<li><a class="reference internal" href="#visualization">4. Visualization</a></li>
-<li><a class="reference internal" href="#python-example">5. Python Example</a></li>
+<li><a class="reference internal" href="#">Chapter 1 — Introduction</a><ul>
+<li><a class="reference internal" href="#why-another-book">1. Why Another Book?</a></li>
+<li><a class="reference internal" href="#from-classical-physics-to-quantum-mechanics">2. From Classical Physics to Quantum Mechanics</a><ul>
+<li><a class="reference internal" href="#the-rise-of-classical-physics">2.1 The Rise of Classical Physics</a></li>
+<li><a class="reference internal" href="#the-expansion-of-classical-physics">2.2 The Expansion of Classical Physics</a></li>
+<li><a class="reference internal" href="#the-first-cracks">2.3 The First Cracks</a></li>
+<li><a class="reference internal" href="#the-birth-of-quantum-mechanics">2.4 The Birth of Quantum Mechanics</a></li>
+<li><a class="reference internal" href="#a-new-picture-of-reality">2.5 A New Picture of Reality</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#from-quantum-mechanics-to-quantum-computing">3. From Quantum Mechanics to Quantum Computing</a><ul>
+<li><a class="reference internal" href="#computation-is-physical">3.1 Computation Is Physical</a></li>
+<li><a class="reference internal" href="#the-birth-of-quantum-computing">3.2 The Birth of Quantum Computing</a></li>
+<li><a class="reference internal" href="#a-new-model-of-computation">3.3 A New Model of Computation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#why-do-we-need-quantum-computers">4. Why Do We Need Quantum Computers?</a></li>
+<li><a class="reference internal" href="#bits-and-qubits-a-first-look">5. Bits and Qubits: A First Look</a></li>
+<li><a class="reference internal" href="#how-do-quantum-computers-compute">6. How Do Quantum Computers Compute?</a></li>
+<li><a class="reference internal" href="#what-you-will-learn">7. What You Will Learn</a></li>
+<li><a class="reference internal" href="#prerequisites">8. Prerequisites</a></li>
+<li><a class="reference internal" href="#final-thoughts">9. Final Thoughts</a></li>
 </ul>
 </li>
 </ul>
