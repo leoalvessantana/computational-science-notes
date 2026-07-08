@@ -12,7 +12,7 @@ This project started as a personal knowledge base and is now maintained as a lon
 
 The notes are organized into thematic sections, currently including:
 
-- **Quantum Computing** — mathematical foundations, qubits, quantum gates, entanglement, quantum algorithms, and quantum machine learning.
+- **Quantum Computing** *(in progress)* — mathematical foundations, qubits, quantum gates, entanglement, quantum algorithms, and quantum machine learning.
 - *(more sections coming soon)*
 
 
