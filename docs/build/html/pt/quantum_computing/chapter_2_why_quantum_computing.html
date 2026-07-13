@@ -1,0 +1,440 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Capítulo 3 — Matemática para Computação Quântica" href="chapter_3_mathematics_for_quantum_computing.html"><link rel="prev" title="Capítulo 1 — Introdução" href="chapter_1_introduction.html">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Capítulo 2 — Por Que Computação Quântica? - Computational Science Notes 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dff35b1a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Computational Science Notes 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">Computational Science Notes 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Português 🇧🇷</a><input aria-label="Toggle navigation of Português 🇧🇷" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chapter_1_introduction.html">Capítulo 1 — Introdução</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Capítulo 2 — Por Que Computação Quântica?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_3_mathematics_for_quantum_computing.html">Capítulo 3 — Matemática para Computação Quântica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_4_qubits_postulados.html">Capítulo 4 — Qubits e os Postulados da Computação Quântica</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../en/index.html">English 🇺🇸</a><input aria-label="Toggle navigation of English 🇺🇸" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_1_introduction.html">Chapter 1 — Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_2_why_quantum_computing.html">Chapter 2 — Why Quantum Computing?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_3_mathematics_for_quantum_computing.html">Chapter 3 — Mathematics for Quantum Computing</a></li>
+</ul>
+</li>
+</ul>
+
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/pt/quantum_computing/chapter_2_why_quantum_computing.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="capitulo-2-por-que-computacao-quantica">
+<h1>Capítulo 2 — Por Que Computação Quântica?<a class="headerlink" href="#capitulo-2-por-que-computacao-quantica" title="Link to this heading">¶</a></h1>
+<section id="o-custo-de-simular-a-natureza">
+<h2>2.1 O Custo de Simular a Natureza<a class="headerlink" href="#o-custo-de-simular-a-natureza" title="Link to this heading">¶</a></h2>
+<p>No capítulo anterior, mencionamos a observação fundamental de Richard Feynman: simular sistemas quânticos em computadores clássicos se torna exponencialmente difícil à medida que o sistema cresce [1]. É hora de entender exatamente o que isso significa — e por que isso importa tanto.</p>
+<p>Quando físicos querem simular um sistema quântico — uma molécula, um material, uma reação química — eles precisam descrever seu estado quântico completo. Classicamente, isso significa armazenar uma lista de números (chamados de <em>amplitudes</em>) que descrevem cada configuração possível em que o sistema poderia estar.</p>
+<p>O problema é que o número dessas configurações não cresce linearmente com o tamanho do sistema. Ele cresce <strong>exponencialmente</strong>.</p>
+<!-- ```{figure} /_static/figures/ch2_fig1-1.png
+:name: fig-ch2-1-1
+:alt: Crescimento linear vs exponencial
+
+Crescimento linear vs crescimento exponencial à medida que o tamanho do sistema aumenta.
+````-->
+<p>Uma única partícula com dois estados possíveis exige armazenar 2 números. Duas partículas exigem 4. Três partículas exigem 8. Isso não é coincidência — para <em>n</em> partículas, a simulação clássica exige armazenar <strong>2ⁿ</strong> números.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>n partículas  →  2ⁿ números a armazenar
+
+ 1 partícula   →            2
+ 2 partículas  →            4
+ 3 partículas  →            8
+10 partículas  →         1.024
+20 partículas  →     1.048.576
+</pre></div>
+</div>
+<p>Para sistemas pequenos, isso é administrável. Mas esse crescimento exponencial se acelera muito mais rápido do que a intuição da maioria das pessoas espera.</p>
+</section>
+<section id="espacos-de-estados-exponenciais-um-olhar-concreto">
+<h2>2.2 Espaços de Estados Exponenciais: Um Olhar Concreto<a class="headerlink" href="#espacos-de-estados-exponenciais-um-olhar-concreto" title="Link to this heading">¶</a></h2>
+<p>Vamos levar isso ainda mais adiante, porque os números envolvidos são genuinamente surpreendentes.</p>
+<p>Para armazenar classicamente o estado quântico completo de apenas <strong>50 partículas</strong>, seria necessário armazenar aproximadamente <strong>2⁵⁰ ≈ 1,13 × 10¹⁵</strong> números. Cada número tipicamente exige alguns bytes de memória — então isso rapidamente alcança a escala de petabytes.</p>
+<p>Agora vamos até <strong>300 partículas</strong>. O número de amplitudes necessárias, <strong>2³⁰⁰</strong>, excede a maioria das estimativas físicas do número de átomos no universo observável.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Isso não é uma limitação da tecnologia atual — é uma barreira matemática fundamental. Nenhuma quantidade de melhoria de engenharia, processadores mais rápidos ou armazenamento adicional jamais será suficiente para superar um crescimento exponencial dessa escala.</p>
+</div>
+<p>Esta é precisamente a barreira que Feynman identificou: computadores clássicos são, em princípio, incapazes de simular eficientemente até mesmo sistemas quânticos de tamanho modesto [1]. Se a natureza realiza rotineiramente essas “computações” por meio do comportamento ordinário de átomos e moléculas, então um computador construído a partir de componentes quânticos — um que opera <em>nativamente</em> usando esses mesmos princípios — deveria ser capaz de representar tais estados sem precisar enumerar explicitamente cada configuração.</p>
+<p>Isso não é meramente uma forma mais rápida de fazer a mesma coisa que computadores clássicos fazem. É uma estratégia fundamentalmente diferente para representar informação.</p>
+</section>
+<section id="complexidade-computacional-p-np-e-alem">
+<h2>2.3 Complexidade Computacional: P, NP e Além<a class="headerlink" href="#complexidade-computacional-p-np-e-alem" title="Link to this heading">¶</a></h2>
+<p>Para entender onde os computadores quânticos realmente ajudam — e onde não ajudam —, é útil introduzir, em nível intuitivo, como cientistas da computação classificam a dificuldade dos problemas.</p>
+<p>Alguns problemas podem ser resolvidos eficientemente, o que significa que o tempo necessário cresce razoavelmente (de forma polinomial) à medida que a entrada cresce. Esses formam uma classe chamada <strong>P</strong> (tempo Polinomial).</p>
+<p>Outros problemas são muito mais difíceis de <em>resolver</em>, mas fáceis de <em>verificar</em> uma vez que uma solução candidata é fornecida. Esses formam uma classe chamada <strong>NP</strong>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>P   → Problemas que podem ser *resolvidos* eficientemente
+NP  → Problemas que podem ser *verificados* eficientemente
+</pre></div>
+</div>
+<p>Uma famosa questão em aberto na ciência da computação — se P é igual a NP — permanece sem solução e está fora do escopo deste livro. O que importa aqui é uma questão relacionada, mais específica: <strong>onde os computadores quânticos se encaixam nesse quadro?</strong></p>
+<p>Acredita-se que os computadores quânticos resolvam eficientemente uma classe de problemas chamada <strong>BQP</strong> (tempo Polinomial Quântico com erro limitado). Acredita-se que alguns problemas dentro de BQP estejam <em>fora</em> de P — o que significa que nenhum algoritmo clássico conhecido consegue resolvê-los eficientemente, mas um computador quântico consegue.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Não se acredita que os computadores quânticos resolvam problemas NP-completos de forma eficiente em geral. A vantagem que eles oferecem é real, mas mais estreita e específica do que a ficção científica costuma sugerir.</p>
+</div>
+<p>Essa distinção importa. A computação quântica não é uma varinha mágica que dissolve toda dificuldade computacional — é uma ferramenta precisa que muda as regras para um conjunto específico e bem definido de problemas.</p>
+</section>
+<section id="onde-os-computadores-quanticos-oferecem-vantagem">
+<h2>2.4 Onde os Computadores Quânticos Oferecem Vantagem<a class="headerlink" href="#onde-os-computadores-quanticos-oferecem-vantagem" title="Link to this heading">¶</a></h2>
+<p>Com esse enquadramento estabelecido, podemos agora ser concretos sobre onde a vantagem quântica de fato aparece.</p>
+<p>O <strong>Algoritmo de Grover</strong> [2] é tradicionalmente apresentado como um método para buscar em um banco de dados não ordenado contendo <em>N</em> itens. Classicamente, encontrar um item específico exige verificar até <em>N</em> entradas, uma por uma. O algoritmo de Grover reduz isso a aproximadamente <em>√N</em> consultas, proporcionando um ganho de velocidade quadrático.</p>
+<p>No entanto, é importante entender como esse ganho é alcançado. Um equívoco comum é pensar que um computador quântico simplesmente verifica todos os itens simultaneamente. Não é o caso. Em vez disso, o algoritmo de Grover explora o princípio da <strong>interferência quântica</strong> apresentado na seção anterior. Uma forma de visualizar esse processo é imaginar uma mesa de mixagem de áudio: ao longo de uma sequência de operações cuidadosamente projetadas, o algoritmo gradualmente “aumenta o volume” (aumenta a amplitude de probabilidade) da resposta correta enquanto “diminui o volume” das incorretas.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Busca clássica:  até N passos
+Busca de Grover: cerca de √N passos
+</pre></div>
+</div>
+<p>Para um banco de dados contendo um milhão de itens, isso corresponde a reduzir aproximadamente um milhão de passos de busca para apenas cerca de mil.</p>
+<p>Outro exemplo marcante é o <strong>Algoritmo de Shor</strong> [3], que aborda o problema da fatoração de inteiros — a tarefa de decompor um número inteiro grande em seus fatores primos. Esse problema constitui a base de grande parte da criptografia de chave pública moderna, porque os melhores algoritmos clássicos conhecidos se tornam proibitivamente custosos à medida que os números crescem.</p>
+<p>O algoritmo de Shor fornece um algoritmo de tempo polinomial para a fatoração de inteiros, representando um ganho assintótico dramático em relação aos melhores algoritmos clássicos conhecidos. Esse resultado é a principal razão pela qual a computação quântica atraiu tanta atenção dos campos da criptografia e da cibersegurança.</p>
+<p>Além da busca e da fatoração, espera-se que os computadores quânticos sejam úteis em várias outras áreas, incluindo:</p>
+<ul class="simple">
+<li><p><strong>Simulação quântica</strong> — a motivação original discutida anteriormente neste capítulo, permitindo que sistemas quânticos simulem outros sistemas quânticos eficientemente [1].</p></li>
+<li><p><strong>Otimização combinatória</strong>, por meio de algoritmos que serão apresentados mais adiante neste livro.</p></li>
+<li><p><strong>Certas tarefas de aprendizado de máquina</strong>, uma área de pesquisa ativa e em rápida evolução.</p></li>
+</ul>
+<p>Esses algoritmos e aplicações serão revisitados mais adiante no livro, uma vez que tenhamos desenvolvido as ferramentas matemáticas necessárias para entender como eles funcionam.</p>
+</section>
+<section id="limitacoes-honestas-o-que-os-computadores-quanticos-ainda-nao-conseguem-fazer">
+<h2>2.5 Limitações Honestas: O Que os Computadores Quânticos Ainda Não Conseguem Fazer<a class="headerlink" href="#limitacoes-honestas-o-que-os-computadores-quanticos-ainda-nao-conseguem-fazer" title="Link to this heading">¶</a></h2>
+<p>Seria enganoso encerrar este capítulo sem discutir as limitações atuais do hardware quântico.</p>
+<p>Os computadores quânticos de hoje operam no que é comumente conhecido como a <strong>era NISQ</strong> (<em>Noisy Intermediate-Scale Quantum</em>, ou Quântica Ruidosa de Escala Intermediária), termo introduzido pelo físico John Preskill em 2018 [4]. O nome destaca duas características fundamentais dos dispositivos atuais:</p>
+<ul class="simple">
+<li><p><strong>Ruidosa (Noisy):</strong> os qubits são extremamente frágeis. Interações com o ambiente ao redor — como calor, campos eletromagnéticos ou até mesmo vibrações microscópicas — causam <strong>decoerência</strong>, destruindo gradualmente a informação quântica antes que uma computação possa ser concluída.</p></li>
+<li><p><strong>Escala intermediária (Intermediate-scale):</strong> embora os processadores atuais variem de dezenas a mais de mil qubits físicos [5], isso ainda está muito abaixo dos milhões de qubits físicos que se espera que sejam necessários para uma computação quântica tolerante a falhas e em larga escala.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Computadores quânticos tolerantes a falhas — do tipo capaz de executar algoritmos como o de Shor em números criptograficamente relevantes — provavelmente exigirão milhões de qubits físicos protegidos por correção de erros quânticos. Alcançar isso continua sendo um dos maiores desafios de engenharia da área.</p>
+</div>
+<p>Isso naturalmente levanta uma questão importante:</p>
+<p><strong>Se computadores quânticos tolerantes a falhas ainda não existem, os processadores quânticos de hoje são realmente úteis?</strong></p>
+<p>A resposta é <strong>sim</strong>.</p>
+<p>Para fazer uso prático do hardware atual, pesquisadores desenvolveram os <strong>Algoritmos Quânticos Variacionais (VQAs)</strong>, incluindo o <strong>Variational Quantum Eigensolver (VQE)</strong> e o <strong>Quantum Approximate Optimization Algorithm (QAOA)</strong>.</p>
+<p>Esses algoritmos adotam uma <strong>abordagem híbrida quântico-clássica</strong>. Em vez de pedir a um processador quântico frágil que execute sozinho uma computação longa e complexa, o trabalho é dividido entre duas máquinas. Um computador clássico realiza a otimização dos parâmetros do algoritmo, enquanto o processador quântico atua como um coprocessador especializado, avaliando circuitos quânticos que seriam computacionalmente custosos de simular classicamente.</p>
+<p>Como os circuitos quânticos permanecem relativamente curtos, a computação fica muito menos vulnerável à decoerência. Essa estratégia híbrida atualmente representa uma das direções mais promissoras para a computação quântica de curto prazo e se tornou um dos temas centrais de pesquisa na era NISQ.</p>
+<p>É importante ter essa distinção em mente. Os algoritmos apresentados na seção anterior têm ganhos quânticos matematicamente comprovados, mas o hardware tolerante a falhas em larga escala necessário para realizar todo o seu potencial ainda não foi construído. Até lá, os algoritmos híbridos quântico-clássicos oferecem uma forma prática de extrair valor computacional significativo dos processadores quânticos de hoje.</p>
+<p>Dada sua importância prática, revisitaremos essas abordagens híbridas mais adiante no livro. Exploraremos primeiro a teoria subjacente, e então aprenderemos a implementar esses algoritmos passo a passo usando frameworks modernos de programação quântica.</p>
+</section>
+<section id="definindo-expectativas-para-o-restante-deste-livro">
+<h2>2.6 Definindo Expectativas para o Restante Deste Livro<a class="headerlink" href="#definindo-expectativas-para-o-restante-deste-livro" title="Link to this heading">¶</a></h2>
+<p>A esta altura, a motivação deve estar clara: computadores quânticos não são computadores clássicos mais rápidos, nem uma solução universal para todo problema computacional. Eles são máquinas especializadas que oferecem vantagens genuínas e matematicamente fundamentadas para uma classe específica — mas importante — de problemas, entre os quais se destacam a simulação quântica, a fatoração de inteiros e a busca não estruturada.</p>
+<p>Entender <em>por que</em> eles conseguem fazer isso exige entender <em>como</em> a informação quântica é representada e manipulada — que é exatamente para onde este livro se volta a seguir.</p>
+<p>Os próximos capítulos construirão, peça por peça, a linguagem matemática necessária para descrever qubits com precisão — começando pela álgebra linear que fundamenta toda a mecânica quântica.</p>
+</section>
+<hr class="docutils" />
+<section id="referencias">
+<h2>Referências<a class="headerlink" href="#referencias" title="Link to this heading">¶</a></h2>
+<p>[1] Feynman, R. P. (1982). Simulating physics with computers. <em>International Journal of Theoretical Physics</em>, 21(6-7), 467–488.</p>
+<p>[2] Grover, L. K. (1996). A fast quantum mechanical algorithm for database search. <em>Proceedings of the 28th Annual ACM Symposium on the Theory of Computing (STOC)</em>, 212–219. arXiv:quant-ph/9605043.</p>
+<p>[3] Shor, P. W. (1997). Polynomial-time algorithms for prime factorization and discrete logarithms on a quantum computer. <em>SIAM Journal on Computing</em>, 26(5), 1484–1509. arXiv:quant-ph/9508027.</p>
+<p>[4] Preskill, J. (2018). Quantum computing in the NISQ era and beyond. <em>Quantum</em>, 2, 79. arXiv:1801.00862.</p>
+<p>[5] Wikipedia contributors. Noisy intermediate-scale quantum computing. <em>Wikipedia, The Free Encyclopedia</em>. Retrieved July 2026.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="chapter_3_mathematics_for_quantum_computing.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Capítulo 3 — Matemática para Computação Quântica</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="chapter_1_introduction.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Capítulo 1 — Introdução</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Leonardo Alves Santana
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Capítulo 2 — Por Que Computação Quântica?</a><ul>
+<li><a class="reference internal" href="#o-custo-de-simular-a-natureza">2.1 O Custo de Simular a Natureza</a></li>
+<li><a class="reference internal" href="#espacos-de-estados-exponenciais-um-olhar-concreto">2.2 Espaços de Estados Exponenciais: Um Olhar Concreto</a></li>
+<li><a class="reference internal" href="#complexidade-computacional-p-np-e-alem">2.3 Complexidade Computacional: P, NP e Além</a></li>
+<li><a class="reference internal" href="#onde-os-computadores-quanticos-oferecem-vantagem">2.4 Onde os Computadores Quânticos Oferecem Vantagem</a></li>
+<li><a class="reference internal" href="#limitacoes-honestas-o-que-os-computadores-quanticos-ainda-nao-conseguem-fazer">2.5 Limitações Honestas: O Que os Computadores Quânticos Ainda Não Conseguem Fazer</a></li>
+<li><a class="reference internal" href="#definindo-expectativas-para-o-restante-deste-livro">2.6 Definindo Expectativas para o Restante Deste Livro</a></li>
+<li><a class="reference internal" href="#referencias">Referências</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    </body>
+</html>

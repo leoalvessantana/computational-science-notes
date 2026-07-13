@@ -1,0 +1,856 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="prev" title="Chapter 2 — Why Quantum Computing?" href="chapter_2_why_quantum_computing.html">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Chapter 3 — Mathematics for Quantum Computing - Computational Science Notes 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=dff35b1a" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Computational Science Notes 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">Computational Science Notes 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Quantum Computing</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="chapter_1_introduction.html">Chapter 1 — Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter_2_why_quantum_computing.html">Chapter 2 — Why Quantum Computing?</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Chapter 3 — Mathematics for Quantum Computing</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/quantum_computing/chapter_3_mathematics_for_quantum_computing.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="chapter-3-mathematics-for-quantum-computing">
+<h1>Chapter 3 — Mathematics for Quantum Computing<a class="headerlink" href="#chapter-3-mathematics-for-quantum-computing" title="Link to this heading">¶</a></h1>
+<!-- ```{contents}
+:local:
+:depth: 2
+``` -->
+<section id="why-this-chapter-comes-before-qubits">
+<h2>1. Why This Chapter Comes Before Qubits<a class="headerlink" href="#why-this-chapter-comes-before-qubits" title="Link to this heading">¶</a></h2>
+<p>In Chapter 1, we compared a classical bit to a coin lying flat on a table, and a qubit to that same coin spinning in the air. This is a useful first picture, but it is, ultimately, just a picture. To go beyond intuition and actually <em>compute</em> with qubits — to predict what a quantum circuit does, or why a particular algorithm works — we need a precise mathematical language.</p>
+<p>That language is <strong>linear algebra</strong>, extended to <strong>complex numbers</strong>.</p>
+<p>This might sound intimidating, but the goal of this chapter is the opposite of intimidation. We will build this language piece by piece, always starting from a simple, motivated question, and only then introducing the formal tool that answers it. By the end of the chapter, you will be comfortable with the four ingredients listed in the table of contents of Chapter 1: complex numbers, vector spaces, and Dirac notation. Everything else in this book — every qubit, every gate, every algorithm — is built directly on top of these ideas.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This chapter is self-contained. You do not need prior exposure to linear algebra or complex numbers. If you already know this material, feel free to skim it and use it as a reference for notation.</p>
+</div>
+<!-- ```{figure} /_static/figures/ch3_fig1-1.png
+:name: fig-ch3-1-1
+:alt: The mathematical scaffolding of quantum computing
+
+The mathematical scaffolding of quantum computing: complex numbers support vector spaces, which support Dirac notation, which supports qubits.
+``` -->
+</section>
+<section id="complex-numbers">
+<h2>2. Complex Numbers<a class="headerlink" href="#complex-numbers" title="Link to this heading">¶</a></h2>
+<section id="why-real-numbers-are-not-enough">
+<h3>2.1 Why Real Numbers Are Not Enough<a class="headerlink" href="#why-real-numbers-are-not-enough" title="Link to this heading">¶</a></h3>
+<p>Quantum mechanics describes physical systems using <strong>probability amplitudes</strong>. As we saw in Chapter 1, these amplitudes behave like waves and can interfere constructively or destructively.</p>
+<p>At first, it might seem like ordinary real numbers should be enough to capture this. After all, real numbers can be positive or negative, and a negative sign already allows two quantities to cancel each other out when added. But interference in quantum mechanics is richer than a simple sign flip. A real number only ever offers two “directions” — positive or negative, equivalent to a rotation of either <span class="math notranslate nohighlight">\(0°\)</span> or <span class="math notranslate nohighlight">\(180°\)</span>. Quantum interference, however, requires amplitudes that can combine at <em>any</em> relative angle, not just fully aligned or fully opposed. To describe a continuum of possible rotations rather than a single flip, we need a number that carries both a magnitude and an angle at once. This is exactly what a complex number provides, and it is what makes complex numbers, rather than real numbers, the natural alphabet of quantum mechanics.</p>
+<p>At this point, it is fair to ask: where does this requirement actually come from? The honest answer is that this is an experimentally motivated postulate of quantum mechanics — one of a small set of postulates we will state precisely in Chapter 4, once vectors and inner products are in hand. For now, it is enough to accept complex numbers as the natural “alphabet” in which quantum states are written, and to become fluent in using them.</p>
+<p>Before we can talk about angles and rotations, though, we need a number system that actually has room for them — and real numbers, as we are about to see, run out of room almost immediately.</p>
+</section>
+<section id="the-imaginary-unit">
+<h3>2.2 The Imaginary Unit<a class="headerlink" href="#the-imaginary-unit" title="Link to this heading">¶</a></h3>
+<p>Suppose we want to solve the quadratic equation</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+x^2 + 1 = 0
+\]</div>
+</div>
+<p>Rearranging the equation gives</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+x^2 = -1
+\]</div>
+</div>
+<p>which implies</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+x = \pm\sqrt{-1}
+\]</div>
+</div>
+<p>At this point, we encounter a problem. No <strong>real number</strong> satisfies this equation because the square of every real number—whether positive or negative—is always non-negative. In other words, the square root of a negative number does not exist within the real number system.</p>
+<p>Rather than declaring the equation impossible, mathematicians extended the real numbers by introducing a new number called the <strong>imaginary unit</strong>, denoted by (i), and <strong>defined</strong> it to satisfy</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+i^2 = -1
+\]</div>
+</div>
+<p>Equivalently, we often write</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+i = \sqrt{-1}
+\]</div>
+</div>
+<p>This definition extends the real number system in the same spirit that negative numbers and irrational numbers once extended it. It is not a trick or a contradiction; it is the starting point of a larger and remarkably consistent number system.</p>
+<p>Using the imaginary unit, we can construct a <strong>complex number</strong>, which is any number of the form</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+z = a + bi
+\]</div>
+</div>
+<p>where (a) and (b) are ordinary real numbers. The value (a) is called the <strong>real part</strong> of (z), written <span class="math notranslate nohighlight">\(\operatorname{Re}(z)\)</span>, while (b) is called the <strong>imaginary part</strong>, written <span class="math notranslate nohighlight">\(\operatorname{Im}(z)\)</span>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>z = a + bi
+    │   │
+    │   └── Imaginary part (b)
+    └─────── Real part (a)
+</pre></div>
+</div>
+<p>Notice that every real number is also a complex number with (b = 0). In other words, complex numbers do not replace the real numbers—they extend them, just as the real numbers extend the rational numbers.</p>
+</section>
+<section id="the-complex-plane">
+<h3>2.3 The Complex Plane<a class="headerlink" href="#the-complex-plane" title="Link to this heading">¶</a></h3>
+<p>Because a complex number <span class="math notranslate nohighlight">\(z = a + bi\)</span> is defined by two independent real numbers, we cannot place it on a standard one-dimensional number line. Instead, we visualize it as a point in a two-dimensional space called the <strong>complex plane</strong>.In this plane, the horizontal axis represents the real part (<span class="math notranslate nohighlight">\(a\)</span>), and the vertical axis represents the imaginary part (<span class="math notranslate nohighlight">\(b\)</span>).</p>
+<figure class="align-center" id="ch3-fig2-3-adaptive">
+<a class="reference internal image-reference" href="../_images/ch3_fig2-3_adaptive.png"><img alt="The complex plane, showing the modulus r and the phase angle theta" src="../_images/ch3_fig2-3_adaptive.png" style="width: 40%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">The complex plane. A complex number <span class="math notranslate nohighlight">\(z = a + bi\)</span> plotted as a vector from the origin. The horizontal projection is the real part <span class="math notranslate nohighlight">\(a\)</span>, the vertical projection is the imaginary part <span class="math notranslate nohighlight">\(b\)</span>, the length of the vector is the modulus <span class="math notranslate nohighlight">\(r\)</span>, and the angle it makes with the positive real axis is the phase <span class="math notranslate nohighlight">\(\theta\)</span>. We will define <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span> formally in the next two sections — keep this picture in mind as we do.</span><a class="headerlink" href="#ch3-fig2-3-adaptive" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>This geometric interpretation is immensely powerful. It allows us to stop thinking of complex numbers merely as abstract algebraic expressions and start treating them as physical locations or vectors in a 2D space. It also reveals that we can describe the exact same point in two equivalent ways:</p>
+<ul class="simple">
+<li><p><strong>Rectangular form</strong>: <span class="math notranslate nohighlight">\(z = a + bi\)</span>, using horizontal and vertical coordinates (as shown in the figure above).</p></li>
+<li><p><strong>Polar form</strong>: describing the same point by its straight-line distance from the origin (<span class="math notranslate nohighlight">\(r\)</span>) and its angle of rotation (<span class="math notranslate nohighlight">\(\theta\)</span>), which we develop next.</p></li>
+</ul>
+</section>
+<section id="modulus-and-complex-conjugate">
+<h3>2.4 Modulus and Complex Conjugate<a class="headerlink" href="#modulus-and-complex-conjugate" title="Link to this heading">¶</a></h3>
+<p>When we view a complex number as a vector in the complex plane, two geometric properties naturally stand out: its length and its reflection.</p>
+<p>The <strong>modulus</strong> (or magnitude) of a complex number <span class="math notranslate nohighlight">\(z = a + bi\)</span> is its straight-line distance from the origin — the same <span class="math notranslate nohighlight">\(r\)</span> labeled in the figure above. By applying the Pythagorean theorem to the coordinates, this is defined as</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|z| = \sqrt{a^2 + b^2}
+\]</div>
+</div>
+<p>The <strong>complex conjugate</strong> of <span class="math notranslate nohighlight">\(z\)</span>, written <span class="math notranslate nohighlight">\(z^{*}\)</span> (or sometimes <span class="math notranslate nohighlight">\(\bar{z}\)</span>), is obtained by flipping the sign of the imaginary part</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+z^{*} = a - bi
+\]</div>
+</div>
+<p>Geometrically, this corresponds to reflecting the point across the real axis.</p>
+<figure class="align-center" id="ch3-fig2-4-conjugate">
+<a class="reference internal image-reference" href="../_images/ch3_fig2-4_conjugate.png"><img alt="A complex number and its conjugate, reflected across the real axis" src="../_images/ch3_fig2-4_conjugate.png" style="width: 40%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><span class="math notranslate nohighlight">\(z = a + bi\)</span> and its conjugate <span class="math notranslate nohighlight">\(z^{*} = a - bi\)</span>. Both points sit at the same distance <span class="math notranslate nohighlight">\(r\)</span> from the origin, but <span class="math notranslate nohighlight">\(z^{*}\)</span> is the mirror image of <span class="math notranslate nohighlight">\(z\)</span> across the real axis.</span><a class="headerlink" href="#ch3-fig2-4-conjugate" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The conjugate is not just a bookkeeping trick — it is one of the most important operations in quantum mechanics, because multiplying a complex number by its own conjugate always produces a non-negative real number</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+z \cdot z^{*} = (a+bi)(a-bi) = a^2 + b^2 = |z|^2
+\]</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>This single identity, <span class="math notranslate nohighlight">\(z z^{*} = |z|^2\)</span>, is the mathematical bridge between complex probability amplitudes and the real, non-negative probabilities we actually observe when measuring a quantum system. We will use it constantly starting in Chapter 4.</p>
+</div>
+</section>
+<section id="polar-form-and-euler-s-formula">
+<h3>2.5 Polar Form and Euler’s Formula<a class="headerlink" href="#polar-form-and-euler-s-formula" title="Link to this heading">¶</a></h3>
+<p>In the rectangular form (<span class="math notranslate nohighlight">\(z = a + bi\)</span>), we described our complex point using horizontal and vertical coordinates. However, if we think of the complex number as an arrow pointing from the origin, there is another, often more natural way to describe it: by its length (the modulus <span class="math notranslate nohighlight">\(r\)</span>) and the angle it makes with the positive real axis (the <strong>phase</strong> <span class="math notranslate nohighlight">\(\theta\)</span>) — the same two quantities highlighted in the Section 2.3 figure.</p>
+<p>Using basic trigonometry on the complex plane, we know that the coordinates are <span class="math notranslate nohighlight">\(a = r \cos\theta\)</span> and <span class="math notranslate nohighlight">\(b = r \sin\theta\)</span>. Substituting these into our standard complex number yields</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+z = r(\cos\theta + i\sin\theta)
+\]</div>
+</div>
+<p>Remarkably, this expression can be compressed using one of the most celebrated results in all of mathematics, <strong>Euler’s formula</strong></p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+e^{i\theta} = \cos\theta + i\sin\theta
+\]</div>
+</div>
+<p>This beautiful identity allows us to write any complex number compactly as</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+z = r e^{i\theta}
+\]</div>
+</div>
+<ul class="simple">
+<li><p><strong>Rectangular form</strong>: <span class="math notranslate nohighlight">\(z = a + bi\)</span></p></li>
+<li><p><strong>Polar form</strong>: <span class="math notranslate nohighlight">\(z = r e^{i\theta}\)</span>, where <span class="math notranslate nohighlight">\(r = |z|\)</span></p></li>
+</ul>
+<figure class="align-center" id="ch3-fig2-5-unit-circle">
+<a class="reference internal image-reference" href="../_images/ch3_fig2-5_unit_circle.png"><img alt="The unit circle showing e^{i theta} at 0, 90, 180 and 270 degrees" src="../_images/ch3_fig2-5_unit_circle.png" style="width: 40%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">The unit circle (<span class="math notranslate nohighlight">\(r=1\)</span>). As <span class="math notranslate nohighlight">\(\theta\)</span> sweeps around the circle, <span class="math notranslate nohighlight">\(e^{i\theta}\)</span> visits familiar landmarks: <span class="math notranslate nohighlight">\(\theta=0° \Rightarrow 1\)</span>, <span class="math notranslate nohighlight">\(\theta=90° \Rightarrow i\)</span>, <span class="math notranslate nohighlight">\(\theta=180° \Rightarrow -1\)</span>, <span class="math notranslate nohighlight">\(\theta=270° \Rightarrow -i\)</span>. Every complex number of modulus 1 lies somewhere on this circle.</span><a class="headerlink" href="#ch3-fig2-5-unit-circle" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+<p><strong>Worked example.</strong> Let’s convert <span class="math notranslate nohighlight">\(z = 3 + 4i\)</span> to polar form. The modulus is</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+r = \sqrt{3^2 + 4^2} = \sqrt{25} = 5
+\]</div>
+</div>
+<p>and the phase is</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\theta = \arctan\!\left(\frac{4}{3}\right) \approx 53.13°
+\]</div>
+</div>
+<p>so <span class="math notranslate nohighlight">\(z \approx 5\,e^{i \cdot 53.13°}\)</span>. Going back the other way, <span class="math notranslate nohighlight">\(a = r\cos\theta = 5\cos(53.13°) \approx 3\)</span> and <span class="math notranslate nohighlight">\(b = r\sin\theta = 5\sin(53.13°) \approx 4\)</span>, recovering our original number — a useful sanity check whenever you convert between forms.</p>
+<p>While this polar form might feel like a cosmetic change for now, it becomes absolutely essential once we start describing qubit <strong>phases</strong> in Chapter 4. Intuitively, <span class="math notranslate nohighlight">\(r\)</span> tells us “how much” of an amplitude there is, while <span class="math notranslate nohighlight">\(\theta\)</span> tells us “in what rotational direction” it points.</p>
+<p>Quantum interference — the constructive and destructive combination of amplitudes mentioned in Chapter 1 — is, mathematically, just the addition of complex numbers whose phases (<span class="math notranslate nohighlight">\(\theta\)</span>) either align to amplify each other or oppose each other to cancel out.</p>
+<figure class="align-center" id="ch3-fig2-2-interference">
+<a class="reference internal image-reference" href="../_images/ch3_fig2-2_interference.png"><img alt="Constructive and destructive interference of complex amplitudes" src="../_images/ch3_fig2-2_interference.png" style="width: 70%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Left: two amplitudes with aligned phases add constructively, producing a vector with a larger modulus. Right: two amplitudes with opposite phases add destructively, nearly canceling each other out. In both cases the arrows share the same starting point, so the resulting sum can be compared directly against the two original amplitudes.</span><a class="headerlink" href="#ch3-fig2-2-interference" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="practice-questions">
+<h3>2.6 Practice Questions<a class="headerlink" href="#practice-questions" title="Link to this heading">¶</a></h3>
+<div class="tip admonition">
+<p class="admonition-title">Conceptual</p>
+<ol class="arabic simple">
+<li><p>True or false: every real number is also a complex number. Justify your answer using the definition <span class="math notranslate nohighlight">\(z = a+bi\)</span>.</p></li>
+<li><p>Geometrically, what does multiplying a complex number by its conjugate correspond to, and why does the result always land on the real axis?</p></li>
+<li><p>Two complex numbers have the same modulus but phases that differ by <span class="math notranslate nohighlight">\(180°\)</span>. What can you say about their sum?</p></li>
+</ol>
+</div>
+<div class="note admonition">
+<p class="admonition-title">Computational</p>
+<ol class="arabic simple" start="4">
+<li><p>Find the modulus and complex conjugate of <span class="math notranslate nohighlight">\(z = 5 - 12i\)</span>.</p></li>
+<li><p>Convert <span class="math notranslate nohighlight">\(z = 1 + i\)</span> to polar form. What are <span class="math notranslate nohighlight">\(r\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span>?</p></li>
+<li><p>Convert <span class="math notranslate nohighlight">\(z = 4\,e^{i\cdot 120°}\)</span> back to rectangular form <span class="math notranslate nohighlight">\(a + bi\)</span>.</p></li>
+<li><p>Compute <span class="math notranslate nohighlight">\(z \cdot z^{*}\)</span> for <span class="math notranslate nohighlight">\(z = 2 - 3i\)</span> and confirm it equals <span class="math notranslate nohighlight">\(|z|^2\)</span>.</p></li>
+</ol>
+</div>
+<div class="warning admonition">
+<p class="admonition-title">Connecting to physics</p>
+<ol class="arabic simple" start="8">
+<li><p>Two probability amplitudes are given by <span class="math notranslate nohighlight">\(z_1 = 2\,e^{i\cdot 0°}\)</span> and <span class="math notranslate nohighlight">\(z_2 = 2\,e^{i\cdot 30°}\)</span>. Is their sum closer to constructive or destructive interference? Sketch both vectors before computing.</p></li>
+<li><p>Now suppose <span class="math notranslate nohighlight">\(z_2 = 2\,e^{i\cdot 170°}\)</span> instead. How does the picture change, and what happens to <span class="math notranslate nohighlight">\(|z_1 + z_2|\)</span> compared to question 8?</p></li>
+<li><p>Based on questions 8–9, propose a general rule (in words, no formula needed) for when two equal-modulus amplitudes interfere mostly constructively versus mostly destructively.</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="vectors-and-vector-spaces">
+<h2>3. Vectors and Vector Spaces<a class="headerlink" href="#vectors-and-vector-spaces" title="Link to this heading">¶</a></h2>
+<section id="from-numbers-to-lists-of-numbers">
+<h3>3.1 From Numbers to Lists of Numbers<a class="headerlink" href="#from-numbers-to-lists-of-numbers" title="Link to this heading">¶</a></h3>
+<p>A single complex number is already a useful object, but quantum states involve more than one amplitude at a time. To describe a system with several possible outcomes, we group multiple numbers together into a single object called a <strong>vector</strong>.</p>
+<p>A vector is simply an ordered list of numbers, written as a column:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+v = \begin{pmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{pmatrix}
+\end{split}\]</div>
+</div>
+<p>In quantum computing, the entries <span class="math notranslate nohighlight">\(v_1, v_2, \dots, v_n\)</span> will almost always be complex numbers.</p>
+</section>
+<section id="vector-spaces">
+<h3>3.2 Vector Spaces<a class="headerlink" href="#vector-spaces" title="Link to this heading">¶</a></h3>
+<p>A <strong>vector space</strong> is a collection of vectors that can be combined in two basic ways, following a small set of consistent rules:</p>
+<ul class="simple">
+<li><p><strong>Vector addition</strong>: adding two vectors of the same size, entry by entry.</p></li>
+<li><p><strong>Scalar multiplication</strong>: multiplying every entry of a vector by a number (in our case, a complex number).</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>      ┌       ┐       ┌       ┐       ┌            ┐
+      │  v_1  │       │  w_1  │       │ v_1 + w_1  │
+  v + w =  │  v_2  │  +   │  w_2  │  =    │ v_2 + w_2  │
+      │  ...  │       │  ...  │       │    ...     │
+      └       ┘       └       ┘       └            ┘
+</pre></div>
+</div>
+<p>The vector spaces relevant to quantum computing are built using complex numbers as scalars. These are called <strong>complex vector spaces</strong>, and they are the natural home for quantum states.</p>
+</section>
+<section id="linear-combinations-basis-and-dimension">
+<h3>3.3 Linear Combinations, Basis, and Dimension<a class="headerlink" href="#linear-combinations-basis-and-dimension" title="Link to this heading">¶</a></h3>
+<p>A <strong>linear combination</strong> of vectors is simply a weighted sum of them, using scalars as weights:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+w = c_1 v_1 + c_2 v_2 + \dots + c_k v_k
+\]</div>
+</div>
+<p>A set of vectors forms a <strong>basis</strong> for a vector space if every vector in that space can be written as a unique linear combination of them, and none of the basis vectors is redundant (i.e., none can be written as a combination of the others). The number of vectors needed to form a basis is called the <strong>dimension</strong> of the vector space.</p>
+<p>For a single qubit, the relevant vector space has dimension 2. The most natural basis for it consists of two vectors representing “definitely 0” and “definitely 1” — we will meet them formally as <span class="math notranslate nohighlight">\(|0\rangle\)</span> and <span class="math notranslate nohighlight">\(|1\rangle\)</span> later in this chapter.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is precisely why the classical bit’s two possibilities (0 and 1) reappear inside the qubit’s mathematics: they correspond to the two basis vectors of a 2-dimensional complex vector space. What changes is that a qubit is also allowed to be any linear combination of these two vectors — this is exactly the mathematical meaning of <strong>superposition</strong>.</p>
+</div>
+</section>
+<section id="inner-product-and-norm">
+<h3>3.4 Inner Product and Norm<a class="headerlink" href="#inner-product-and-norm" title="Link to this heading">¶</a></h3>
+<p>To measure the “length” of a vector, or the “overlap” between two vectors, we need one more tool: the <strong>inner product</strong>.</p>
+<p>For two vectors <span class="math notranslate nohighlight">\(v\)</span> and <span class="math notranslate nohighlight">\(w\)</span> with complex entries, the inner product is defined as:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle v, w \rangle = \sum_{i=1}^{n} v_i^{*} w_i
+\]</div>
+</div>
+<p>Notice the complex conjugate on the entries of <span class="math notranslate nohighlight">\(v\)</span>. This is not an arbitrary choice — it is exactly what guarantees that the inner product of a vector with itself is always a non-negative real number:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle v, v \rangle = \sum_{i=1}^{n} v_i^{*} v_i = \sum_{i=1}^{n} |v_i|^2 \; \geq 0
+\]</div>
+</div>
+<p>This quantity is used to define the <strong>norm</strong> (length) of a vector:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\|v\| = \sqrt{\langle v, v \rangle}
+\]</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A quantum state vector is always required to have norm equal to 1. This is called the <strong>normalization condition</strong>, and it is what guarantees that the probabilities extracted from a quantum state (via <span class="math notranslate nohighlight">\(|v_i|^2\)</span>) add up to exactly 100%. We will return to this the moment we formally introduce qubits in Chapter 4.</p>
+</div>
+<p>Two vectors are called <strong>orthogonal</strong> if their inner product is zero — intuitively, they point in “completely independent” directions, with no overlap at all. A basis whose vectors are all mutually orthogonal <em>and</em> individually normalized (norm 1) is called an <strong>orthonormal basis</strong>. Quantum computing relies almost exclusively on orthonormal bases, because they correspond to sets of perfectly distinguishable measurement outcomes.</p>
+</section>
+</section>
+<section id="dirac-notation">
+<h2>4. Dirac Notation<a class="headerlink" href="#dirac-notation" title="Link to this heading">¶</a></h2>
+<section id="why-a-new-notation-at-all">
+<h3>4.1 Why a New Notation at All?<a class="headerlink" href="#why-a-new-notation-at-all" title="Link to this heading">¶</a></h3>
+<p>At this point we already have everything we need mathematically: complex numbers, vectors, and inner products. So why does quantum mechanics use yet another notation on top of this?</p>
+<p>The answer is convenience and clarity. <strong>Dirac notation</strong> (also called <strong>bra-ket notation</strong>), introduced by Paul Dirac in the 1930s, was designed specifically to make quantum mechanical expressions compact, unambiguous, and easy to manipulate. Once you get used to it, it becomes hard to imagine quantum computing written any other way — and every quantum computing paper, textbook, and programming framework you will encounter uses it.</p>
+</section>
+<section id="kets">
+<h3>4.2 Kets<a class="headerlink" href="#kets" title="Link to this heading">¶</a></h3>
+<p>A <strong>ket</strong>, written <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>, is simply a column vector:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+|\psi\rangle = \begin{pmatrix} \psi_1 \\ \psi_2 \\ \vdots \\ \psi_n \end{pmatrix}
+\end{split}\]</div>
+</div>
+<p>The symbol inside the “half-bracket” (here, <span class="math notranslate nohighlight">\(\psi\)</span>) is just a label chosen by whoever is describing the state — it could be a letter, a word, or even a digit. For a single qubit, the two basis states are conventionally labeled <span class="math notranslate nohighlight">\(|0\rangle\)</span> and <span class="math notranslate nohighlight">\(|1\rangle\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+|0\rangle = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \qquad
+|1\rangle = \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+\end{split}\]</div>
+</div>
+<p>This pair is called the <strong>computational basis</strong>, and it is the default basis used throughout quantum computing.</p>
+</section>
+<section id="bras">
+<h3>4.3 Bras<a class="headerlink" href="#bras" title="Link to this heading">¶</a></h3>
+<p>A <strong>bra</strong>, written <span class="math notranslate nohighlight">\(\langle\psi|\)</span>, is the <strong>conjugate transpose</strong> of the corresponding ket — that is, we turn the column into a row, and take the complex conjugate of every entry:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle\psi| = \begin{pmatrix} \psi_1^{*} &amp; \psi_2^{*} &amp; \dots &amp; \psi_n^{*} \end{pmatrix}
+\]</div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Ket  |ψ⟩  →  column vector
+Bra  ⟨ψ|  →  row vector, entries conjugated
+</pre></div>
+</div>
+<p>Every ket has a corresponding bra, and vice versa. Together, they give the notation its name: bra + ket = <strong>bra-ket</strong>.</p>
+</section>
+<section id="putting-them-together-the-inner-product">
+<h3>4.4 Putting Them Together: The Inner Product<a class="headerlink" href="#putting-them-together-the-inner-product" title="Link to this heading">¶</a></h3>
+<p>The real elegance of Dirac notation appears when a bra and a ket are placed side by side. The expression <span class="math notranslate nohighlight">\(\langle\phi|\psi\rangle\)</span> is exactly the inner product we defined in Section 3.4:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle\phi|\psi\rangle = \sum_{i=1}^{n} \phi_i^{*}\psi_i
+\]</div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>⟨ϕ|   ×   |ψ⟩   =   ⟨ϕ|ψ⟩
+(bra)    (ket)     (a single number)
+</pre></div>
+</div>
+<p>This is precisely why the notation was designed this way: the “bracket” <span class="math notranslate nohighlight">\(\langle \cdot | \cdot \rangle\)</span> literally spells out the operation being performed. Using the computational basis as an example:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle 0|0\rangle = 1, \qquad \langle 1|1\rangle = 1, \qquad \langle 0|1\rangle = 0
+\]</div>
+</div>
+<p>These three results simply confirm, in the new notation, that <span class="math notranslate nohighlight">\(|0\rangle\)</span> and <span class="math notranslate nohighlight">\(|1\rangle\)</span> are each normalized (norm 1) and mutually orthogonal — in other words, that they form an orthonormal basis.</p>
+</section>
+<section id="general-quantum-states-in-dirac-notation">
+<h3>4.5 General Quantum States in Dirac Notation<a class="headerlink" href="#general-quantum-states-in-dirac-notation" title="Link to this heading">¶</a></h3>
+<p>Using the idea of a linear combination from Section 3.3, a general single-qubit state can now be written as:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle = \alpha|0\rangle + \beta|1\rangle
+\]</div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> and <span class="math notranslate nohighlight">\(\beta\)</span> are complex numbers called <strong>probability amplitudes</strong>, subject to the normalization condition:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\alpha|^2 + |\beta|^2 = 1
+\]</div>
+</div>
+<p>This single equation is the precise mathematical version of the “spinning coin” analogy from Chapter 1: the qubit is not simply <span class="math notranslate nohighlight">\(|0\rangle\)</span> or <span class="math notranslate nohighlight">\(|1\rangle\)</span>, but a combination of both, weighted by complex amplitudes whose squared magnitudes behave like probabilities.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>We are only previewing this here. Chapter 4 will define the qubit formally, explain exactly why <span class="math notranslate nohighlight">\(|\alpha|^2\)</span> and <span class="math notranslate nohighlight">\(|\beta|^2\)</span> are interpreted as probabilities (the <strong>Born rule</strong>), and connect this equation to the Bloch Sphere introduced in Chapter 1.</p>
+</div>
+</section>
+</section>
+<section id="matrices-and-linear-operators">
+<h2>5. Matrices and Linear Operators<a class="headerlink" href="#matrices-and-linear-operators" title="Link to this heading">¶</a></h2>
+<section id="matrices-as-transformations">
+<h3>5.1 Matrices as Transformations<a class="headerlink" href="#matrices-as-transformations" title="Link to this heading">¶</a></h3>
+<p>If a vector describes the <em>state</em> of a quantum system, then something else must describe how that state <em>changes</em>. That something is a <strong>matrix</strong>.</p>
+<p>A matrix is a rectangular array of numbers, and — crucially — it can be multiplied by a vector to produce a new vector:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+M|\psi\rangle = |\psi'\rangle
+\]</div>
+</div>
+<p>In quantum computing, matrices play the role of <strong>quantum gates</strong>: every operation applied to a qubit, as introduced conceptually in Chapter 1, corresponds mathematically to multiplying its state vector by a matrix.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>   State           Gate            New State
+   |ψ⟩       ×       M       =        |ψ&#39;⟩
+(before)      (transformation)      (after)
+</pre></div>
+</div>
+</section>
+<section id="the-identity-matrix">
+<h3>5.2 The Identity Matrix<a class="headerlink" href="#the-identity-matrix" title="Link to this heading">¶</a></h3>
+<p>The simplest possible matrix is the <strong>identity matrix</strong>, denoted <span class="math notranslate nohighlight">\(I\)</span>, which leaves every vector unchanged:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+I = \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; 1 \end{pmatrix}, \qquad I|\psi\rangle = |\psi\rangle
+\end{split}\]</div>
+</div>
+<p>While trivial on its own, the identity matrix is a useful reference point: every quantum gate can be understood, in part, by comparing what it does differently from doing nothing at all.</p>
+</section>
+<section id="the-adjoint-conjugate-transpose-of-a-matrix">
+<h3>5.3 The Adjoint (Conjugate Transpose) of a Matrix<a class="headerlink" href="#the-adjoint-conjugate-transpose-of-a-matrix" title="Link to this heading">¶</a></h3>
+<p>Just as a ket has a corresponding bra, every matrix <span class="math notranslate nohighlight">\(M\)</span> has a corresponding <strong>adjoint</strong>, written <span class="math notranslate nohighlight">\(M^{\dagger}\)</span> (read “M dagger”), obtained by transposing the matrix and taking the complex conjugate of every entry:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+M^{\dagger} = (M^{T})^{*}
+\]</div>
+</div>
+<p>The adjoint will reappear constantly throughout this book, most importantly in the next definition.</p>
+</section>
+<section id="unitary-matrices">
+<h3>5.4 Unitary Matrices<a class="headerlink" href="#unitary-matrices" title="Link to this heading">¶</a></h3>
+<p>Not every matrix corresponds to something physically allowed inside a quantum computer. Recall from Section 3.4 that a quantum state vector must always have norm 1 — this represents the requirement that probabilities add up to 100%. It follows that any transformation applied to a quantum state must preserve this norm; otherwise, the resulting “probabilities” would no longer make sense.</p>
+<p>Matrices with this norm-preserving property are called <strong>unitary matrices</strong>, and they satisfy the defining condition:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+U^{\dagger}U = UU^{\dagger} = I
+\]</div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Every quantum gate is mathematically represented by a unitary matrix. This is not an arbitrary design choice — it is a direct mathematical consequence of the requirement that quantum states remain properly normalized after every operation. We will use this fact repeatedly once quantum gates are introduced formally.</p>
+</div>
+<p>An intuitive way to think about unitary matrices is that they <em>rotate</em> vectors without stretching or shrinking them — much like rotating an arrow around the origin changes its direction but never its length.</p>
+</section>
+<section id="eigenvalues-and-eigenvectors-briefly">
+<h3>5.5 Eigenvalues and Eigenvectors, Briefly<a class="headerlink" href="#eigenvalues-and-eigenvectors-briefly" title="Link to this heading">¶</a></h3>
+<p>One more concept will be useful in later chapters, particularly when we discuss measurement: <strong>eigenvectors</strong> and <strong>eigenvalues</strong>.</p>
+<p>For a given matrix <span class="math notranslate nohighlight">\(M\)</span>, a vector <span class="math notranslate nohighlight">\(|v\rangle\)</span> is called an eigenvector of <span class="math notranslate nohighlight">\(M\)</span> if applying <span class="math notranslate nohighlight">\(M\)</span> to it only rescales it, without changing its direction:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+M|v\rangle = \lambda|v\rangle
+\]</div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda\)</span> is a (possibly complex) number called the corresponding <strong>eigenvalue</strong>.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>M |v⟩  =  λ |v⟩
+           │
+           └── same direction as |v⟩, just scaled by λ
+</pre></div>
+</div>
+<p>We will not need the full theory of eigenvalues and eigenvectors yet. For now, it is enough to know that they exist and that, later in this book, they will provide the precise mathematical description of what happens when a qubit is measured.</p>
+</section>
+<section id="a-first-glimpse-of-the-tensor-product">
+<h3>5.6 A First Glimpse of the Tensor Product<a class="headerlink" href="#a-first-glimpse-of-the-tensor-product" title="Link to this heading">¶</a></h3>
+<p>Everything discussed so far describes a <em>single</em> qubit. But interesting computation requires <em>many</em> qubits working together, and combining multiple quantum systems into one requires an additional operation called the <strong>tensor product</strong>, written <span class="math notranslate nohighlight">\(\otimes\)</span>.</p>
+<p>We will not define the tensor product rigorously here — it deserves its own careful treatment once multi-qubit systems are introduced in Part IV of this book. For now, it is enough to know that it exists, and that it is the mathematical tool responsible for one of the most famous and counterintuitive phenomena in quantum computing: <strong>entanglement</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If linear combinations (Section 3.3) describe how a <em>single</em> qubit can be a blend of <span class="math notranslate nohighlight">\(|0\rangle\)</span> and <span class="math notranslate nohighlight">\(|1\rangle\)</span>, the tensor product describes how <em>multiple</em> qubits combine into a single, larger quantum state — one that, remarkably, cannot always be split back apart into independent pieces.</p>
+</div>
+</section>
+</section>
+<section id="putting-it-all-together">
+<h2>6. Putting It All Together<a class="headerlink" href="#putting-it-all-together" title="Link to this heading">¶</a></h2>
+<p>Let’s briefly review the path this chapter has taken:</p>
+<ul class="simple">
+<li><p>We introduced <strong>complex numbers</strong> because quantum amplitudes need both a magnitude and a phase to properly describe interference.</p></li>
+<li><p>We introduced <strong>vectors</strong> and <strong>vector spaces</strong> because a quantum state is described by more than one amplitude at once.</p></li>
+<li><p>We introduced the <strong>inner product</strong> and <strong>normalization</strong> because probabilities must be real, non-negative, and must add up to 100%.</p></li>
+<li><p>We introduced <strong>Dirac notation</strong> as a compact and standard way to write all of the above.</p></li>
+<li><p>We introduced <strong>matrices</strong>, and in particular <strong>unitary matrices</strong>, because every operation on a quantum state must preserve normalization.</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Complex Numbers  →  amplitudes with magnitude and phase
+Vector Spaces    →  states as combinations of basis vectors
+Inner Product    →  normalization and orthogonality
+Dirac Notation   →  |ψ⟩, ⟨ψ|, ⟨ϕ|ψ⟩
+Matrices (Unitary) → transformations of quantum states
+</pre></div>
+</div>
+<p>With this toolkit in hand, we are finally ready to give a fully precise definition of the qubit — connecting the “spinning coin” and the Bloch Sphere from Chapter 1 to the equation <span class="math notranslate nohighlight">\(|\psi\rangle = \alpha|0\rangle + \beta|1\rangle\)</span> introduced in this chapter. That is exactly where the next chapter begins.</p>
+<!-- ```{figure} /_static/figures/ch3_fig6-1.png
+:name: fig-ch3-6-1
+:alt: From mathematics to qubits
+
+From mathematics to qubits: complex numbers, vector spaces, and Dirac notation combine to precisely describe a quantum state.
+``` -->
+</section>
+<hr class="docutils" />
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">¶</a></h2>
+<p>[1] Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</p>
+<p>[2] Dirac, P. A. M. (1930). <em>The Principles of Quantum Mechanics</em>. Oxford University Press.</p>
+<p>[3] Axler, S. (2015). <em>Linear Algebra Done Right</em> (3rd ed.). Springer.</p>
+<p>[4] Sakurai, J. J., &amp; Napolitano, J. (2017). <em>Modern Quantum Mechanics</em> (2nd ed.). Cambridge University Press.</p>
+<p>[5] Euler, L. (1748). <em>Introductio in analysin infinitorum</em>. Lausanne.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="chapter_2_why_quantum_computing.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Chapter 2 — Why Quantum Computing?</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Leonardo Alves Santana
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Chapter 3 — Mathematics for Quantum Computing</a><ul>
+<li><a class="reference internal" href="#why-this-chapter-comes-before-qubits">1. Why This Chapter Comes Before Qubits</a></li>
+<li><a class="reference internal" href="#complex-numbers">2. Complex Numbers</a><ul>
+<li><a class="reference internal" href="#why-real-numbers-are-not-enough">2.1 Why Real Numbers Are Not Enough</a></li>
+<li><a class="reference internal" href="#the-imaginary-unit">2.2 The Imaginary Unit</a></li>
+<li><a class="reference internal" href="#the-complex-plane">2.3 The Complex Plane</a></li>
+<li><a class="reference internal" href="#modulus-and-complex-conjugate">2.4 Modulus and Complex Conjugate</a></li>
+<li><a class="reference internal" href="#polar-form-and-euler-s-formula">2.5 Polar Form and Euler’s Formula</a></li>
+<li><a class="reference internal" href="#practice-questions">2.6 Practice Questions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#vectors-and-vector-spaces">3. Vectors and Vector Spaces</a><ul>
+<li><a class="reference internal" href="#from-numbers-to-lists-of-numbers">3.1 From Numbers to Lists of Numbers</a></li>
+<li><a class="reference internal" href="#vector-spaces">3.2 Vector Spaces</a></li>
+<li><a class="reference internal" href="#linear-combinations-basis-and-dimension">3.3 Linear Combinations, Basis, and Dimension</a></li>
+<li><a class="reference internal" href="#inner-product-and-norm">3.4 Inner Product and Norm</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dirac-notation">4. Dirac Notation</a><ul>
+<li><a class="reference internal" href="#why-a-new-notation-at-all">4.1 Why a New Notation at All?</a></li>
+<li><a class="reference internal" href="#kets">4.2 Kets</a></li>
+<li><a class="reference internal" href="#bras">4.3 Bras</a></li>
+<li><a class="reference internal" href="#putting-them-together-the-inner-product">4.4 Putting Them Together: The Inner Product</a></li>
+<li><a class="reference internal" href="#general-quantum-states-in-dirac-notation">4.5 General Quantum States in Dirac Notation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#matrices-and-linear-operators">5. Matrices and Linear Operators</a><ul>
+<li><a class="reference internal" href="#matrices-as-transformations">5.1 Matrices as Transformations</a></li>
+<li><a class="reference internal" href="#the-identity-matrix">5.2 The Identity Matrix</a></li>
+<li><a class="reference internal" href="#the-adjoint-conjugate-transpose-of-a-matrix">5.3 The Adjoint (Conjugate Transpose) of a Matrix</a></li>
+<li><a class="reference internal" href="#unitary-matrices">5.4 Unitary Matrices</a></li>
+<li><a class="reference internal" href="#eigenvalues-and-eigenvectors-briefly">5.5 Eigenvalues and Eigenvectors, Briefly</a></li>
+<li><a class="reference internal" href="#a-first-glimpse-of-the-tensor-product">5.6 A First Glimpse of the Tensor Product</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#putting-it-all-together">6. Putting It All Together</a></li>
+<li><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    </body>
+</html>

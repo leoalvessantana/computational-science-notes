@@ -1,0 +1,650 @@
+# Capítulo 7 — Algoritmos Quânticos
+
+Nos Capítulos 4 e 5, construímos a teoria: postulados, qubits, portas, emaranhamento. No Capítulo 6, construímos as ferramentas: um simulador em `numpy` e o Qiskit. Chegou a hora de usar tudo isso para o que realmente importa — **algoritmos** que resolvem problemas mais rápido do que qualquer computador clássico consegue.
+
+Este capítulo segue uma progressão histórica e pedagógica natural. Começamos com um pouco de teoria da computação e análise de algoritmos — o vocabulário necessário para dizer, com precisão, o que significa "mais rápido". Em seguida, estudamos quatro algoritmos, em ordem crescente de sofisticação: **Deutsch–Jozsa** (o primeiro algoritmo a demonstrar vantagem quântica, ainda que para um problema artificial), o **algoritmo de Grover** (busca não estruturada, com vantagem quadrática), a **Transformada Quântica de Fourier** (uma sub-rotina que, por si só, não resolve nenhum problema, mas é o motor por trás do próximo algoritmo), e o **algoritmo de Shor** (fatoração de inteiros, com vantagem exponencial — o resultado que tornou a computação quântica famosa).
+
+> **Nota**
+>
+> Todo o código deste capítulo reaproveita as funções `numpy` construídas no Capítulo 6 (`kron_n`, `embed`, `gate_on_qubit`, `controlled_gate`, `H`, `X`, `Z`, `normalize`, etc.). Assumimos que elas já estão definidas.
+
+---
+
+## 7.1 Teoria da Computação
+
+Antes de falar de algoritmos *quânticos*, vale a pena fixar um pouco de vocabulário sobre algoritmos em geral — a chamada **teoria da computação**.
+
+### Problemas de decisão e classes de complexidade
+
+Um **problema de decisão** é uma pergunta com resposta sim/não sobre uma entrada (por exemplo: "este número é primo?"). A **classe de complexidade** de um problema descreve quanto recurso computacional (tempo, memória) é necessário para resolvê-lo, em função do tamanho $n$ da entrada.
+
+Duas classes clássicas serão relevantes neste capítulo:
+
+- $\textbf{P}$: problemas resolvíveis em tempo **polinomial** em $n$ por um computador clássico (determinístico). Considerados "eficientes".
+- $\textbf{NP}$: problemas cuja resposta, uma vez encontrada, pode ser **verificada** em tempo polinomial — mesmo que encontrá-la pareça exigir tempo exponencial. A fatoração de inteiros, tema da Seção 7.6, está em $\textbf{NP}$ (e acredita-se, mas não está demonstrado, que não está em $\textbf{P}$ classicamente).
+
+A computação quântica define sua própria classe:
+
+- $\textbf{BQP}$ (*Bounded-error Quantum Polynomial time*): problemas resolvíveis em tempo polinomial por um computador **quântico**, com probabilidade de erro limitada (por exemplo, no máximo $1/3$, que pode ser reduzida repetindo o algoritmo).
+
+> **Importante**
+>
+> Sabe-se que $\textbf{P}\subseteq\textbf{BQP}$ (qualquer coisa que um computador clássico resolve eficientemente, um computador quântico também resolve). O algoritmo de Shor (Seção 7.6) resolve a fatoração de inteiros em $\textbf{BQP}$; não se sabe se a fatoração está em $\textbf{P}$. Por isso, o algoritmo de Shor não prova que $\textbf{P}\neq\textbf{BQP}$ — mas é a evidência mais famosa de que os dois conjuntos provavelmente **não coincidem**.
+
+### O modelo de oráculo
+
+Muitos algoritmos quânticos — incluindo os quatro deste capítulo — não recebem a entrada como uma lista de números, mas como uma **função caixa-preta** (ou *oráculo*) $f$, que o algoritmo só pode acessar chamando-a com um argumento e observando o resultado. A pergunta relevante passa a ser: **quantas chamadas ao oráculo** (não quantos passos de computação) são necessárias para resolver o problema?
+
+> **Nota**
+>
+> Para que um oráculo clássico $f:\{0,1\}^n\to\{0,1\}$ possa ser usado dentro de um circuito quântico, ele precisa ser implementado como uma porta **unitária** (Postulado 2, Capítulo 4) — o que exige que seja **reversível**. A construção padrão usa um qubit auxiliar:
+>
+> $$
+> U_f|x\rangle|y\rangle = |x\rangle|y\oplus f(x)\rangle,
+> $$
+>
+> exatamente o mesmo tipo de construção que já apareceu, implicitamente, na porta CNOT do Capítulo 5 (que é o caso $f(x)=x$). Essa é a forma de oráculo usada tanto no algoritmo de Deutsch–Jozsa (Seção 7.3) quanto, de forma disfarçada, no de Grover (Seção 7.4).
+
+<details>
+<summary><strong>Exercícios 7.1</strong></summary>
+
+1. A que classe de complexidade pertence o problema "dado um circuito quântico com $n$ qubits e $m$ portas, e um observável $O$, o valor esperado de $O$ é maior que $0.5$?" (não é necessário resolver formalmente — apenas identifique qual das classes definidas nesta seção é a mais natural para descrevê-lo, e por quê).
+
+   <details>
+   <summary>Resolução</summary>
+
+   $\textbf{BQP}$: o problema é resolvido de forma natural simulando o próprio circuito quântico (Capítulo 6) e usando um `Estimator` (Seção 6.7) para estimar o valor esperado, com probabilidade de erro controlável repetindo a medição.
+   </details>
+
+2. Por que a construção $U_f|x\rangle|y\rangle = |x\rangle|y\oplus f(x)\rangle$ é sempre reversível, para **qualquer** função clássica $f$ (mesmo que $f$ em si não seja injetora)?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Porque $U_f$ é sua própria inversa: aplicando $U_f$ duas vezes seguidas, $y\oplus f(x)\oplus f(x) = y$ (já que $f(x)\oplus f(x)=0$ para qualquer bit), então o segundo qubit retorna ao valor original. Isso vale independentemente de $f$ ser ou não injetora, porque a reversibilidade está na estrutura do XOR com o qubit auxiliar, não na função $f$ em si.
+   </details>
+
+</details>
+
+---
+
+## 7.2 Análise de Algoritmos
+
+Para comparar algoritmos clássicos e quânticos de forma justa, precisamos de uma métrica comum. Neste capítulo, usaremos principalmente a **complexidade de consulta** (*query complexity*): o número de chamadas ao oráculo necessárias no **pior caso**, como função de $n$ (para Deutsch–Jozsa e Grover) ou como função do tamanho do número a fatorar (para Shor, onde a métrica relevante passa a ser tempo de execução, não consultas a um oráculo).
+
+Usamos a notação usual de análise de algoritmos:
+
+- $O(g(n))$: limitado superiormente, a menos de uma constante, por $g(n)$ para $n$ suficientemente grande.
+- $\Omega(g(n))$: limitado inferiormente pela mesma noção — usado para provar que **nenhum** algoritmo (clássico, nesse caso) pode fazer melhor que $g(n)$.
+
+A tabela abaixo resume as vantagens que vamos demonstrar (e, em alguns casos, provar formalmente) neste capítulo:
+
+```
+Algoritmo         Problema                    Clássico (pior caso)    Quântico       Tipo de vantagem
+-----------------------------------------------------------------------------------------------------
+Deutsch-Jozsa     f constante ou balanceada   O(2^(n-1) + 1)          O(1)           Exponencial
+Grover            busca em N itens            O(N)                    O(√N)          Quadrática
+Shor              fatorar inteiro de n bits   sub-exponencial         O(n^3) (~)     Exponencial (conjecturada)
+```
+
+> **Nota**
+>
+> "Vantagem exponencial" para Deutsch–Jozsa é um resultado *no modelo de oráculo determinístico* — um algoritmo clássico **probabilístico** resolve o mesmo problema com alta confiança em apenas algumas consultas. Por isso, Deutsch–Jozsa é historicamente importante (foi o primeiro exemplo de separação quântico-clássica), mas não representa uma vantagem prática de verdade. Grover e Shor, em contraste, mantêm sua vantagem mesmo contra os melhores algoritmos clássicos probabilísticos conhecidos.
+
+Duas ideias vão aparecer repetidamente nas próximas seções e merecem ser destacadas desde já:
+
+- **Interferência**: aplicar Hadamard a uma superposição pode fazer amplitudes se cancelarem (interferência destrutiva) ou se reforçarem (interferência construtiva). Deutsch–Jozsa e Grover são, no fundo, formas cuidadosamente projetadas de produzir interferência construtiva exatamente sobre a resposta certa.
+- **Amplificação de amplitude**: em vez de tentar "adivinhar" a resposta de uma vez, Grover aumenta gradualmente a probabilidade de medir a resposta certa, repetindo uma mesma operação várias vezes — uma ideia sem análogo clássico direto.
+
+<details>
+<summary><strong>Exercícios 7.2</strong></summary>
+
+1. Para $n=10$ qubits (portanto $N=2^{10}=1024$ itens), quantas consultas ao oráculo Grover precisa, aproximadamente, comparado com uma busca clássica exaustiva?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Clássico: até $1024$ consultas no pior caso. Grover: aproximadamente $\frac{\pi}{4}\sqrt{1024}=\frac{\pi}{4}\times32\approx 25$ consultas — uma redução de mais de $40\times$.
+   </details>
+
+2. Explique, em uma frase, por que uma vantagem "quadrática" ($O(\sqrt N)$ vs. $O(N)$) é qualitativamente diferente de uma vantagem "exponencial" ($O(n^3)$ vs. $O(2^n)$) ao considerar problemas cada vez maiores.
+
+   <details>
+   <summary>Resolução</summary>
+
+   Uma vantagem quadrática cresce, mas a razão entre os tempos clássico e quântico cresce apenas como $\sqrt N$; uma vantagem exponencial faz a razão entre os tempos crescer exponencialmente com o tamanho da entrada, de modo que, para entradas grandes, o algoritmo clássico se torna computacionalmente inviável enquanto o quântico permanece tratável.
+   </details>
+
+</details>
+
+---
+
+## 7.3 Deutsch–Jozsa
+
+### O problema
+
+Recebemos acesso a um oráculo para uma função $f:\{0,1\}^n\to\{0,1\}$, com a **promessa** de que $f$ é de um dos dois tipos:
+
+- **Constante**: $f(x)$ é o mesmo valor para todo $x$ (ou sempre 0, ou sempre 1).
+- **Balanceada**: $f(x)$ vale $0$ para exatamente metade das entradas e $1$ para a outra metade.
+
+**Objetivo**: decidir qual dos dois casos ocorre, com o menor número possível de chamadas a $f$.
+
+**Clássico**: no pior caso, um algoritmo determinístico pode precisar de $2^{n-1}+1$ consultas (imagine consultar exatamente metade das entradas e obter sempre o mesmo valor: ainda não se sabe se as restantes serão iguais — constante — ou diferentes — balanceada; a consulta seguinte decide).
+
+**Quântico**: o algoritmo de Deutsch–Jozsa resolve isso com **uma única consulta** ao oráculo.
+
+### O circuito
+
+```
+|0⟩^n ──[H^n]──●────────[H^n]──[medir]
+               │  U_f
+|1⟩   ──[H]────●────────
+```
+
+Onde $U_f|x\rangle|y\rangle=|x\rangle|y\oplus f(x)\rangle$ (Seção 7.1) atua sobre os $n$ qubits de entrada e o qubit auxiliar.
+
+### Por que funciona
+
+Partindo de $|0\rangle^{\otimes n}|1\rangle$ e aplicando $H$ a todos os $n+1$ qubits, obtemos uma superposição uniforme sobre $x$, com o qubit auxiliar em $|-\rangle$:
+
+$$
+\frac{1}{\sqrt{2^n}}\sum_{x}|x\rangle \otimes |-\rangle.
+$$
+
+Um fato notável sobre $U_f$ é que, quando o qubit auxiliar está em $|-\rangle$, aplicar $U_f$ produz exatamente uma **fase** $(-1)^{f(x)}$ no registrador $x$, sem alterar o auxiliar — um truque conhecido como *phase kickback*:
+
+$$
+U_f\Big(|x\rangle\otimes|-\rangle\Big) = (-1)^{f(x)}|x\rangle\otimes|-\rangle.
+$$
+
+Depois do oráculo, o estado dos $n$ primeiros qubits é
+
+$$
+\frac{1}{\sqrt{2^n}}\sum_{x}(-1)^{f(x)}|x\rangle.
+$$
+
+Aplicando $H^{\otimes n}$ novamente, a amplitude do estado $|0\rangle^{\otimes n}$ se torna
+
+$$
+\frac{1}{2^n}\sum_x (-1)^{f(x)}.
+$$
+
+- Se $f$ é **constante**, todos os termos têm o mesmo sinal, e essa soma vale $\pm1$ — a probabilidade de medir $|0\rangle^{\otimes n}$ é exatamente $1$.
+- Se $f$ é **balanceada**, exatamente metade dos termos é $+1$ e metade $-1$, e a soma é **exatamente zero** — interferência destrutiva total, e a probabilidade de medir $|0\rangle^{\otimes n}$ é exatamente $0$.
+
+Medindo os $n$ primeiros qubits, portanto, o resultado $|0\rangle^{\otimes n}$ (todos zero) identifica $f$ constante com certeza; qualquer outro resultado identifica $f$ balanceada com certeza.
+
+### Implementação
+
+```python
+def dj_oracle_matrix(f, n):
+    """Constrói U_f em n+1 qubits: |x>|y> -> |x>|y xor f(x)>."""
+    dim = 2 ** (n + 1)
+    U = np.zeros((dim, dim), dtype=complex)
+    for idx in range(dim):
+        x, y = idx >> 1, idx & 1
+        new_idx = (x << 1) | (y ^ f(x))
+        U[new_idx, idx] = 1
+    return U
+
+def deutsch_jozsa(f, n):
+    dim = 2 ** (n + 1)
+    state = np.zeros(dim, dtype=complex)
+    state[1] = 1.0                                  # |0...0>|1>
+    state = kron_n(*[H] * (n + 1)) @ state           # H em todos os n+1 qubits
+    state = dj_oracle_matrix(f, n) @ state           # oráculo
+    state = kron_n(*([H] * n + [I])) @ state         # H apenas nos n primeiros
+
+    prob_all_zero = sum(
+        abs(state[idx]) ** 2 for idx in range(dim) if (idx >> 1) == 0
+    )
+    return prob_all_zero  # 1.0 -> constante ; 0.0 -> balanceada
+```
+
+> **💡 Exemplo — Confirmando o algoritmo**
+>
+> ```python
+> n = 3
+> f_const = lambda x: 0
+> f_balanced = lambda x: bin(x).count("1") % 2   # paridade dos bits de x
+>
+> print(deutsch_jozsa(f_const, n))     # 1.0
+> print(deutsch_jozsa(f_balanced, n))  # 0.0
+> ```
+>
+> Os resultados confirmam exatamente a previsão teórica: probabilidade $1$ de medir todos-zero para a função constante, e probabilidade $0$ para a balanceada — decidido com uma única consulta ao oráculo, embutida em `dj_oracle_matrix`.
+
+<details>
+<summary><strong>Exercícios 7.3</strong></summary>
+
+1. Verifique que `f_balanced` definida no exemplo é, de fato, balanceada para $n=3$ (dica: calcule `f_balanced(x)` para todo $x$ de $0$ a $7$ e conte quantos resultados são $0$ e quantos são $1$).
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   valores = [bin(x).count("1") % 2 for x in range(8)]
+   print(valores)  # [0,1,1,0,1,0,0,1]
+   ```
+
+   Quatro zeros e quatro uns — exatamente balanceada.
+   </details>
+
+2. O que aconteceria se, por engano, aplicássemos $H^{\otimes(n+1)}$ (incluindo o qubit auxiliar) na segunda rodada de Hadamards, em vez de $H^{\otimes n}\otimes I$? O resultado da medição dos primeiros $n$ qubits ainda seria confiável?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Aplicar $H$ novamente ao qubit auxiliar apenas transforma $|-\rangle$ de volta para $|1\rangle$ (já que $H^2=I$), sem afetar os outros $n$ qubits — a probabilidade de medir todos-zero nos primeiros $n$ qubits permanece exatamente a mesma. O algoritmo continuaria funcionando; a diferença é puramente estética (o qubit auxiliar terminaria em $|1\rangle$ em vez de $|-\rangle$).
+   </details>
+
+3. Modifique `f_const` para retornar sempre $1$ em vez de sempre $0$. O resultado de `deutsch_jozsa` deveria mudar?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Não — para $f(x)=1$ (constante), a soma $\sum_x(-1)^{f(x)}$ vale $-2^n$ em vez de $+2^n$, mas o módulo ao quadrado da amplitude (que é o que a probabilidade mede) é o mesmo. `deutsch_jozsa` ainda retorna $1.0$.
+   </details>
+
+</details>
+
+---
+
+## 7.4 Algoritmo de Grover
+
+### O problema
+
+Temos um oráculo para uma função $f:\{0,1\}^n\to\{0,1\}$ que vale $1$ em exatamente **um** item "marcado" $w$ (dentre $N=2^n$ itens) e $0$ em todos os demais. **Objetivo**: encontrar $w$.
+
+**Clássico**: no pior caso, é preciso testar até $N$ itens — $O(N)$.
+
+**Quântico**: o algoritmo de Grover encontra $w$ com alta probabilidade usando apenas $O(\sqrt N)$ consultas ao oráculo — especificamente, cerca de $\frac{\pi}{4}\sqrt N$ repetições de duas operações.
+
+### As duas operações
+
+**Oráculo de fase.** Em vez de marcar $w$ escrevendo em um qubit auxiliar (como em Deutsch–Jozsa), Grover usa uma versão que aplica uma fase $-1$ diretamente ao item marcado:
+
+$$
+U_f|x\rangle = \begin{cases}-|x\rangle & x=w\\ |x\rangle & x\neq w\end{cases}.
+$$
+
+**Operador de difusão.** Reflete o estado em torno da superposição uniforme $|s\rangle=\tfrac{1}{\sqrt N}\sum_x|x\rangle$:
+
+$$
+U_s = H^{\otimes n}\big(2|0\rangle\langle0|-I\big)H^{\otimes n}.
+$$
+
+### Interpretação geométrica
+
+A combinação $U_s U_f$ tem uma interpretação elegante: dentro do plano 2D gerado por $|w\rangle$ e pela superposição uniforme dos itens não marcados, cada aplicação de $U_sU_f$ é uma **rotação** por um ângulo fixo $\theta\approx\frac{2}{\sqrt N}$ (para $N$ grande), aproximando o estado cada vez mais de $|w\rangle$. Após aproximadamente $\frac{\pi}{4}\sqrt N$ rotações, o estado está o mais próximo possível de $|w\rangle$ — e medir nesse ponto retorna $w$ com alta probabilidade. Continuar iterando além desse ponto "passa direto" e começa a se afastar de $|w\rangle$ novamente — por isso o número de iterações precisa ser escolhido com cuidado.
+
+### Implementação
+
+```python
+def grover_oracle(marked_index, n):
+    dim = 2 ** n
+    U = np.eye(dim, dtype=complex)
+    U[marked_index, marked_index] = -1
+    return U
+
+def diffusion_operator(n):
+    dim = 2 ** n
+    Hn = kron_n(*[H] * n)
+    proj0 = np.zeros((dim, dim), dtype=complex)
+    proj0[0, 0] = 1
+    inversion_about_zero = 2 * proj0 - np.eye(dim, dtype=complex)
+    return Hn @ inversion_about_zero @ Hn
+
+def grover(marked_index, n, iterations):
+    dim = 2 ** n
+    state = np.zeros(dim, dtype=complex)
+    state[0] = 1.0
+    state = kron_n(*[H] * n) @ state          # superposição uniforme
+
+    Uf, Us = grover_oracle(marked_index, n), diffusion_operator(n)
+    for _ in range(iterations):
+        state = Uf @ state
+        state = Us @ state
+    return state
+```
+
+> **💡 Exemplo — Buscando o item 5 entre 8 itens**
+>
+> ```python
+> n, marked = 3, 5
+> N = 2 ** n
+> optimal_iters = round(np.pi / 4 * np.sqrt(N))   # 2 iterações para N=8
+>
+> state = grover(marked, n, optimal_iters)
+> probs = np.abs(state) ** 2
+> print(probs[marked])   # 0.9453... -> quase certeza
+> ```
+>
+> Com apenas **duas** consultas ao oráculo (contra até 8 consultas no pior caso clássico), a probabilidade de medir o item correto ($5$) sobe para aproximadamente $94.5\%$ — o restante da probabilidade se distribui igualmente entre os outros sete itens.
+
+> **Nota**
+>
+> A probabilidade de sucesso de Grover **não** cresce monotonicamente até 1 e depois fica lá — ela oscila. Se continuássemos aplicando $U_sU_f$ além do número ótimo de iterações, a probabilidade de encontrar $w$ começaria a **diminuir** novamente. Escolher o número certo de iterações — aproximadamente $\frac{\pi}{4}\sqrt N$, arredondado para o inteiro mais próximo — é parte essencial do algoritmo.
+
+<details>
+<summary><strong>Exercícios 7.4</strong></summary>
+
+1. Repita o Exemplo desta seção, mas com `iterations=1` (uma iteração a menos que o ótimo) e depois com `iterations=4` (mais iterações que o ótimo). A probabilidade de encontrar o item marcado aumenta ou diminui em cada caso, comparada ao resultado ótimo?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   for it in [1, 2, 3, 4]:
+       probs = np.abs(grover(5, 3, it)) ** 2
+       print(it, probs[5])
+   ```
+
+   A probabilidade sobe até `iterations=2` (o ótimo) e depois **cai** para `iterations=3` e `4`, confirmando o comportamento oscilatório descrito na Nota desta seção.
+   </details>
+
+2. Para $N=64$ itens ($n=6$), calcule o número ótimo de iterações. Quantas vezes mais rápido é Grover, comparado a uma busca clássica exaustiva no pior caso?
+
+   <details>
+   <summary>Resolução</summary>
+
+   $\frac{\pi}{4}\sqrt{64} = \frac{\pi}{4}\times8\approx6.3\to6$ iterações, contra até $64$ consultas clássicas — aproximadamente $10\times$ mais rápido, consistente com a vantagem quadrática ($\sqrt{64}=8$, na ordem de grandeza certa).
+   </details>
+
+3. O operador de difusão foi escrito como $H^{\otimes n}(2|0\rangle\langle0|-I)H^{\otimes n}$. Explique por que $2|0\rangle\langle0|-I$ é, de fato, uma matriz unitária (dica: pense em seus autovalores, sabendo que $|0\rangle\langle0|$ é um projetor).
+
+   <details>
+   <summary>Resolução</summary>
+
+   $|0\rangle\langle0|$ tem autovalor $1$ no subespaço gerado por $|0\rangle$ e autovalor $0$ em todo o subespaço ortogonal a $|0\rangle$. Logo $2|0\rangle\langle0|-I$ tem autovalor $2\times1-1=1$ na direção $|0\rangle$ e autovalor $2\times0-1=-1$ em todo o resto — todos os autovalores têm módulo $1$, e a matriz é hermitiana, portanto é unitária (consistente com o Postulado 2).
+   </details>
+
+</details>
+
+---
+
+## 7.5 Transformada Quântica de Fourier
+
+A **Transformada Quântica de Fourier** (QFT) não resolve, por si só, nenhum problema — é uma sub-rotina, o análogo quântico da Transformada Discreta de Fourier (DFT) clássica, e é o ingrediente central do algoritmo de Shor (próxima seção) e de toda a família de algoritmos de **estimativa de fase**.
+
+### Definição
+
+Dado um vetor de $N=2^n$ amplitudes $x_0,\ldots,x_{N-1}$, a DFT clássica produz $y_0,\ldots,y_{N-1}$ com
+
+$$
+y_k = \frac{1}{\sqrt N}\sum_{j=0}^{N-1} x_j\, e^{2\pi i jk/N}.
+$$
+
+A QFT é exatamente essa mesma transformação linear, mas aplicada **às amplitudes de um estado quântico** de $n$ qubits:
+
+$$
+\text{QFT}|j\rangle = \frac{1}{\sqrt N}\sum_{k=0}^{N-1} e^{2\pi ijk/N}|k\rangle.
+$$
+
+> **Nota**
+>
+> A diferença crucial entre a DFT clássica e a QFT não está na fórmula — é a mesma —, mas em **como ela é executada**. A DFT clássica, mesmo pelo algoritmo FFT (*Fast Fourier Transform*), exige $O(N\log N)$ operações. A QFT, como veremos a seguir, é implementada por um circuito com apenas $O(n^2)=O((\log N)^2)$ portas — exponencialmente mais rápida, desde que a entrada e a saída permaneçam como amplitudes quânticas (não podemos "ler" os $y_k$ diretamente sem medir, o que destrói a maior parte da informação — mais um eco do Teorema da Não-Clonagem, Capítulo 5).
+
+### O circuito
+
+A QFT sobre $n$ qubits é construída com portas $H$ e portas de fase controlada $R_\varphi$ (Capítulo 4, Seção 4.5), seguidas de trocas (*swaps*) para reverter a ordem dos qubits:
+
+```
+q0: ──[H]──●───────●──────────────×──
+           │φ=π/2  │              │
+q1: ───────●───────┼──[H]──●──────┼──×
+                    │φ=π/4  │φ=π/2 │  │
+q2: ────────────────●───────●──[H]×──×
+```
+
+### Implementação
+
+```python
+def controlled_phase(phi, control, target, n):
+    U_phase = np.diag([1, np.exp(1j * phi)]).astype(complex)
+    return controlled_gate(U_phase, control, target, n)
+
+def qft_circuit_matrix(n):
+    dim = 2 ** n
+    M = np.eye(dim, dtype=complex)
+    for q in range(n):
+        M = gate_on_qubit(H, q, n) @ M
+        for k in range(q + 1, n):
+            phi = np.pi / (2 ** (k - q))
+            M = controlled_phase(phi, k, q, n) @ M
+    # reverter a ordem dos qubits com swaps
+    for i in range(n // 2):
+        j = n - 1 - i
+        SWAP = np.eye(dim, dtype=complex)
+        for x in range(dim):
+            bits = [(x >> (n - 1 - b)) & 1 for b in range(n)]
+            bits[i], bits[j] = bits[j], bits[i]
+            y = sum(b << (n - 1 - pos) for pos, b in enumerate(bits))
+            SWAP[:, x] = 0
+            SWAP[y, x] = 1
+        M = SWAP @ M
+    return M
+```
+
+> **💡 Exemplo — Confirmando a QFT contra sua definição direta**
+>
+> ```python
+> def qft_matrix_by_definition(n):
+>     N = 2 ** n
+>     omega = np.exp(2j * np.pi / N)
+>     F = np.array([[omega ** (j * k) for k in range(N)] for j in range(N)])
+>     return F / np.sqrt(N)
+>
+> n = 3
+> print(np.allclose(qft_matrix_by_definition(n), qft_circuit_matrix(n)))  # True
+> ```
+>
+> O circuito de $O(n^2)$ portas reproduz exatamente a matriz de $N\times N=2^n\times2^n$ entradas definida diretamente pela fórmula — construída, nesse caso, com $O(N^2)$ operações. Para $n=20$ ($N\approx10^6$), essa diferença já é a diferença entre segundos e uma eternidade.
+
+<details>
+<summary><strong>Exercícios 7.5</strong></summary>
+
+1. Calcule `qft_circuit_matrix(1)` (QFT de um único qubit) e compare com uma porta que você já conhece do Capítulo 4.
+
+   <details>
+   <summary>Resolução</summary>
+
+   Para $n=1$, a QFT se reduz exatamente à porta Hadamard $H$ — não há portas de fase controlada (não há outro qubit para controlar) nem swaps a fazer.
+   </details>
+
+2. Aplique `qft_circuit_matrix(3)` ao estado $|0\rangle^{\otimes3}$. Que estado você espera obter, sabendo que $j=0$ na fórmula da QFT torna todas as fases $e^{2\pi i\cdot0\cdot k/N}$ iguais a 1?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   state = np.zeros(8, dtype=complex); state[0] = 1
+   print(qft_circuit_matrix(3) @ state)
+   ```
+
+   O resultado é a superposição uniforme $\tfrac{1}{\sqrt8}\sum_k|k\rangle$ — exatamente o mesmo estado que $H^{\otimes3}|000\rangle$ produziria, já usado repetidamente nas seções anteriores.
+   </details>
+
+3. Por que a QFT termina com uma etapa de *swaps*, revertendo a ordem dos qubits? (Dica: pense em como o circuito, sem os swaps, naturalmente calcula os bits de $k$ na ordem inversa à convencional.)
+
+   <details>
+   <summary>Resolução</summary>
+
+   O circuito, construído dessa forma padrão, produz os bits do índice $k$ resultante na ordem invertida (o bit mais significativo de $k$ termina no último qubit do circuito, e vice-versa) — os swaps finais apenas reorganizam os qubits para que a saída siga a mesma convenção de ordenação usada em todo o resto do livro (Capítulo 5, Nota da Seção 5.1).
+   </details>
+
+</details>
+
+---
+
+## 7.6 Algoritmo de Shor
+
+Chegamos ao algoritmo que, em 1994, mudou a percepção pública sobre o que a computação quântica poderia fazer: o **algoritmo de Shor**, capaz de **fatorar um número inteiro** em tempo polinomial — uma tarefa para a qual não se conhece nenhum algoritmo clássico eficiente, e sobre a qual boa parte da criptografia atual (RSA) depende justamente dessa dificuldade.
+
+### Redução: de fatoração a busca de período
+
+A ideia central de Shor não ataca a fatoração diretamente — ela a **reduz** a um problema diferente: encontrar a **ordem** (ou período) $r$ de um número $a$ módulo $N$, isto é, o menor $r>0$ tal que
+
+$$
+a^r \equiv 1 \pmod N.
+$$
+
+Uma vez encontrado $r$ (par, e com $a^{r/2}\not\equiv-1\pmod N$ — condições satisfeitas com alta probabilidade para $a$ escolhido aleatoriamente), os fatores de $N$ são obtidos **classicamente**, por um simples cálculo de máximo divisor comum:
+
+$$
+\gcd\!\left(a^{r/2}-1,\,N\right) \quad \text{e} \quad \gcd\!\left(a^{r/2}+1,\,N\right).
+$$
+
+> **Nota**
+>
+> Encontrar a ordem $r$ é, ele mesmo, um problema classicamente difícil (não se conhece algoritmo clássico eficiente para isso). É exatamente aqui — e apenas aqui — que a computação quântica entra: encontrar $r$ **rapidamente**, usando a QFT.
+
+### A parte quântica: estimativa de fase
+
+O algoritmo prepara uma superposição uniforme sobre um registrador $x$ de $n$ qubits (com $2^n\geq N^2$, tipicamente) e usa um oráculo de **exponenciação modular** para calcular $a^x\bmod N$ em um segundo registrador:
+
+$$
+\frac{1}{\sqrt{2^n}}\sum_x |x\rangle|a^x\bmod N\rangle.
+$$
+
+Essa função $x\mapsto a^x\bmod N$ é **periódica**, com período exatamente $r$. "Medir" o segundo registrador (mesmo sem olhar o resultado explicitamente) colapsa o primeiro registrador em uma superposição uniforme apenas sobre os valores de $x$ compatíveis com o resultado observado — que formam, por construção, um **pente periódico** de período $r$:
+
+$$
+\frac{1}{\sqrt{2^n/r}}\sum_{k} |x_0 + kr\rangle.
+$$
+
+Aplicando a **QFT** (Seção 7.5) a esse pente, a interferência entre os termos concentra quase toda a probabilidade em múltiplos inteiros de $2^n/r$ — e medir o resultado revela $r$ (via fração continuada, um algoritmo puramente clássico que converte a fração medida $k/2^n$ em uma aproximação racional com denominador pequeno, que é exatamente $r$).
+
+> **Importante**
+>
+> A QFT é, literalmente, o motor por trás dessa etapa: sem ela — sem a capacidade de transformar informação de período em posições concentradas de probabilidade —, não haveria como extrair $r$ de forma eficiente. É por isso que a Seção 7.5 precisava vir antes desta.
+
+### Ilustrando a busca de período
+
+Implementar o oráculo completo de exponenciação modular está fora do escopo deste livro (exige, na prática, um circuito aritmético substancial). Mas podemos ilustrar exatamente o mecanismo de interferência que faz o algoritmo funcionar, construindo diretamente o "pente periódico" pós-medição e aplicando a QFT já implementada na Seção 7.5.
+
+```python
+N_factor, a, n_bits = 15, 7, 4
+Q = 2 ** n_bits  # 16
+
+powers = [pow(a, x, N_factor) for x in range(Q)]
+print(powers)  # [1, 7, 4, 13, 1, 7, 4, 13, 1, 7, 4, 13, 1, 7, 4, 13]
+
+r = next(k for k in range(1, Q) if powers[k] == 1)
+print("período r =", r)   # 4
+
+# simula o colapso do primeiro registrador após "medir" a^x mod N = powers[1]
+y0 = powers[1]
+xs_compativeis = [x for x in range(Q) if powers[x] == y0]   # [1, 5, 9, 13]
+
+state = np.zeros(Q, dtype=complex)
+for x in xs_compativeis:
+    state[x] = 1.0
+state = normalize(state)
+
+transformado = qft_circuit_matrix(n_bits) @ state
+probs = np.abs(transformado) ** 2
+picos = [k for k in range(Q) if probs[k] > 1e-6]
+print("picos após a QFT:", picos)   # [0, 4, 8, 12]
+```
+
+> **💡 Exemplo — Da medição aos fatores de 15**
+>
+> Continuando o código acima, os picos observados ($0,4,8,12$) são exatamente os múltiplos de $Q/r=16/4=4$ — confirmando, numericamente, a previsão teórica da subseção anterior. Suponha que a medição retorne o valor $4$. O pós-processamento **clássico** recupera $r$ e, em seguida, os fatores:
+>
+> ```python
+> from math import gcd
+> from fractions import Fraction
+>
+> medido = 4
+> r_estimado = Fraction(medido, Q).limit_denominator(N_factor).denominator
+> print("r estimado:", r_estimado)  # 4
+>
+> fator1 = gcd(a ** (r_estimado // 2) - 1, N_factor)
+> fator2 = gcd(a ** (r_estimado // 2) + 1, N_factor)
+> print("fatores:", fator1, fator2)  # 3 5
+> ```
+>
+> A partir de uma única medição quântica (simulada aqui de forma determinística, para clareza — na prática o resultado seria aleatório entre os picos $0,4,8,12$) e um pós-processamento clássico simples, recuperamos $15 = 3\times5$.
+
+### Complexidade
+
+O algoritmo completo de Shor — incluindo a exponenciação modular quântica — resolve a fatoração de um número de $n$ bits com aproximadamente $O(n^3)$ operações quânticas, contra o melhor algoritmo clássico conhecido (o *general number field sieve*), que é **sub-exponencial**, mas ainda assim cresce muito mais rápido que qualquer polinômio em $n$. Essa é a vantagem exponencial (conjecturada, no sentido da Seção 7.1) que torna o algoritmo de Shor a ameaça mais conhecida à criptografia RSA — e uma das principais motivações para o desenvolvimento de hardware quântico em larga escala.
+
+<details>
+<summary><strong>Exercícios 7.6</strong></summary>
+
+1. Repita o exemplo desta seção com $a=2$ em vez de $a=7$ (mesmo $N=15$). Qual é o novo período $r$? (Dica: calcule `[pow(2, x, 15) for x in range(16)]`.)
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   print([pow(2, x, 15) for x in range(16)])
+   # [1, 2, 4, 8, 1, 2, 4, 8, ...]
+   ```
+
+   O período é $r=4$ novamente (coincidentemente o mesmo desta seção, mas por uma razão diferente — a ordem de 2 módulo 15 também é 4).
+   </details>
+
+2. Usando o $r=4$ do exercício anterior e $a=2$, calcule os fatores de $15$ pela mesma fórmula de $\gcd$. Eles ainda são $3$ e $5$?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   from math import gcd
+   print(gcd(2**2 - 1, 15), gcd(2**2 + 1, 15))  # 3, 5
+   ```
+
+   Sim — como esperado, já que $15=3\times5$ tem uma única fatoração em primos, qualquer escolha válida de $a$ (com $r$ par e $a^{r/2}\not\equiv-1$) leva aos mesmos fatores.
+   </details>
+
+3. Por que o algoritmo de Shor exige que $2^n\geq N^2$ (e não apenas $2^n\geq N$) para o registrador de $x$? (Dica: pense na precisão necessária para que a fração continuada, na etapa de pós-processamento clássico, identifique $r$ sem ambiguidade.)
+
+   <details>
+   <summary>Resolução</summary>
+
+   A etapa de fração continuada precisa de precisão suficiente na fase medida para reconstruir $r$ sem erro, e essa precisão precisa ser boa o bastante para distinguir frações com denominador até $N$ — o que exige, por resultados de teoria dos números sobre aproximação por fração continuada, que o registrador tenha uma resolução da ordem de $N^2$ (isto é, $2^n\geq N^2$) para garantir que a fração medida esteja suficientemente próxima de $k/r$ e a reconstrua unicamente.
+   </details>
+
+</details>
+
+---
+
+## 7.7 Juntando Tudo
+
+Vamos revisar o caminho percorrido neste capítulo:
+
+- Situamos os algoritmos quânticos dentro da **teoria da computação** clássica (classes $\textbf{P}$, $\textbf{NP}$, $\textbf{BQP}$) e do **modelo de oráculo**, no qual a maioria dos algoritmos deste capítulo é formulada.
+- Estabelecemos vocabulário de **análise de algoritmos** — complexidade de consulta, notação $O(\cdot)$ — e antecipamos as vantagens (exponencial, quadrática) que cada algoritmo demonstraria.
+- **Deutsch–Jozsa**: o primeiro algoritmo a separar computação clássica e quântica, usando interferência para decidir se uma função é constante ou balanceada com uma única consulta.
+- **Grover**: busca não estruturada com vantagem quadrática, via oráculo de fase e amplificação de amplitude (rotação geométrica repetida).
+- **QFT**: o análogo quântico da Transformada de Fourier, implementável com $O(n^2)$ portas, e ingrediente essencial para estimativa de fase.
+- **Shor**: reduzimos a fatoração de inteiros à busca de período, resolvida eficientemente pela QFT, seguida de pós-processamento clássico (fração continuada e $\gcd$) para extrair os fatores.
+
+```
+Teoria da Computação   →  P, NP, BQP, modelo de oráculo
+Análise de Algoritmos  →  complexidade de consulta, O(·), tipos de vantagem
+Deutsch-Jozsa          →  interferência total  →  1 consulta, vantagem exponencial (oráculo)
+Grover                 →  amplificação de amplitude  →  O(√N), vantagem quadrática
+QFT                    →  análogo quântico da DFT  →  O(n²) portas
+Shor                   →  fatoração → busca de período → QFT → gcd  →  vantagem exponencial
+```
+
+Com Deutsch–Jozsa, Grover, a QFT e Shor estabelecidos, cobrimos os algoritmos "canônicos" da computação quântica orientada a circuitos. O próximo capítulo muda de direção: em vez de algoritmos com garantias exatas rodando em computadores quânticos ideais, exploramos como usar computadores quânticos **reais e ruidosos** de hoje — através de algoritmos variacionais, otimização, e as primeiras conexões entre computação quântica e aprendizado de máquina.
+
+---
+
+## Referências
+
+[1] Nielsen, M. A., & Chuang, I. L. (2010). *Quantum Computation and Quantum Information* (10th Anniversary ed.). Cambridge University Press.
+
+[2] Deutsch, D., & Jozsa, R. (1992). Rapid Solution of Problems by Quantum Computation. *Proceedings of the Royal Society of London A*, 439(1907), 553–558.
+
+[3] Grover, L. K. (1996). A Fast Quantum Mechanical Algorithm for Database Search. *Proceedings of the 28th Annual ACM Symposium on Theory of Computing*, 212–219.
+
+[4] Shor, P. W. (1997). Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer. *SIAM Journal on Computing*, 26(5), 1484–1509.
+
+[5] Nielsen, M. A. (2010). *Quantum Computation and Quantum Information*, Capítulo 5 (Transformada Quântica de Fourier e suas aplicações).

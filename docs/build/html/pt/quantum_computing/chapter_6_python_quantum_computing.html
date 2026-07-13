@@ -1,0 +1,1063 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Sumário" href="../../en/index.html"><link rel="prev" title="Capítulo 5 — Sistemas de Múltiplos Qubits" href="chapter_5_multi_qubit_systems.html">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Capítulo 6 — Programação em Python para Computação Quântica - Computational Science Notes 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dff35b1a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Computational Science Notes 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">Computational Science Notes 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Português 🇧🇷</a><input aria-label="Toggle navigation of Português 🇧🇷" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chapter_1_introduction.html">Capítulo 1 — Introdução</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_2_why_quantum_computing.html">Capítulo 2 — Por Que Computação Quântica?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_3_mathematics_for_quantum_computing.html">Capítulo 3 — Matemática para Computação Quântica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_4_qubits_postulados.html">Capítulo 4 — Qubits e os Postulados da Computação Quântica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_5_multi_qubit_systems.html">Capítulo 5 — Sistemas de Múltiplos Qubits</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Capítulo 6 — Programação em Python para Computação Quântica</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../en/index.html">English 🇺🇸</a><input aria-label="Toggle navigation of English 🇺🇸" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_1_introduction.html">Chapter 1 — Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_2_why_quantum_computing.html">Chapter 2 — Why Quantum Computing?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_3_mathematics_for_quantum_computing.html">Chapter 3 — Mathematics for Quantum Computing</a></li>
+</ul>
+</li>
+</ul>
+
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/pt/quantum_computing/chapter_6_python_quantum_computing.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="capitulo-6-programacao-em-python-para-computacao-quantica">
+<h1>Capítulo 6 — Programação em Python para Computação Quântica<a class="headerlink" href="#capitulo-6-programacao-em-python-para-computacao-quantica" title="Link to this heading">¶</a></h1>
+<p>Nos Capítulos 4 e 5, construímos toda a teoria de que precisávamos: os postulados da mecânica quântica, o qubit, a Esfera de Bloch, as portas de um e de múltiplos qubits, o emaranhamento e a notação de circuitos. Chegou a hora de transformar essa matemática em <strong>código</strong>.</p>
+<p>Este capítulo tem dois objetivos. Primeiro, construir — do zero, usando apenas <code class="docutils literal notranslate"><span class="pre">numpy</span></code> — um pequeno <strong>simulador de qubits</strong>, implementando literalmente cada postulado como uma função. Isso não é apenas um exercício de programação: é a melhor forma de confirmar que você realmente entende a teoria, porque um simulador que “quase funciona” simplesmente não funciona. Segundo, apresentar o <strong>Qiskit</strong>, o framework que usaremos a partir do Capítulo 7 para construir e executar circuitos quânticos reais, tanto em simuladores otimizados quanto em hardware quântico de verdade.</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Todo o código deste capítulo assume <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">numpy</span> <span class="pre">as</span> <span class="pre">np</span></code>. Os trechos são cumulativos: funções definidas em uma seção são reaproveitadas nas seções seguintes, exatamente como os postulados de um capítulo são reaproveitados no próximo.</p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="dos-postulados-ao-codigo-construindo-um-simulador-de-qubit">
+<h2>6.1 Dos Postulados ao Código: Construindo um Simulador de Qubit<a class="headerlink" href="#dos-postulados-ao-codigo-construindo-um-simulador-de-qubit" title="Link to this heading">¶</a></h2>
+<p>Pelo <strong>Postulado 1</strong>, um estado quântico é um vetor complexo normalizado. Em <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, representamos isso da forma mais direta possível: um array de números complexos.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Vetores de base computacional (Capítulo 4, Seção 4.3)</span>
+<span class="n">ket0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+<span class="n">ket1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Divide o vetor pela sua norma (Postulado 1: ||psi|| = 1).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">state</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_valid_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-9</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verifica a condição de normalização do Postulado 1.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span>
+</pre></div>
+</div>
+<p>Pelo <strong>Postulado 2</strong>, a evolução é dada por matrizes unitárias. Definimos as portas do Capítulo 4 exatamente como matrizes <code class="docutils literal notranslate"><span class="pre">numpy</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">I</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_gate</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">gate</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aplica uma porta (matriz unitária) a um estado (Postulado 2).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">gate</span> <span class="o">@</span> <span class="n">state</span>
+</pre></div>
+</div>
+<p>Para sistemas de múltiplos qubits (Capítulo 5), representamos o estado como um único vetor de <span class="math notranslate nohighlight">\(2^n\)</span> entradas, seguindo o <strong>Postulado 4</strong> (produto tensorial):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">kron_n</span><span class="p">(</span><span class="o">*</span><span class="n">mats</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Produto tensorial de várias matrizes/vetores, na ordem dada.&quot;&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">mats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mats</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+</pre></div>
+</div>
+<p>O último ingrediente é aplicar uma porta a <strong>um qubit específico</strong> dentro de um sistema maior, deixando os demais intactos — algo que fizemos “manualmente” no Capítulo 5 (Seção 5.5), escrevendo explicitamente <span class="math notranslate nohighlight">\(H\otimes I\)</span>. Em código, generalizamos isso para qualquer posição e qualquer número de qubits:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="n">ops_by_qubit</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Constrói o produto tensorial de n_qubits operadores 2x2, usando</span>
+<span class="sd">    ops_by_qubit[i] no qubit i e a identidade nos demais.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mats</span> <span class="o">=</span> <span class="p">[</span><span class="n">ops_by_qubit</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">I</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">kron_n</span><span class="p">(</span><span class="o">*</span><span class="n">mats</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">gate_on_qubit</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aplica `gate` apenas ao qubit de índice `qubit`, identidade nos demais.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">embed</span><span class="p">({</span><span class="n">qubit</span><span class="p">:</span> <span class="n">gate</span><span class="p">},</span> <span class="n">n_qubits</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Simulando <span class="math notranslate nohighlight">\(H|0\rangle\)</span></strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">apply_gate</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="c1"># [0.70710678+0.j 0.70710678+0.j]</span>
+</pre></div>
+</div>
+<p>O resultado é <span class="math notranslate nohighlight">\(\tfrac{1}{\sqrt2}(1,1)^T = |+\rangle\)</span>, exatamente como calculamos “à mão” no Capítulo 4.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 6.1</strong></summary>
+<ol class="arabic">
+<li><p>Usando <code class="docutils literal notranslate"><span class="pre">apply_gate</span></code>, calcule o estado resultante de aplicar <span class="math notranslate nohighlight">\(X\)</span> a <code class="docutils literal notranslate"><span class="pre">ket1</span></code>. O resultado deveria coincidir com qual vetor de base?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">ket1</span><span class="p">,</span> <span class="n">X</span><span class="p">))</span>  <span class="c1"># [1.+0.j 0.+0.j]</span>
+</pre></div>
+</div>
+<p>O resultado é <code class="docutils literal notranslate"><span class="pre">ket0</span></code>, confirmando que <span class="math notranslate nohighlight">\(X|1\rangle=|0\rangle\)</span> (Capítulo 4, Seção 4.5).</p>
+</details>
+</li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">is_valid_state</span></code> para verificar se o vetor <code class="docutils literal notranslate"><span class="pre">np.array([0.6,</span> <span class="pre">0.8])</span></code> representa um estado quântico válido.</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">is_valid_state</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)))</span>  <span class="c1"># True, pois 0.6²+0.8² = 1</span>
+</pre></div>
+</div>
+</details>
+</li>
+<li><p>Usando <code class="docutils literal notranslate"><span class="pre">gate_on_qubit</span></code> e <code class="docutils literal notranslate"><span class="pre">kron_n</span></code>, construa o estado <span class="math notranslate nohighlight">\(|10\rangle\)</span> (dois qubits) e aplique <span class="math notranslate nohighlight">\(X\)</span> apenas ao qubit de índice 1 (o segundo). Que estado você espera obter, e o código confirma isso?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">ket1</span><span class="p">,</span> <span class="n">ket0</span><span class="p">)</span>          <span class="c1"># |10&gt;</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>  <span class="c1"># corresponde a |11&gt;</span>
+</pre></div>
+</div>
+<p>Esperávamos <span class="math notranslate nohighlight">\(|11\rangle\)</span>, já que <span class="math notranslate nohighlight">\(X\)</span> inverte o segundo qubit de <span class="math notranslate nohighlight">\(|0\rangle\)</span> para <span class="math notranslate nohighlight">\(|1\rangle\)</span> — e é exatamente o que o código produz.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+<hr class="docutils" />
+<section id="visualizando-estados-quanticos">
+<h2>6.2 Visualizando Estados Quânticos<a class="headerlink" href="#visualizando-estados-quanticos" title="Link to this heading">¶</a></h2>
+<p>Duas ferramentas de visualização já apareceram na teoria: o <strong>valor esperado</strong> de um observável e a <strong>Esfera de Bloch</strong> (Capítulo 4, Seção 4.4). Vamos implementá-las.</p>
+<section id="valor-esperado">
+<h3>Valor esperado<a class="headerlink" href="#valor-esperado" title="Link to this heading">¶</a></h3>
+<p>Para um observável <span class="math notranslate nohighlight">\(A\)</span> (uma matriz hermitiana — neste livro, tipicamente <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span> ou <span class="math notranslate nohighlight">\(Z\)</span>) e um estado <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>, o valor esperado é <span class="math notranslate nohighlight">\(\langle\psi|A|\psi\rangle\)</span>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">expectation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">observable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calcula &lt;psi|A|psi&gt;.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">@</span> <span class="n">observable</span> <span class="o">@</span> <span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="coordenadas-na-esfera-de-bloch">
+<h3>Coordenadas na Esfera de Bloch<a class="headerlink" href="#coordenadas-na-esfera-de-bloch" title="Link to this heading">¶</a></h3>
+<p>Lembrando do Capítulo 4, todo estado de um qubit corresponde a um ponto <span class="math notranslate nohighlight">\((x,y,z)\)</span> na esfera unitária, onde <span class="math notranslate nohighlight">\(x=\langle X\rangle\)</span>, <span class="math notranslate nohighlight">\(y=\langle Y\rangle\)</span> e <span class="math notranslate nohighlight">\(z=\langle Z\rangle\)</span>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">bloch_vector</span><span class="p">(</span><span class="n">state</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retorna as coordenadas (x, y, z) do estado na Esfera de Bloch.&quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">expectation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">expectation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">expectation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Coordenadas de Bloch de três estados conhecidos</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plus</span> <span class="o">=</span> <span class="n">apply_gate</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+<span class="n">plus_i</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">ket0</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">ket1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">bloch_vector</span><span class="p">(</span><span class="n">ket0</span><span class="p">))</span>    <span class="c1"># [0. 0. 1.]   -&gt; polo norte</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bloch_vector</span><span class="p">(</span><span class="n">plus</span><span class="p">))</span>    <span class="c1"># [1. 0. 0.]   -&gt; eixo +x</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bloch_vector</span><span class="p">(</span><span class="n">plus_i</span><span class="p">))</span>  <span class="c1"># [0. 1. 0.]   -&gt; eixo +y</span>
+</pre></div>
+</div>
+<p>Esses três resultados confirmam exatamente o que a teoria previa: <span class="math notranslate nohighlight">\(|0\rangle\)</span> no polo norte, <span class="math notranslate nohighlight">\(|+\rangle\)</span> no eixo <span class="math notranslate nohighlight">\(+x\)</span> e <span class="math notranslate nohighlight">\(|{+}i\rangle=\tfrac{1}{\sqrt2}(|0\rangle+i|1\rangle)\)</span> no eixo <span class="math notranslate nohighlight">\(+y\)</span>.</p>
+</div></blockquote>
+<p>Para desenhar a esfera de fato, uma biblioteca como <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> (com projeção 3D) ou o utilitário <code class="docutils literal notranslate"><span class="pre">plot_bloch_vector</span></code> do Qiskit (Seção 6.7) recebem exatamente o vetor <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> retornado por <code class="docutils literal notranslate"><span class="pre">bloch_vector</span></code> e desenham a seta correspondente sobre a esfera.</p>
+<details>
+<summary><strong>Exercícios 6.2</strong></summary>
+<ol class="arabic">
+<li><p>Calcule <code class="docutils literal notranslate"><span class="pre">expectation(ket0,</span> <span class="pre">Z)</span></code> e <code class="docutils literal notranslate"><span class="pre">expectation(ket1,</span> <span class="pre">Z)</span></code>. Os sinais fazem sentido, sabendo que <span class="math notranslate nohighlight">\(Z|0\rangle=|0\rangle\)</span> e <span class="math notranslate nohighlight">\(Z|1\rangle=-|1\rangle\)</span>?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">expectation</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">Z</span><span class="p">))</span>  <span class="c1"># 1.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">expectation</span><span class="p">(</span><span class="n">ket1</span><span class="p">,</span> <span class="n">Z</span><span class="p">))</span>  <span class="c1"># -1.0</span>
+</pre></div>
+</div>
+<p>Fazem sentido: <span class="math notranslate nohighlight">\(|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|1\rangle\)</span> são autovetores de <span class="math notranslate nohighlight">\(Z\)</span> com autovalores <span class="math notranslate nohighlight">\(+1\)</span> e <span class="math notranslate nohighlight">\(-1\)</span>, e o valor esperado de um autovetor é exatamente seu autovalor.</p>
+</details>
+</li>
+<li><p>Calcule o vetor de Bloch do estado <span class="math notranslate nohighlight">\(|-\rangle = \tfrac{1}{\sqrt2}(|0\rangle-|1\rangle)\)</span>. Em que ponto da esfera ele deveria cair?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">minus</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">ket0</span> <span class="o">-</span> <span class="n">ket1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bloch_vector</span><span class="p">(</span><span class="n">minus</span><span class="p">))</span>  <span class="c1"># [-1. 0. 0.]</span>
+</pre></div>
+</div>
+<p>No eixo <span class="math notranslate nohighlight">\(-x\)</span>, no lado oposto de <span class="math notranslate nohighlight">\(|+\rangle\)</span> — como esperado, já que <span class="math notranslate nohighlight">\(H|1\rangle=|-\rangle\)</span>.</p>
+</details>
+</li>
+<li><p>O vetor de Bloch de um estado <strong>misto</strong> (fora do escopo deste livro) tem norma menor que 1. Verifique que, para qualquer estado <strong>puro</strong> normalizado, <code class="docutils literal notranslate"><span class="pre">np.linalg.norm(bloch_vector(state))</span></code> é sempre 1 (teste com dois ou três estados diferentes).</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ket0</span><span class="p">,</span> <span class="n">plus</span><span class="p">,</span> <span class="n">plus_i</span><span class="p">,</span> <span class="n">minus</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">bloch_vector</span><span class="p">(</span><span class="n">s</span><span class="p">)))</span>  <span class="c1"># 1.0 em todos os casos</span>
+</pre></div>
+</div>
+<p>Isso confirma numericamente o que o Capítulo 4 estabeleceu: todo estado puro de um qubit cai exatamente <strong>sobre a superfície</strong> da esfera, nunca em seu interior.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="portas-parametrizadas">
+<h2>6.3 Portas Parametrizadas<a class="headerlink" href="#portas-parametrizadas" title="Link to this heading">¶</a></h2>
+<p>O Capítulo 4 (Seção 4.5) introduziu as portas de rotação <span class="math notranslate nohighlight">\(R_x,R_y,R_z\)</span> e a porta de fase <span class="math notranslate nohighlight">\(R_\varphi\)</span> como funções de um ângulo contínuo. Em código, elas se tornam <strong>funções que retornam matrizes</strong>, em vez de matrizes fixas:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">Rx</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)],</span>
+        <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">Ry</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)],</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">Rz</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span>
+    <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">Phase</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Porta de fase R_phi (S = Phase(pi/2), T = Phase(pi/4)).&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span><span class="p">)]</span>
+    <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Verificando <span class="math notranslate nohighlight">\(X = i\,R_x(\pi)\)</span></strong></p>
+<p>No Capítulo 4 (exercício da Seção 4.5), mostramos “à mão” que <span class="math notranslate nohighlight">\(R_x(\pi)|0\rangle = -i|1\rangle\)</span>, o mesmo estado físico que <span class="math notranslate nohighlight">\(X|0\rangle=|1\rangle\)</span> a menos de uma fase global. Vamos confirmar isso numericamente:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">Rx</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>  <span class="c1"># [0.+0.j  0.-1.j]  =  -i * |1&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">X</span><span class="p">))</span>          <span class="c1"># [0.+0.j  1.+0.j]  =  |1&gt;</span>
+</pre></div>
+</div>
+<p>Os dois vetores diferem exatamente pelo fator de fase global <span class="math notranslate nohighlight">\(-i\)</span>, confirmando a relação <span class="math notranslate nohighlight">\(X=i\,R_x(\pi)\)</span>.</p>
+</div></blockquote>
+<p>Como as portas parametrizadas retornam matrizes, elas se combinam perfeitamente com <code class="docutils literal notranslate"><span class="pre">gate_on_qubit</span></code> e <code class="docutils literal notranslate"><span class="pre">embed</span></code> da Seção 6.1 — nenhum código novo é necessário para usá-las em sistemas de múltiplos qubits.</p>
+<details>
+<summary><strong>Exercícios 6.3</strong></summary>
+<ol class="arabic">
+<li><p>Calcule <code class="docutils literal notranslate"><span class="pre">Phase(np.pi/2)</span></code> e compare com a matriz da porta <span class="math notranslate nohighlight">\(S\)</span> do Capítulo 4.</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">Phase</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># [[1.+0.j 0.+0.j]</span>
+<span class="c1">#  [0.+0.j 0.+1.j]]</span>
+</pre></div>
+</div>
+<p>Coincide com <span class="math notranslate nohighlight">\(S=\begin{pmatrix}1&amp;0\\0&amp;i\end{pmatrix}\)</span>, como esperado, já que <span class="math notranslate nohighlight">\(e^{i\pi/2}=i\)</span>.</p>
+</details>
+</li>
+<li><p>Usando <code class="docutils literal notranslate"><span class="pre">Ry</span></code>, reproduza numericamente o exemplo do Capítulo 4 em que <span class="math notranslate nohighlight">\(R_y(\pi/2)\)</span> leva <span class="math notranslate nohighlight">\(|0\rangle\)</span> até <span class="math notranslate nohighlight">\(|+\rangle\)</span>. Confirme calculando o vetor de Bloch do resultado.</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">apply_gate</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">Ry</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bloch_vector</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>  <span class="c1"># aproximadamente [1. 0. 0.]</span>
+</pre></div>
+</div>
+</details>
+</li>
+<li><p>Escreva uma função <code class="docutils literal notranslate"><span class="pre">random_state()</span></code> que gere um estado de um qubit aleatório mas válido, aplicando <code class="docutils literal notranslate"><span class="pre">Ry</span></code> com um ângulo aleatório e <code class="docutils literal notranslate"><span class="pre">Rz</span></code> com outro ângulo aleatório a <code class="docutils literal notranslate"><span class="pre">ket0</span></code>. Por que esse procedimento sempre produz um estado normalizado, sem precisar chamar <code class="docutils literal notranslate"><span class="pre">normalize</span></code> explicitamente?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">random_state</span><span class="p">():</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">apply_gate</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">Ry</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">apply_gate</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">Rz</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+<p>Como <span class="math notranslate nohighlight">\(R_y\)</span> e <span class="math notranslate nohighlight">\(R_z\)</span> são matrizes <strong>unitárias</strong> (Postulado 2), elas preservam a norma de qualquer vetor de entrada — e <code class="docutils literal notranslate"><span class="pre">ket0</span></code> já é normalizado. Logo, o resultado é automaticamente normalizado, sem necessidade de renormalizar.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+<hr class="docutils" />
+<section id="portas-multi-controladas">
+<h2>6.4 Portas Multi-Controladas<a class="headerlink" href="#portas-multi-controladas" title="Link to this heading">¶</a></h2>
+<p>O Capítulo 5 (Seção 5.4) definiu portas controladas via a matriz em blocos <span class="math notranslate nohighlight">\(CU=\begin{pmatrix}I&amp;0\\0&amp;U\end{pmatrix}\)</span>. Essa forma é conveniente para o papel, mas incômoda para código genérico, porque assume que controle e alvo são qubits “adjacentes” em uma ordem específica. Uma formulação equivalente, mais fácil de programar para <strong>qualquer</strong> posição de controle e alvo, usa os projetores</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+P_0 = |0\rangle\langle0| = \begin{pmatrix}1&amp;0\\0&amp;0\end{pmatrix}, \qquad P_1 = |1\rangle\langle1| = \begin{pmatrix}0&amp;0\\0&amp;1\end{pmatrix},
+\end{split}\]</div>
+</div>
+<p>e escreve</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+CU = \big(P_0 \text{ no controle}\big)\otimes I_{\text{resto}} \;+\; \big(P_1 \text{ no controle}\big)\otimes\big(U \text{ no alvo}\big)\otimes I_{\text{resto}}.
+\]</div>
+</div>
+<p>Em código, usando <code class="docutils literal notranslate"><span class="pre">embed</span></code> da Seção 6.1:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">P0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+<span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">controlled_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constrói a matriz de uma porta controlada-U, para controle e alvo</span>
+<span class="sd">    em qualquer posição entre n_qubits.&quot;&quot;&quot;</span>
+    <span class="n">term0</span> <span class="o">=</span> <span class="n">embed</span><span class="p">({</span><span class="n">control</span><span class="p">:</span> <span class="n">P0</span><span class="p">},</span> <span class="n">n_qubits</span><span class="p">)</span>
+    <span class="n">term1</span> <span class="o">=</span> <span class="n">embed</span><span class="p">({</span><span class="n">control</span><span class="p">:</span> <span class="n">P1</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">gate</span><span class="p">},</span> <span class="n">n_qubits</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">term0</span> <span class="o">+</span> <span class="n">term1</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Vale a pena confirmar que <code class="docutils literal notranslate"><span class="pre">controlled_gate(X,</span> <span class="pre">0,</span> <span class="pre">1,</span> <span class="pre">2)</span></code> reproduz exatamente a matriz de CNOT do Capítulo 5:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">controlled_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># [[1.+0.j 0.+0.j 0.+0.j 0.+0.j]</span>
+<span class="c1">#  [0.+0.j 1.+0.j 0.+0.j 0.+0.j]</span>
+<span class="c1">#  [0.+0.j 0.+0.j 0.+0.j 1.+0.j]</span>
+<span class="c1">#  [0.+0.j 0.+0.j 1.+0.j 0.+0.j]]</span>
+</pre></div>
+</div>
+<p>É exatamente a matriz de CNOT apresentada na Seção 5.4.</p>
+</div></blockquote>
+<section id="generalizando-para-multiplos-controles-mcx-e-mcz">
+<h3>Generalizando para múltiplos controles: MCX e MCZ<a class="headerlink" href="#generalizando-para-multiplos-controles-mcx-e-mcz" title="Link to this heading">¶</a></h3>
+<p>A porta <strong>Toffoli</strong> (Capítulo 5) é o caso <span class="math notranslate nohighlight">\(U=X\)</span> com <strong>dois</strong> controles. Generalizando ainda mais, uma porta <strong>multi-controlada</strong> (<span class="math notranslate nohighlight">\(MCX\)</span>, <span class="math notranslate nohighlight">\(MCZ\)</span>, etc.) aplica <span class="math notranslate nohighlight">\(U\)</span> ao alvo <strong>somente se todos os controles estiverem em <span class="math notranslate nohighlight">\(|1\rangle\)</span></strong>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">multi_controlled_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aplica `gate` ao alvo apenas quando TODOS os qubits em `controls`</span>
+<span class="sd">    estão em |1&gt;; identidade em qualquer outro caso.&quot;&quot;&quot;</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n_qubits</span>
+    <span class="n">identity_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+
+    <span class="n">ops_all_ones</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span> <span class="n">P1</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">controls</span><span class="p">}</span>
+    <span class="n">projector_all_ones</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">ops_all_ones</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+
+    <span class="n">ops_all_ones_and_gate</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">ops_all_ones</span><span class="p">)</span>
+    <span class="n">ops_all_ones_and_gate</span><span class="p">[</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="n">gate</span>
+    <span class="n">block_with_gate</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">ops_all_ones_and_gate</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">identity_full</span> <span class="o">-</span> <span class="n">projector_all_ones</span> <span class="o">+</span> <span class="n">block_with_gate</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">MCX</span><span class="p">(</span><span class="n">controls</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">multi_controlled_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">MCZ</span><span class="p">(</span><span class="n">controls</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">multi_controlled_gate</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">controls</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Verificando a Toffoli via <code class="docutils literal notranslate"><span class="pre">MCX</span></code></strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">toffoli</span> <span class="o">=</span> <span class="n">MCX</span><span class="p">(</span><span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">target</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">ket1</span><span class="p">,</span> <span class="n">ket1</span><span class="p">,</span> <span class="n">ket0</span><span class="p">)</span>   <span class="c1"># |110&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">toffoli</span> <span class="o">@</span> <span class="n">state</span><span class="p">)</span>             <span class="c1"># corresponde a |111&gt;</span>
+</pre></div>
+</div>
+<p>O resultado tem uma única entrada não nula na posição correspondente a <span class="math notranslate nohighlight">\(|111\rangle\)</span>, confirmando que a Toffoli inverteu o alvo porque <strong>ambos</strong> os controles estavam em <span class="math notranslate nohighlight">\(|1\rangle\)</span> — exatamente a definição da Seção 5.4.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 6.4</strong></summary>
+<ol class="arabic">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">controlled_gate</span></code> para construir a matriz <span class="math notranslate nohighlight">\(4\times4\)</span> de <span class="math notranslate nohighlight">\(CZ\)</span> (controle no qubit 0, alvo no qubit 1) e compare com a matriz calculada “à mão” no Capítulo 5.</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">controlled_gate</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># diag(1, 1, 1, -1) — coincide com o resultado da Seção 5.4.</span>
+</pre></div>
+</div>
+</details>
+</li>
+<li><p>Usando <code class="docutils literal notranslate"><span class="pre">MCX</span></code> com três controles (<code class="docutils literal notranslate"><span class="pre">controls=[0,1,2]</span></code>, <code class="docutils literal notranslate"><span class="pre">target=3</span></code>, <code class="docutils literal notranslate"><span class="pre">n_qubits=4</span></code>), verifique que <span class="math notranslate nohighlight">\(|1110\rangle\)</span> é levado a <span class="math notranslate nohighlight">\(|1111\rangle\)</span>, mas <span class="math notranslate nohighlight">\(|1100\rangle\)</span> permanece inalterado.</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mcx4</span> <span class="o">=</span> <span class="n">MCX</span><span class="p">(</span><span class="n">controls</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">target</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mcx4</span> <span class="o">@</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">ket1</span><span class="p">,</span> <span class="n">ket1</span><span class="p">,</span> <span class="n">ket1</span><span class="p">,</span> <span class="n">ket0</span><span class="p">))</span>  <span class="c1"># -&gt; |1111&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mcx4</span> <span class="o">@</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">ket1</span><span class="p">,</span> <span class="n">ket1</span><span class="p">,</span> <span class="n">ket0</span><span class="p">,</span> <span class="n">ket0</span><span class="p">))</span>  <span class="c1"># -&gt; |1100&gt; (inalterado)</span>
+</pre></div>
+</div>
+<p>No primeiro caso, os três controles estão em <span class="math notranslate nohighlight">\(|1\rangle\)</span>, então o alvo é invertido. No segundo caso, o terceiro controle está em <span class="math notranslate nohighlight">\(|0\rangle\)</span>, então nada acontece.</p>
+</details>
+</li>
+<li><p>Por que a fórmula <code class="docutils literal notranslate"><span class="pre">identity_full</span> <span class="pre">-</span> <span class="pre">projector_all_ones</span> <span class="pre">+</span> <span class="pre">block_with_gate</span></code> funciona mesmo quando <code class="docutils literal notranslate"><span class="pre">gate</span></code> não é uma simples permutação (por exemplo, <code class="docutils literal notranslate"><span class="pre">gate</span> <span class="pre">=</span> <span class="pre">H</span></code>)? (Dica: pense em como cada termo atua sobre um vetor de base, separando os casos “todos os controles em 1” e “pelo menos um controle em 0”.)</p>
+<details>
+<summary>Resolução</summary>
+<p>Sobre qualquer vetor de base <span class="math notranslate nohighlight">\(|x\rangle\)</span>: se <strong>algum</strong> controle está em <span class="math notranslate nohighlight">\(|0\rangle\)</span>, então <code class="docutils literal notranslate"><span class="pre">projector_all_ones</span></code> e <code class="docutils literal notranslate"><span class="pre">block_with_gate</span></code> agem como zero sobre <span class="math notranslate nohighlight">\(|x\rangle\)</span> (o projetor correspondente naquele controle mata o termo), e sobra apenas <code class="docutils literal notranslate"><span class="pre">identity_full</span></code>, que deixa <span class="math notranslate nohighlight">\(|x\rangle\)</span> inalterado — correto. Se <strong>todos</strong> os controles estão em <span class="math notranslate nohighlight">\(|1\rangle\)</span>, então <code class="docutils literal notranslate"><span class="pre">identity_full</span></code> e <code class="docutils literal notranslate"><span class="pre">projector_all_ones</span></code> se cancelam exatamente sobre esse subespaço (ambos agem como identidade nele), e sobra apenas <code class="docutils literal notranslate"><span class="pre">block_with_gate</span></code>, que aplica <code class="docutils literal notranslate"><span class="pre">gate</span></code> ao alvo — também correto. Isso vale para <strong>qualquer</strong> matriz <code class="docutils literal notranslate"><span class="pre">gate</span></code>, unitária ou não, pois a decomposição é feita antes de “escolher” o que <code class="docutils literal notranslate"><span class="pre">gate</span></code> faz.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="medicao-em-pratica">
+<h2>6.5 Medição em Prática<a class="headerlink" href="#medicao-em-pratica" title="Link to this heading">¶</a></h2>
+<p>O <strong>Postulado 3</strong> (Regra de Born, Capítulo 4) e sua generalização para medição parcial (Capítulo 5, Seção 5.6) se traduzem quase diretamente em código: calcular probabilidades a partir de amplitudes ao quadrado, sortear um resultado, e colapsar/renormalizar o estado.</p>
+<section id="medindo-todos-os-qubits">
+<h3>Medindo todos os qubits<a class="headerlink" href="#medindo-todos-os-qubits" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">measure_all</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mede todos os qubits na base computacional (Postulado 3).&quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">rng</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+    <span class="n">probabilities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="n">outcome</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">probabilities</span><span class="p">)</span>
+    <span class="n">bitstring</span> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">outcome</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;0</span><span class="si">{</span><span class="n">n_qubits</span><span class="si">}</span><span class="s2">b&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bitstring</span>
+</pre></div>
+</div>
+</section>
+<section id="medicao-parcial-um-unico-qubit">
+<h3>Medição parcial (um único qubit)<a class="headerlink" href="#medicao-parcial-um-unico-qubit" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">measure_qubit</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">qubit</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">,</span> <span class="n">rng</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mede apenas um qubit (Capítulo 5, Seção 5.6), retornando o resultado</span>
+<span class="sd">    (0 ou 1) e o estado colapsado e renormalizado dos demais qubits.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">rng</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">()</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="n">prob_zero</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="nb">abs</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">n_qubits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">qubit</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">outcome</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">prob_zero</span> <span class="k">else</span> <span class="mi">1</span>
+
+    <span class="n">collapsed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+        <span class="n">bit</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">n_qubits</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">qubit</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">bit</span> <span class="o">==</span> <span class="n">outcome</span><span class="p">:</span>
+            <span class="n">collapsed</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">outcome</span><span class="p">,</span> <span class="n">normalize</span><span class="p">(</span><span class="n">collapsed</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>A expressão <code class="docutils literal notranslate"><span class="pre">(x</span> <span class="pre">&gt;&gt;</span> <span class="pre">(n_qubits</span> <span class="pre">-</span> <span class="pre">1</span> <span class="pre">-</span> <span class="pre">qubit))</span> <span class="pre">&amp;</span> <span class="pre">1</span></code> simplesmente lê o bit correspondente ao qubit desejado na representação binária do índice <code class="docutils literal notranslate"><span class="pre">x</span></code>, respeitando a convenção — já usada desde o Capítulo 5 — de que o <strong>primeiro</strong> qubit do ket corresponde ao bit <strong>mais significativo</strong>.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>💡 Exemplo — Medindo o estado de Bell</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bell</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">ket0</span><span class="p">)</span>
+<span class="n">bell</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">@</span> <span class="n">bell</span>
+<span class="n">bell</span> <span class="o">=</span> <span class="n">controlled_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">@</span> <span class="n">bell</span>   <span class="c1"># |Phi+&gt; = (|00&gt;+|11&gt;)/sqrt(2)</span>
+
+<span class="n">outcome</span><span class="p">,</span> <span class="n">remaining</span> <span class="o">=</span> <span class="n">measure_qubit</span><span class="p">(</span><span class="n">bell</span><span class="p">,</span> <span class="n">qubit</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outcome</span><span class="p">,</span> <span class="n">remaining</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Executando esse código repetidas vezes, <code class="docutils literal notranslate"><span class="pre">outcome</span></code> será <span class="math notranslate nohighlight">\(0\)</span> ou <span class="math notranslate nohighlight">\(1\)</span> aproximadamente com a mesma frequência (<span class="math notranslate nohighlight">\(50\%\)</span> cada) — mas, em <strong>qualquer</strong> execução, <code class="docutils literal notranslate"><span class="pre">remaining</span></code> sempre será exatamente igual a <code class="docutils literal notranslate"><span class="pre">ket0</span></code> quando <code class="docutils literal notranslate"><span class="pre">outcome</span> <span class="pre">==</span> <span class="pre">0</span></code> e a <code class="docutils literal notranslate"><span class="pre">ket1</span></code> quando <code class="docutils literal notranslate"><span class="pre">outcome</span> <span class="pre">==</span> <span class="pre">1</span></code>. Essa é a correlação perfeita do emaranhamento, agora observável diretamente no código, e não apenas no papel.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 6.5</strong></summary>
+<ol class="arabic">
+<li><p>Execute <code class="docutils literal notranslate"><span class="pre">measure_all</span></code> sobre o estado <span class="math notranslate nohighlight">\(|+\rangle\otimes|0\rangle\)</span> várias vezes (por exemplo, em um laço de 1000 repetições) e conte a frequência de cada resultado (<code class="docutils literal notranslate"><span class="pre">&quot;00&quot;</span></code> e <code class="docutils literal notranslate"><span class="pre">&quot;10&quot;</span></code>). As frequências deveriam se aproximar de quais probabilidades teóricas?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">H</span><span class="p">),</span> <span class="n">ket0</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">measure_all</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Counter</span><span class="p">(</span><span class="n">results</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>As frequências devem se aproximar de 50% para <code class="docutils literal notranslate"><span class="pre">&quot;00&quot;</span></code> e 50% para <code class="docutils literal notranslate"><span class="pre">&quot;10&quot;</span></code>, coincidindo com o cálculo já feito no Capítulo 5 (Seção 5.2).</p>
+</details>
+</li>
+<li><p>Modifique o exemplo desta seção para medir o estado de Bell <span class="math notranslate nohighlight">\(|\Psi^-\rangle=\tfrac1{\sqrt2}(|01\rangle-|10\rangle)\)</span> (Capítulo 5, Seção 5.5) em vez de <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span>, e confirme que, se <code class="docutils literal notranslate"><span class="pre">outcome==0</span></code> (primeiro qubit em <span class="math notranslate nohighlight">\(|0\rangle\)</span>), o qubit restante colapsa para <span class="math notranslate nohighlight">\(|1\rangle\)</span> (a menos de fase global).</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psi_minus</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">kron_n</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">ket1</span><span class="p">)</span> <span class="o">-</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">ket1</span><span class="p">,</span> <span class="n">ket0</span><span class="p">))</span>
+<span class="n">outcome</span><span class="p">,</span> <span class="n">remaining</span> <span class="o">=</span> <span class="n">measure_qubit</span><span class="p">(</span><span class="n">psi_minus</span><span class="p">,</span> <span class="n">qubit</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outcome</span><span class="p">,</span> <span class="n">remaining</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Consistente com o resultado obtido “à mão” no Exercício 3 da Seção 5.6.</p>
+</details>
+</li>
+<li><p>Por que a função <code class="docutils literal notranslate"><span class="pre">measure_qubit</span></code> usa <code class="docutils literal notranslate"><span class="pre">normalize(collapsed)</span></code> em vez de simplesmente dividir por <code class="docutils literal notranslate"><span class="pre">np.sqrt(prob_zero)</span></code> (ou <code class="docutils literal notranslate"><span class="pre">np.sqrt(1-prob_zero)</span></code>)? Os dois métodos deveriam dar o mesmo resultado?</p>
+<details>
+<summary>Resolução</summary>
+<p>Sim, os dois métodos são matematicamente equivalentes: <code class="docutils literal notranslate"><span class="pre">prob_zero</span></code> (quando <code class="docutils literal notranslate"><span class="pre">outcome==0</span></code>) é exatamente a soma dos módulos ao quadrado das entradas mantidas em <code class="docutils literal notranslate"><span class="pre">collapsed</span></code>, então <code class="docutils literal notranslate"><span class="pre">np.linalg.norm(collapsed)</span> <span class="pre">==</span> <span class="pre">np.sqrt(prob_zero)</span></code>. Usar <code class="docutils literal notranslate"><span class="pre">normalize</span></code> é apenas mais robusto e genérico — evita recalcular a probabilidade separadamente e lida melhor com pequenos erros de arredondamento numérico.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="protocolos-quanticos">
+<h2>6.6 Protocolos Quânticos<a class="headerlink" href="#protocolos-quanticos" title="Link to this heading">¶</a></h2>
+<p>Com o simulador completo — estados, portas, portas controladas e medição — podemos, finalmente, implementar dois dos protocolos mais importantes da computação quântica: o <strong>teletransporte quântico</strong> e a <strong>codificação superdensa</strong>. Ambos usam o mesmo ingrediente central que já vimos repetidas vezes: o par de Bell.</p>
+<section id="teletransporte-quantico">
+<h3>Teletransporte quântico<a class="headerlink" href="#teletransporte-quantico" title="Link to this heading">¶</a></h3>
+<p>O objetivo do teletransporte é transferir um estado quântico <strong>desconhecido</strong> <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> de um qubit para outro, usando um par de Bell compartilhado e <strong>dois bits clássicos</strong> de comunicação — sem nunca violar o Teorema da Não-Clonagem (Capítulo 5, Seção 5.8), já que o qubit original é destruído (medido) no processo.</p>
+<p>O protocolo usa três qubits: <code class="docutils literal notranslate"><span class="pre">q0</span></code> (o estado <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> a ser teletransportado), <code class="docutils literal notranslate"><span class="pre">q1</span></code> (a metade de Alice do par de Bell) e <code class="docutils literal notranslate"><span class="pre">q2</span></code> (a metade de Bob).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">teleport</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">ket0</span><span class="p">,</span> <span class="n">ket0</span><span class="p">)</span>
+
+    <span class="c1"># 1. Preparar um par de Bell entre q1 (Alice) e q2 (Bob)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">controlled_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+
+    <span class="c1"># 2. Alice interage seu qubit de dados (q0) com sua metade do par (q1)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">controlled_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+
+    <span class="c1"># 3. Alice mede q0 e q1, obtendo dois bits clássicos m0, m1</span>
+    <span class="n">m0</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">measure_qubit</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+    <span class="n">m1</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">measure_qubit</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+
+    <span class="c1"># 4. Bob aplica uma correção em q2, dependendo dos bits recebidos de Alice</span>
+    <span class="k">if</span> <span class="n">m1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+    <span class="k">if</span> <span class="n">m0</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+
+    <span class="k">return</span> <span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">state</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p>O passo 4 — a <strong>correção condicionada ao resultado clássico da medição</strong> — é o coração do protocolo, e é exatamente por isso que o teletransporte não viola a relatividade: os bits <span class="math notranslate nohighlight">\(m_0,m_1\)</span> precisam ser <strong>enviados classicamente</strong> (por exemplo, por telefone) até Bob antes que ele possa recuperar <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>. Sem essa comunicação clássica, o qubit de Bob fica em uma mistura sem sentido físico definido.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>💡 Exemplo — Confirmando o teletransporte</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">psi</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">Ry</span><span class="p">(</span><span class="mf">0.7</span><span class="p">)))</span>  <span class="c1"># um estado qualquer, &quot;desconhecido&quot;</span>
+<span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">,</span> <span class="n">final_state</span> <span class="o">=</span> <span class="n">teleport</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">m0</span><span class="p">,</span> <span class="n">m1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">final_state</span><span class="p">)</span>   <span class="c1"># produto |m0&gt;|m1&gt;|psi&gt;, a menos de fase global</span>
+</pre></div>
+</div>
+<p>Repetindo essa execução muitas vezes, <code class="docutils literal notranslate"><span class="pre">m0</span></code> e <code class="docutils literal notranslate"><span class="pre">m1</span></code> variam aleatoriamente entre as quatro combinações possíveis — mas, extraindo apenas a parte do vetor correspondente ao qubit de Bob (<code class="docutils literal notranslate"><span class="pre">q2</span></code>), o resultado é <strong>sempre</strong> <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> (a menos de uma fase global irrelevante, Postulado 1), independentemente de qual dos quatro resultados de medição ocorreu. Essa é precisamente a garantia que o protocolo promete.</p>
+</div></blockquote>
+</section>
+<section id="codificacao-superdensa">
+<h3>Codificação superdensa<a class="headerlink" href="#codificacao-superdensa" title="Link to this heading">¶</a></h3>
+<p>A <strong>codificação superdensa</strong> é, em certo sentido, o protocolo “espelhado” do teletransporte: em vez de transmitir um qubit usando dois bits clássicos, ela transmite <strong>dois bits clássicos</strong> usando um único qubit — desde que Alice e Bob já compartilhem um par de Bell de antemão.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">superdense_encode</span><span class="p">(</span><span class="n">bit0</span><span class="p">,</span> <span class="n">bit1</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="c1"># Par de Bell compartilhado entre Alice (q0) e Bob (q1)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="n">ket0</span><span class="p">,</span> <span class="n">ket0</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">controlled_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+
+    <span class="c1"># Alice codifica dois bits clássicos aplicando portas ao SEU qubit (q0)</span>
+    <span class="k">if</span> <span class="n">bit1</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+    <span class="k">if</span> <span class="n">bit0</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+
+    <span class="k">return</span> <span class="n">state</span>  <span class="c1"># Alice envia apenas q0 para Bob</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">superdense_decode</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="c1"># Bob, com os dois qubits em mãos, desfaz o emaranhamento e mede</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">controlled_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+    <span class="n">outcome</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1"># estado é um vetor de base puro</span>
+    <span class="k">return</span> <span class="nb">format</span><span class="p">(</span><span class="n">outcome</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;0</span><span class="si">{</span><span class="n">n_qubits</span><span class="si">}</span><span class="s2">b&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Enviando os quatro pares de bits possíveis</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">bit0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">bit1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
+        <span class="n">encoded</span> <span class="o">=</span> <span class="n">superdense_encode</span><span class="p">(</span><span class="n">bit0</span><span class="p">,</span> <span class="n">bit1</span><span class="p">)</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="n">superdense_decode</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;enviado </span><span class="si">{</span><span class="n">bit0</span><span class="si">}{</span><span class="n">bit1</span><span class="si">}</span><span class="s2"> -&gt; recebido </span><span class="si">{</span><span class="n">decoded</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As quatro execuções confirmam que Bob recupera exatamente os dois bits que Alice codificou, tendo recebido fisicamente apenas <strong>um</strong> qubit — o segundo bit de informação “já estava lá”, codificado na correlação do par de Bell compartilhado com antecedência.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 6.6</strong></summary>
+<ol class="arabic">
+<li><p>No protocolo de teletransporte, o que aconteceria se Bob <strong>esquecesse</strong> de aplicar a correção do passo 4 (mesmo tendo recebido <span class="math notranslate nohighlight">\(m_0,m_1\)</span> corretamente)? O qubit de Bob ainda seria útil? (Dica: pense em quais dos quatro estados de Bell — Capítulo 5, Seção 5.5 — aparecem em cada caso.)</p>
+<details>
+<summary>Resolução</summary>
+<p>Sem a correção, o qubit de Bob estaria em um de quatro estados possíveis (relacionados a <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> por <span class="math notranslate nohighlight">\(I\)</span>, <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Z\)</span> ou <span class="math notranslate nohighlight">\(XZ\)</span>, dependendo de <span class="math notranslate nohighlight">\(m_0,m_1\)</span>) — correto apenas no caso <span class="math notranslate nohighlight">\(m_0=m_1=0\)</span>. Nos outros três casos, o estado de Bob estaria “errado” de uma forma sistemática e conhecida (não aleatória), mas ainda assim inutilizável sem a correção, pois Bob não saberia, sem os bits classicamente comunicados, qual dos quatro casos ocorreu.</p>
+</details>
+</li>
+<li><p>Na codificação superdensa, o que acontece se Alice não aplicar <strong>nenhuma</strong> porta (ou seja, <code class="docutils literal notranslate"><span class="pre">bit0=bit1=0</span></code>)? Verifique que Bob ainda decodifica corretamente <code class="docutils literal notranslate"><span class="pre">&quot;00&quot;</span></code>.</p>
+<details>
+<summary>Resolução</summary>
+<p>Sem portas aplicadas, o estado permanece <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span>. Aplicando a decodificação de Bob (CNOT seguida de <span class="math notranslate nohighlight">\(H\)</span> no primeiro qubit), o estado retorna a <span class="math notranslate nohighlight">\(|00\rangle\)</span> — o mesmo cálculo, na direção inversa, do Exemplo da Seção 5.5. Bob mede <code class="docutils literal notranslate"><span class="pre">&quot;00&quot;</span></code>, corretamente.</p>
+</details>
+</li>
+<li><p>Ambos os protocolos desta seção dependem de um par de Bell <strong>pré-compartilhado</strong>. Explique, em uma frase, por que isso não viola o Teorema da Não-Clonagem — isto é, por que compartilhar um par de Bell de antemão é diferente de “copiar” um qubit desconhecido.</p>
+<details>
+<summary>Resolução</summary>
+<p>O par de Bell é preparado por quem quer que o distribua (por exemplo, um Hadamard seguido de CNOT sobre dois qubits conhecidos em <span class="math notranslate nohighlight">\(|0\rangle\)</span>), não copiado a partir de um estado desconhecido preexistente — exatamente a mesma distinção discutida no Exercício 3 da Seção 5.8.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="construindo-circuitos-com-qiskit">
+<h2>6.7 Construindo Circuitos com Qiskit<a class="headerlink" href="#construindo-circuitos-com-qiskit" title="Link to this heading">¶</a></h2>
+<p>O simulador das seções anteriores foi construído propositalmente do zero, para deixar transparente a conexão entre cada postulado e cada linha de código. Na prática, porém, ninguém escreve simuladores manuais para trabalhar com dezenas ou centenas de qubits — usamos frameworks especializados, altamente otimizados, que também sabem se comunicar com hardware quântico real. O mais usado atualmente é o <strong>Qiskit</strong>, desenvolvido pela IBM.</p>
+<section id="construindo-um-circuito">
+<h3>Construindo um circuito<a class="headerlink" href="#construindo-um-circuito" title="Link to this heading">¶</a></h3>
+<p>A classe central do Qiskit é <code class="docutils literal notranslate"><span class="pre">QuantumCircuit</span></code>. Reconstruir o circuito de Bell da Seção 5.5 é quase uma tradução direta do diagrama:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.quantum_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">Statevector</span>
+
+<span class="n">qc</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>       <span class="c1"># Hadamard no qubit 0</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">cx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1"># CNOT: controle = qubit 0, alvo = qubit 1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">qc</span><span class="o">.</span><span class="n">draw</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     ┌───┐
+q_0: ┤ H ├──■──
+     └───┘┌─┴─┐
+q_1: ─────┤ X ├
+          └───┘
+</pre></div>
+</div>
+</section>
+<section id="composicao-de-circuitos">
+<h3>Composição de circuitos<a class="headerlink" href="#composicao-de-circuitos" title="Link to this heading">¶</a></h3>
+<p>Circuitos podem ser construídos em partes e combinados com <code class="docutils literal notranslate"><span class="pre">compose</span></code>, o que é útil para reaproveitar sub-rotinas (como a preparação de um par de Bell) dentro de circuitos maiores — exatamente como fizemos “na mão” reaproveitando <code class="docutils literal notranslate"><span class="pre">gate_on_qubit</span></code> e <code class="docutils literal notranslate"><span class="pre">controlled_gate</span></code> ao longo deste capítulo:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bell_pair</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">bell_pair</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">bell_pair</span><span class="o">.</span><span class="n">cx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">circuito_maior</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">circuito_maior</span><span class="o">.</span><span class="n">compose</span><span class="p">(</span><span class="n">bell_pair</span><span class="p">,</span> <span class="n">qubits</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># ... o restante do protocolo de teletransporte iria aqui</span>
+</pre></div>
+</div>
+</section>
+<section id="obtendo-o-vetor-de-estado-statevector">
+<h3>Obtendo o vetor de estado: <code class="docutils literal notranslate"><span class="pre">Statevector</span></code><a class="headerlink" href="#obtendo-o-vetor-de-estado-statevector" title="Link to this heading">¶</a></h3>
+<p>Para inspecionar o estado exato de um circuito — o equivalente ao vetor <code class="docutils literal notranslate"><span class="pre">numpy</span></code> que manipulamos nas seções anteriores —, usamos <code class="docutils literal notranslate"><span class="pre">Statevector</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">Statevector</span><span class="o">.</span><span class="n">from_instruction</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="c1"># Statevector([0.70710678+0.j, 0.+0.j, 0.+0.j, 0.70710678+0.j], dims=(2, 2))</span>
+</pre></div>
+</div>
+<p>Isso é literalmente o mesmo vetor que calculamos manualmente na Seção 5.5 e novamente na Seção 6.4 — apenas obtido de uma biblioteca otimizada e testada, em vez de <code class="docutils literal notranslate"><span class="pre">numpy</span></code> puro.</p>
+</section>
+<section id="executando-com-sampler-e-estimator">
+<h3>Executando com Sampler e Estimator<a class="headerlink" href="#executando-com-sampler-e-estimator" title="Link to this heading">¶</a></h3>
+<p>Para simular a <strong>medição</strong> de um circuito (Postulado 3) ou calcular <strong>valores esperados</strong> (Seção 6.2) usando as ferramentas padrão do Qiskit, usamos as <em>primitivas</em> <code class="docutils literal notranslate"><span class="pre">Sampler</span></code> e <code class="docutils literal notranslate"><span class="pre">Estimator</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.primitives</span><span class="w"> </span><span class="kn">import</span> <span class="n">StatevectorSampler</span><span class="p">,</span> <span class="n">StatevectorEstimator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qiskit.quantum_info</span><span class="w"> </span><span class="kn">import</span> <span class="n">SparsePauliOp</span>
+
+<span class="n">qc_medido</span> <span class="o">=</span> <span class="n">qc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">qc_medido</span><span class="o">.</span><span class="n">measure_all</span><span class="p">()</span>
+
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">StatevectorSampler</span><span class="p">()</span>
+<span class="n">resultado</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="n">qc_medido</span><span class="p">],</span> <span class="n">shots</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resultado</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">meas</span><span class="o">.</span><span class="n">get_counts</span><span class="p">())</span>
+<span class="c1"># algo como {&#39;00&#39;: 503, &#39;11&#39;: 497}</span>
+
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">StatevectorEstimator</span><span class="p">()</span>
+<span class="n">observavel</span> <span class="o">=</span> <span class="n">SparsePauliOp</span><span class="p">(</span><span class="s2">&quot;ZZ&quot;</span><span class="p">)</span>
+<span class="n">resultado</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">run</span><span class="p">([(</span><span class="n">qc</span><span class="p">,</span> <span class="n">observavel</span><span class="p">)])</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resultado</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">evs</span><span class="p">)</span>   <span class="c1"># valor esperado de Z⊗Z no estado de Bell -&gt; 1.0</span>
+</pre></div>
+</div>
+<p>O <code class="docutils literal notranslate"><span class="pre">Sampler</span></code> responde à pergunta “se eu medir este circuito muitas vezes, quais resultados eu observo, e com que frequência?” — o análogo direto de <code class="docutils literal notranslate"><span class="pre">measure_all</span></code> da Seção 6.5, mas repetido <code class="docutils literal notranslate"><span class="pre">shots</span></code> vezes automaticamente. O <code class="docutils literal notranslate"><span class="pre">Estimator</span></code> responde à pergunta “qual é o valor esperado deste observável?” — o análogo direto de <code class="docutils literal notranslate"><span class="pre">expectation</span></code> da Seção 6.2, mas calculado (ou estimado, em hardware real) sem que você precise construir a matriz do observável manualmente.</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Em um simulador como <code class="docutils literal notranslate"><span class="pre">StatevectorSampler</span></code>, os resultados de <code class="docutils literal notranslate"><span class="pre">Estimator</span></code> são calculados exatamente (como fizemos na Seção 6.2). Ao rodar o <strong>mesmo código</strong> em hardware quântico real — trocando apenas o objeto <code class="docutils literal notranslate"><span class="pre">sampler</span></code>/<code class="docutils literal notranslate"><span class="pre">estimator</span></code> por um conectado a um backend da IBM —, os valores retornados passam a ser <strong>estimativas estatísticas</strong>, sujeitas a ruído físico real, obtidas a partir de um número finito de execuções (<code class="docutils literal notranslate"><span class="pre">shots</span></code>). Essa é uma das grandes vantagens de se apoiar nas primitivas do Qiskit desde o início: o mesmo código roda, sem alterações estruturais, tanto em simulação perfeita quanto em hardware real.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 6.7</strong></summary>
+<ol class="arabic">
+<li><p>Usando <code class="docutils literal notranslate"><span class="pre">QuantumCircuit</span></code>, construa o circuito do Exemplo da Seção 5.7 (<span class="math notranslate nohighlight">\(H\)</span> e <span class="math notranslate nohighlight">\(X\)</span> em paralelo, seguidos de CNOT) e use <code class="docutils literal notranslate"><span class="pre">Statevector.from_instruction</span></code> para confirmar que o resultado é o estado de Bell <span class="math notranslate nohighlight">\(|\Psi^+\rangle\)</span>.</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">qc2</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">qc2</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">qc2</span><span class="o">.</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">qc2</span><span class="o">.</span><span class="n">cx</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Statevector</span><span class="o">.</span><span class="n">from_instruction</span><span class="p">(</span><span class="n">qc2</span><span class="p">))</span>
+<span class="c1"># [0.+0.j, 0.70710678+0.j, 0.70710678+0.j, 0.+0.j]  -&gt; |Psi+&gt;</span>
+</pre></div>
+</div>
+</details>
+</li>
+<li><p>Adicione <code class="docutils literal notranslate"><span class="pre">qc.measure_all()</span></code> ao circuito de Bell original e execute com <code class="docutils literal notranslate"><span class="pre">StatevectorSampler</span></code> e <code class="docutils literal notranslate"><span class="pre">shots=2000</span></code>. As contagens deveriam se concentrar em quais dois resultados, e aproximadamente em qual proporção?</p>
+<details>
+<summary>Resolução</summary>
+<p>As contagens devem se concentrar quase exclusivamente em <code class="docutils literal notranslate"><span class="pre">&quot;00&quot;</span></code> e <code class="docutils literal notranslate"><span class="pre">&quot;11&quot;</span></code>, cada um em torno de 50% (1000 ocorrências cada, com flutuação estatística), exatamente como já esperávamos do Capítulo 5 e confirmamos na Seção 6.5.</p>
+</details>
+</li>
+<li><p>Por que faz sentido que o valor esperado de <span class="math notranslate nohighlight">\(Z\otimes Z\)</span> no estado de Bell <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span> seja exatamente <span class="math notranslate nohighlight">\(1.0\)</span>, e não, por exemplo, <span class="math notranslate nohighlight">\(0\)</span>? (Dica: pense nos quatro resultados possíveis de medir <span class="math notranslate nohighlight">\(Z\)</span> em cada qubit separadamente, e no sinal do produto dos dois resultados em cada caso.)</p>
+<details>
+<summary>Resolução</summary>
+<p>Medir <span class="math notranslate nohighlight">\(Z\)</span> em cada qubit dá <span class="math notranslate nohighlight">\(+1\)</span> (para <span class="math notranslate nohighlight">\(|0\rangle\)</span>) ou <span class="math notranslate nohighlight">\(-1\)</span> (para <span class="math notranslate nohighlight">\(|1\rangle\)</span>). No estado <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span>, os únicos resultados possíveis são <span class="math notranslate nohighlight">\(|00\rangle\)</span> (produto <span class="math notranslate nohighlight">\((+1)(+1)=+1\)</span>) e <span class="math notranslate nohighlight">\(|11\rangle\)</span> (produto <span class="math notranslate nohighlight">\((-1)(-1)=+1\)</span>), cada um com probabilidade <span class="math notranslate nohighlight">\(\tfrac12\)</span> — o produto dos resultados é <strong>sempre</strong> <span class="math notranslate nohighlight">\(+1\)</span>, nunca <span class="math notranslate nohighlight">\(-1\)</span>. Por isso o valor esperado de <span class="math notranslate nohighlight">\(Z\otimes Z\)</span>, que é a média desse produto, vale exatamente <span class="math notranslate nohighlight">\(1.0\)</span>, refletindo a correlação perfeita do emaranhamento (Capítulo 5, Seção 5.6).</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="juntando-tudo">
+<h2>6.8 Juntando Tudo<a class="headerlink" href="#juntando-tudo" title="Link to this heading">¶</a></h2>
+<p>Vamos revisar o caminho percorrido neste capítulo:</p>
+<ul class="simple">
+<li><p>Construímos, com <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, um <strong>simulador de qubit</strong> completo — estados como vetores complexos, portas como matrizes, e sistemas de múltiplos qubits via produto tensorial — implementando literalmente os quatro postulados dos Capítulos 4 e 5.</p></li>
+<li><p>Implementamos o <strong>valor esperado</strong> e as <strong>coordenadas de Bloch</strong>, conectando código a visualização.</p></li>
+<li><p>Traduzimos as <strong>portas parametrizadas</strong> (<span class="math notranslate nohighlight">\(R_x,R_y,R_z,R_\varphi\)</span>) em funções que retornam matrizes, reaproveitando toda a infraestrutura já construída.</p></li>
+<li><p>Generalizamos <strong>portas controladas</strong> para controle e alvo em qualquer posição, e construímos <strong>portas multi-controladas</strong> (<span class="math notranslate nohighlight">\(MCX\)</span>, <span class="math notranslate nohighlight">\(MCZ\)</span>) usando projetores.</p></li>
+<li><p>Implementamos a <strong>medição</strong> — total e parcial — como sorteio de um resultado seguido de colapso e renormalização.</p></li>
+<li><p>Usamos tudo isso para implementar, e verificar numericamente, os dois protocolos quânticos fundamentais: <strong>teletransporte</strong> e <strong>codificação superdensa</strong>.</p></li>
+<li><p>Apresentamos o <strong>Qiskit</strong>, mostrando como as mesmas ideias — circuitos, vetores de estado, medição, valores esperados — se expressam em uma ferramenta profissional capaz de rodar em hardware quântico real.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Simulador numpy       →  estados (vetores), portas (matrizes), ⊗ para n qubits
+Visualização           →  &lt;psi|A|psi&gt;, vetor de Bloch (x,y,z)
+Portas Parametrizadas →  Rx(θ), Ry(θ), Rz(θ), Phase(φ)  →  funções -&gt; matrizes
+Portas Multi-Control. →  projetores P0, P1  →  MCX, MCZ para n controles
+Medição                →  sortear resultado (Born) + colapsar + renormalizar
+Protocolos             →  teletransporte, codificação superdensa (via Bell)
+Qiskit                 →  QuantumCircuit, Statevector, Sampler, Estimator, hardware
+</pre></div>
+</div>
+<p>Com um simulador funcional construído do zero e o Qiskit apresentado como ferramenta profissional, temos agora tudo que precisamos — teoria e prática — para atacar os primeiros <strong>algoritmos quânticos</strong> de verdade: Deutsch–Jozsa, o algoritmo de Grover, a Transformada Quântica de Fourier e o algoritmo de Shor. É para lá que o próximo capítulo nos leva.</p>
+</section>
+<hr class="docutils" />
+<section id="referencias">
+<h2>Referências<a class="headerlink" href="#referencias" title="Link to this heading">¶</a></h2>
+<p>[1] Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</p>
+<p>[2] Bennett, C. H., Brassard, G., Crépeau, C., Jozsa, R., Peres, A., &amp; Wootters, W. K. (1993). Teleporting an Unknown Quantum State via Dual Classical and Einstein-Podolsky-Rosen Channels. <em>Physical Review Letters</em>, 70(13), 1895–1899.</p>
+<p>[3] Bennett, C. H., &amp; Wiesner, S. J. (1992). Communication via One- and Two-Particle Operators on Einstein-Podolsky-Rosen States. <em>Physical Review Letters</em>, 69(20), 2881–2884.</p>
+<p>[4] Qiskit Development Team. <em>Qiskit Documentation</em>. IBM Quantum. Disponível em: https://docs.quantum.ibm.com</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../../en/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Sumário</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="chapter_5_multi_qubit_systems.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Capítulo 5 — Sistemas de Múltiplos Qubits</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Leonardo Alves Santana
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Capítulo 6 — Programação em Python para Computação Quântica</a><ul>
+<li><a class="reference internal" href="#dos-postulados-ao-codigo-construindo-um-simulador-de-qubit">6.1 Dos Postulados ao Código: Construindo um Simulador de Qubit</a></li>
+<li><a class="reference internal" href="#visualizando-estados-quanticos">6.2 Visualizando Estados Quânticos</a><ul>
+<li><a class="reference internal" href="#valor-esperado">Valor esperado</a></li>
+<li><a class="reference internal" href="#coordenadas-na-esfera-de-bloch">Coordenadas na Esfera de Bloch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#portas-parametrizadas">6.3 Portas Parametrizadas</a></li>
+<li><a class="reference internal" href="#portas-multi-controladas">6.4 Portas Multi-Controladas</a><ul>
+<li><a class="reference internal" href="#generalizando-para-multiplos-controles-mcx-e-mcz">Generalizando para múltiplos controles: MCX e MCZ</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#medicao-em-pratica">6.5 Medição em Prática</a><ul>
+<li><a class="reference internal" href="#medindo-todos-os-qubits">Medindo todos os qubits</a></li>
+<li><a class="reference internal" href="#medicao-parcial-um-unico-qubit">Medição parcial (um único qubit)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#protocolos-quanticos">6.6 Protocolos Quânticos</a><ul>
+<li><a class="reference internal" href="#teletransporte-quantico">Teletransporte quântico</a></li>
+<li><a class="reference internal" href="#codificacao-superdensa">Codificação superdensa</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#construindo-circuitos-com-qiskit">6.7 Construindo Circuitos com Qiskit</a><ul>
+<li><a class="reference internal" href="#construindo-um-circuito">Construindo um circuito</a></li>
+<li><a class="reference internal" href="#composicao-de-circuitos">Composição de circuitos</a></li>
+<li><a class="reference internal" href="#obtendo-o-vetor-de-estado-statevector">Obtendo o vetor de estado: <code class="docutils literal notranslate"><span class="pre">Statevector</span></code></a></li>
+<li><a class="reference internal" href="#executando-com-sampler-e-estimator">Executando com Sampler e Estimator</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#juntando-tudo">6.8 Juntando Tudo</a></li>
+<li><a class="reference internal" href="#referencias">Referências</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    </body>
+</html>

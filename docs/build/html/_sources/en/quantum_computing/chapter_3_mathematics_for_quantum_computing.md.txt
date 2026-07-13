@@ -1,0 +1,9 @@
+# Chapter 3 — Mathematics for Quantum Computing
+
+<!-- ```{contents}
+:local:
+:depth: 2
+``` -->
+
+
+In Progress...

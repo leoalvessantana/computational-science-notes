@@ -1,0 +1,804 @@
+# Capítulo 6 — Programação em Python para Computação Quântica
+
+Nos Capítulos 4 e 5, construímos toda a teoria de que precisávamos: os postulados da mecânica quântica, o qubit, a Esfera de Bloch, as portas de um e de múltiplos qubits, o emaranhamento e a notação de circuitos. Chegou a hora de transformar essa matemática em **código**.
+
+Este capítulo tem dois objetivos. Primeiro, construir — do zero, usando apenas `numpy` — um pequeno **simulador de qubits**, implementando literalmente cada postulado como uma função. Isso não é apenas um exercício de programação: é a melhor forma de confirmar que você realmente entende a teoria, porque um simulador que "quase funciona" simplesmente não funciona. Segundo, apresentar o **Qiskit**, o framework que usaremos a partir do Capítulo 7 para construir e executar circuitos quânticos reais, tanto em simuladores otimizados quanto em hardware quântico de verdade.
+
+> **Nota**
+>
+> Todo o código deste capítulo assume `import numpy as np`. Os trechos são cumulativos: funções definidas em uma seção são reaproveitadas nas seções seguintes, exatamente como os postulados de um capítulo são reaproveitados no próximo.
+
+---
+
+## 6.1 Dos Postulados ao Código: Construindo um Simulador de Qubit
+
+Pelo **Postulado 1**, um estado quântico é um vetor complexo normalizado. Em `numpy`, representamos isso da forma mais direta possível: um array de números complexos.
+
+```python
+import numpy as np
+
+# Vetores de base computacional (Capítulo 4, Seção 4.3)
+ket0 = np.array([1, 0], dtype=complex)
+ket1 = np.array([0, 1], dtype=complex)
+
+def normalize(state):
+    """Divide o vetor pela sua norma (Postulado 1: ||psi|| = 1)."""
+    return state / np.linalg.norm(state)
+
+def is_valid_state(state, tol=1e-9):
+    """Verifica a condição de normalização do Postulado 1."""
+    return abs(np.linalg.norm(state) - 1.0) < tol
+```
+
+Pelo **Postulado 2**, a evolução é dada por matrizes unitárias. Definimos as portas do Capítulo 4 exatamente como matrizes `numpy`:
+
+```python
+I = np.eye(2, dtype=complex)
+X = np.array([[0, 1], [1, 0]], dtype=complex)
+Y = np.array([[0, -1j], [1j, 0]], dtype=complex)
+Z = np.array([[1, 0], [0, -1]], dtype=complex)
+H = (1 / np.sqrt(2)) * np.array([[1, 1], [1, -1]], dtype=complex)
+
+def apply_gate(state, gate):
+    """Aplica uma porta (matriz unitária) a um estado (Postulado 2)."""
+    return gate @ state
+```
+
+Para sistemas de múltiplos qubits (Capítulo 5), representamos o estado como um único vetor de $2^n$ entradas, seguindo o **Postulado 4** (produto tensorial):
+
+```python
+def kron_n(*mats):
+    """Produto tensorial de várias matrizes/vetores, na ordem dada."""
+    result = mats[0]
+    for m in mats[1:]:
+        result = np.kron(result, m)
+    return result
+```
+
+O último ingrediente é aplicar uma porta a **um qubit específico** dentro de um sistema maior, deixando os demais intactos — algo que fizemos "manualmente" no Capítulo 5 (Seção 5.5), escrevendo explicitamente $H\otimes I$. Em código, generalizamos isso para qualquer posição e qualquer número de qubits:
+
+```python
+def embed(ops_by_qubit, n_qubits):
+    """
+    Constrói o produto tensorial de n_qubits operadores 2x2, usando
+    ops_by_qubit[i] no qubit i e a identidade nos demais.
+    """
+    mats = [ops_by_qubit.get(i, I) for i in range(n_qubits)]
+    return kron_n(*mats)
+
+def gate_on_qubit(gate, qubit, n_qubits):
+    """Aplica `gate` apenas ao qubit de índice `qubit`, identidade nos demais."""
+    return embed({qubit: gate}, n_qubits)
+```
+
+> **💡 Exemplo — Simulando $H|0\rangle$**
+>
+> ```python
+> state = apply_gate(ket0, H)
+> print(state)
+> # [0.70710678+0.j 0.70710678+0.j]
+> ```
+>
+> O resultado é $\tfrac{1}{\sqrt2}(1,1)^T = |+\rangle$, exatamente como calculamos "à mão" no Capítulo 4.
+
+<details>
+<summary><strong>Exercícios 6.1</strong></summary>
+
+1. Usando `apply_gate`, calcule o estado resultante de aplicar $X$ a `ket1`. O resultado deveria coincidir com qual vetor de base?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   print(apply_gate(ket1, X))  # [1.+0.j 0.+0.j]
+   ```
+
+   O resultado é `ket0`, confirmando que $X|1\rangle=|0\rangle$ (Capítulo 4, Seção 4.5).
+   </details>
+
+2. Use `is_valid_state` para verificar se o vetor `np.array([0.6, 0.8])` representa um estado quântico válido.
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   print(is_valid_state(np.array([0.6, 0.8], dtype=complex)))  # True, pois 0.6²+0.8² = 1
+   ```
+   </details>
+
+3. Usando `gate_on_qubit` e `kron_n`, construa o estado $|10\rangle$ (dois qubits) e aplique $X$ apenas ao qubit de índice 1 (o segundo). Que estado você espera obter, e o código confirma isso?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   state = kron_n(ket1, ket0)          # |10>
+   state = gate_on_qubit(X, 1, 2) @ state
+   print(state)  # corresponde a |11>
+   ```
+
+   Esperávamos $|11\rangle$, já que $X$ inverte o segundo qubit de $|0\rangle$ para $|1\rangle$ — e é exatamente o que o código produz.
+   </details>
+
+</details>
+
+---
+
+## 6.2 Visualizando Estados Quânticos
+
+Duas ferramentas de visualização já apareceram na teoria: o **valor esperado** de um observável e a **Esfera de Bloch** (Capítulo 4, Seção 4.4). Vamos implementá-las.
+
+### Valor esperado
+
+Para um observável $A$ (uma matriz hermitiana — neste livro, tipicamente $X$, $Y$ ou $Z$) e um estado $|\psi\rangle$, o valor esperado é $\langle\psi|A|\psi\rangle$:
+
+```python
+def expectation(state, observable):
+    """Calcula <psi|A|psi>."""
+    return np.real(np.conj(state) @ observable @ state)
+```
+
+### Coordenadas na Esfera de Bloch
+
+Lembrando do Capítulo 4, todo estado de um qubit corresponde a um ponto $(x,y,z)$ na esfera unitária, onde $x=\langle X\rangle$, $y=\langle Y\rangle$ e $z=\langle Z\rangle$:
+
+```python
+def bloch_vector(state):
+    """Retorna as coordenadas (x, y, z) do estado na Esfera de Bloch."""
+    x = expectation(state, X)
+    y = expectation(state, Y)
+    z = expectation(state, Z)
+    return np.array([x, y, z])
+```
+
+> **💡 Exemplo — Coordenadas de Bloch de três estados conhecidos**
+>
+> ```python
+> plus = apply_gate(ket0, H)
+> plus_i = normalize(ket0 + 1j * ket1)
+>
+> print(bloch_vector(ket0))    # [0. 0. 1.]   -> polo norte
+> print(bloch_vector(plus))    # [1. 0. 0.]   -> eixo +x
+> print(bloch_vector(plus_i))  # [0. 1. 0.]   -> eixo +y
+> ```
+>
+> Esses três resultados confirmam exatamente o que a teoria previa: $|0\rangle$ no polo norte, $|+\rangle$ no eixo $+x$ e $|{+}i\rangle=\tfrac{1}{\sqrt2}(|0\rangle+i|1\rangle)$ no eixo $+y$.
+
+Para desenhar a esfera de fato, uma biblioteca como `matplotlib` (com projeção 3D) ou o utilitário `plot_bloch_vector` do Qiskit (Seção 6.7) recebem exatamente o vetor `(x, y, z)` retornado por `bloch_vector` e desenham a seta correspondente sobre a esfera.
+
+<details>
+<summary><strong>Exercícios 6.2</strong></summary>
+
+1. Calcule `expectation(ket0, Z)` e `expectation(ket1, Z)`. Os sinais fazem sentido, sabendo que $Z|0\rangle=|0\rangle$ e $Z|1\rangle=-|1\rangle$?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   print(expectation(ket0, Z))  # 1.0
+   print(expectation(ket1, Z))  # -1.0
+   ```
+
+   Fazem sentido: $|0\rangle$ e $|1\rangle$ são autovetores de $Z$ com autovalores $+1$ e $-1$, e o valor esperado de um autovetor é exatamente seu autovalor.
+   </details>
+
+2. Calcule o vetor de Bloch do estado $|-\rangle = \tfrac{1}{\sqrt2}(|0\rangle-|1\rangle)$. Em que ponto da esfera ele deveria cair?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   minus = normalize(ket0 - ket1)
+   print(bloch_vector(minus))  # [-1. 0. 0.]
+   ```
+
+   No eixo $-x$, no lado oposto de $|+\rangle$ — como esperado, já que $H|1\rangle=|-\rangle$.
+   </details>
+
+3. O vetor de Bloch de um estado **misto** (fora do escopo deste livro) tem norma menor que 1. Verifique que, para qualquer estado **puro** normalizado, `np.linalg.norm(bloch_vector(state))` é sempre 1 (teste com dois ou três estados diferentes).
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   for s in [ket0, plus, plus_i, minus]:
+       print(np.linalg.norm(bloch_vector(s)))  # 1.0 em todos os casos
+   ```
+
+   Isso confirma numericamente o que o Capítulo 4 estabeleceu: todo estado puro de um qubit cai exatamente **sobre a superfície** da esfera, nunca em seu interior.
+   </details>
+
+</details>
+
+---
+
+## 6.3 Portas Parametrizadas
+
+O Capítulo 4 (Seção 4.5) introduziu as portas de rotação $R_x,R_y,R_z$ e a porta de fase $R_\varphi$ como funções de um ângulo contínuo. Em código, elas se tornam **funções que retornam matrizes**, em vez de matrizes fixas:
+
+```python
+def Rx(theta):
+    return np.array([
+        [np.cos(theta / 2), -1j * np.sin(theta / 2)],
+        [-1j * np.sin(theta / 2), np.cos(theta / 2)]
+    ], dtype=complex)
+
+def Ry(theta):
+    return np.array([
+        [np.cos(theta / 2), -np.sin(theta / 2)],
+        [np.sin(theta / 2), np.cos(theta / 2)]
+    ], dtype=complex)
+
+def Rz(theta):
+    return np.array([
+        [np.exp(-1j * theta / 2), 0],
+        [0, np.exp(1j * theta / 2)]
+    ], dtype=complex)
+
+def Phase(phi):
+    """Porta de fase R_phi (S = Phase(pi/2), T = Phase(pi/4))."""
+    return np.array([
+        [1, 0],
+        [0, np.exp(1j * phi)]
+    ], dtype=complex)
+```
+
+> **💡 Exemplo — Verificando $X = i\,R_x(\pi)$**
+>
+> No Capítulo 4 (exercício da Seção 4.5), mostramos "à mão" que $R_x(\pi)|0\rangle = -i|1\rangle$, o mesmo estado físico que $X|0\rangle=|1\rangle$ a menos de uma fase global. Vamos confirmar isso numericamente:
+>
+> ```python
+> print(apply_gate(ket0, Rx(np.pi)))  # [0.+0.j  0.-1.j]  =  -i * |1>
+> print(apply_gate(ket0, X))          # [0.+0.j  1.+0.j]  =  |1>
+> ```
+>
+> Os dois vetores diferem exatamente pelo fator de fase global $-i$, confirmando a relação $X=i\,R_x(\pi)$.
+
+Como as portas parametrizadas retornam matrizes, elas se combinam perfeitamente com `gate_on_qubit` e `embed` da Seção 6.1 — nenhum código novo é necessário para usá-las em sistemas de múltiplos qubits.
+
+<details>
+<summary><strong>Exercícios 6.3</strong></summary>
+
+1. Calcule `Phase(np.pi/2)` e compare com a matriz da porta $S$ do Capítulo 4.
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   print(Phase(np.pi / 2))
+   # [[1.+0.j 0.+0.j]
+   #  [0.+0.j 0.+1.j]]
+   ```
+
+   Coincide com $S=\begin{pmatrix}1&0\\0&i\end{pmatrix}$, como esperado, já que $e^{i\pi/2}=i$.
+   </details>
+
+2. Usando `Ry`, reproduza numericamente o exemplo do Capítulo 4 em que $R_y(\pi/2)$ leva $|0\rangle$ até $|+\rangle$. Confirme calculando o vetor de Bloch do resultado.
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   state = apply_gate(ket0, Ry(np.pi / 2))
+   print(bloch_vector(state))  # aproximadamente [1. 0. 0.]
+   ```
+   </details>
+
+3. Escreva uma função `random_state()` que gere um estado de um qubit aleatório mas válido, aplicando `Ry` com um ângulo aleatório e `Rz` com outro ângulo aleatório a `ket0`. Por que esse procedimento sempre produz um estado normalizado, sem precisar chamar `normalize` explicitamente?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   def random_state():
+       theta = np.random.uniform(0, np.pi)
+       phi = np.random.uniform(0, 2 * np.pi)
+       state = apply_gate(ket0, Ry(theta))
+       state = apply_gate(state, Rz(phi))
+       return state
+   ```
+
+   Como $R_y$ e $R_z$ são matrizes **unitárias** (Postulado 2), elas preservam a norma de qualquer vetor de entrada — e `ket0` já é normalizado. Logo, o resultado é automaticamente normalizado, sem necessidade de renormalizar.
+   </details>
+
+</details>
+
+---
+
+## 6.4 Portas Multi-Controladas
+
+O Capítulo 5 (Seção 5.4) definiu portas controladas via a matriz em blocos $CU=\begin{pmatrix}I&0\\0&U\end{pmatrix}$. Essa forma é conveniente para o papel, mas incômoda para código genérico, porque assume que controle e alvo são qubits "adjacentes" em uma ordem específica. Uma formulação equivalente, mais fácil de programar para **qualquer** posição de controle e alvo, usa os projetores
+
+$$
+P_0 = |0\rangle\langle0| = \begin{pmatrix}1&0\\0&0\end{pmatrix}, \qquad P_1 = |1\rangle\langle1| = \begin{pmatrix}0&0\\0&1\end{pmatrix},
+$$
+
+e escreve
+
+$$
+CU = \big(P_0 \text{ no controle}\big)\otimes I_{\text{resto}} \;+\; \big(P_1 \text{ no controle}\big)\otimes\big(U \text{ no alvo}\big)\otimes I_{\text{resto}}.
+$$
+
+Em código, usando `embed` da Seção 6.1:
+
+```python
+P0 = np.array([[1, 0], [0, 0]], dtype=complex)
+P1 = np.array([[0, 0], [0, 1]], dtype=complex)
+
+def controlled_gate(gate, control, target, n_qubits):
+    """Constrói a matriz de uma porta controlada-U, para controle e alvo
+    em qualquer posição entre n_qubits."""
+    term0 = embed({control: P0}, n_qubits)
+    term1 = embed({control: P1, target: gate}, n_qubits)
+    return term0 + term1
+```
+
+> **Nota**
+>
+> Vale a pena confirmar que `controlled_gate(X, 0, 1, 2)` reproduz exatamente a matriz de CNOT do Capítulo 5:
+>
+> ```python
+> print(controlled_gate(X, 0, 1, 2))
+> # [[1.+0.j 0.+0.j 0.+0.j 0.+0.j]
+> #  [0.+0.j 1.+0.j 0.+0.j 0.+0.j]
+> #  [0.+0.j 0.+0.j 0.+0.j 1.+0.j]
+> #  [0.+0.j 0.+0.j 1.+0.j 0.+0.j]]
+> ```
+>
+> É exatamente a matriz de CNOT apresentada na Seção 5.4.
+
+### Generalizando para múltiplos controles: MCX e MCZ
+
+A porta **Toffoli** (Capítulo 5) é o caso $U=X$ com **dois** controles. Generalizando ainda mais, uma porta **multi-controlada** ($MCX$, $MCZ$, etc.) aplica $U$ ao alvo **somente se todos os controles estiverem em $|1\rangle$**:
+
+```python
+def multi_controlled_gate(gate, controls, target, n_qubits):
+    """Aplica `gate` ao alvo apenas quando TODOS os qubits em `controls`
+    estão em |1>; identidade em qualquer outro caso."""
+    dim = 2 ** n_qubits
+    identity_full = np.eye(dim, dtype=complex)
+
+    ops_all_ones = {c: P1 for c in controls}
+    projector_all_ones = embed(ops_all_ones, n_qubits)
+
+    ops_all_ones_and_gate = dict(ops_all_ones)
+    ops_all_ones_and_gate[target] = gate
+    block_with_gate = embed(ops_all_ones_and_gate, n_qubits)
+
+    return identity_full - projector_all_ones + block_with_gate
+
+def MCX(controls, target, n_qubits):
+    return multi_controlled_gate(X, controls, target, n_qubits)
+
+def MCZ(controls, target, n_qubits):
+    return multi_controlled_gate(Z, controls, target, n_qubits)
+```
+
+> **💡 Exemplo — Verificando a Toffoli via `MCX`**
+>
+> ```python
+> toffoli = MCX(controls=[0, 1], target=2, n_qubits=3)
+> state = kron_n(ket1, ket1, ket0)   # |110>
+> print(toffoli @ state)             # corresponde a |111>
+> ```
+>
+> O resultado tem uma única entrada não nula na posição correspondente a $|111\rangle$, confirmando que a Toffoli inverteu o alvo porque **ambos** os controles estavam em $|1\rangle$ — exatamente a definição da Seção 5.4.
+
+<details>
+<summary><strong>Exercícios 6.4</strong></summary>
+
+1. Use `controlled_gate` para construir a matriz $4\times4$ de $CZ$ (controle no qubit 0, alvo no qubit 1) e compare com a matriz calculada "à mão" no Capítulo 5.
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   print(controlled_gate(Z, 0, 1, 2))
+   # diag(1, 1, 1, -1) — coincide com o resultado da Seção 5.4.
+   ```
+   </details>
+
+2. Usando `MCX` com três controles (`controls=[0,1,2]`, `target=3`, `n_qubits=4`), verifique que $|1110\rangle$ é levado a $|1111\rangle$, mas $|1100\rangle$ permanece inalterado.
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   mcx4 = MCX(controls=[0, 1, 2], target=3, n_qubits=4)
+   print(mcx4 @ kron_n(ket1, ket1, ket1, ket0))  # -> |1111>
+   print(mcx4 @ kron_n(ket1, ket1, ket0, ket0))  # -> |1100> (inalterado)
+   ```
+
+   No primeiro caso, os três controles estão em $|1\rangle$, então o alvo é invertido. No segundo caso, o terceiro controle está em $|0\rangle$, então nada acontece.
+   </details>
+
+3. Por que a fórmula `identity_full - projector_all_ones + block_with_gate` funciona mesmo quando `gate` não é uma simples permutação (por exemplo, `gate = H`)? (Dica: pense em como cada termo atua sobre um vetor de base, separando os casos "todos os controles em 1" e "pelo menos um controle em 0".)
+
+   <details>
+   <summary>Resolução</summary>
+
+   Sobre qualquer vetor de base $|x\rangle$: se **algum** controle está em $|0\rangle$, então `projector_all_ones` e `block_with_gate` agem como zero sobre $|x\rangle$ (o projetor correspondente naquele controle mata o termo), e sobra apenas `identity_full`, que deixa $|x\rangle$ inalterado — correto. Se **todos** os controles estão em $|1\rangle$, então `identity_full` e `projector_all_ones` se cancelam exatamente sobre esse subespaço (ambos agem como identidade nele), e sobra apenas `block_with_gate`, que aplica `gate` ao alvo — também correto. Isso vale para **qualquer** matriz `gate`, unitária ou não, pois a decomposição é feita antes de "escolher" o que `gate` faz.
+   </details>
+
+</details>
+
+---
+
+## 6.5 Medição em Prática
+
+O **Postulado 3** (Regra de Born, Capítulo 4) e sua generalização para medição parcial (Capítulo 5, Seção 5.6) se traduzem quase diretamente em código: calcular probabilidades a partir de amplitudes ao quadrado, sortear um resultado, e colapsar/renormalizar o estado.
+
+### Medindo todos os qubits
+
+```python
+def measure_all(state, n_qubits, rng=None):
+    """Mede todos os qubits na base computacional (Postulado 3)."""
+    rng = rng or np.random.default_rng()
+    probabilities = np.abs(state) ** 2
+    outcome = rng.choice(len(state), p=probabilities)
+    bitstring = format(outcome, f"0{n_qubits}b")
+    return bitstring
+```
+
+### Medição parcial (um único qubit)
+
+```python
+def measure_qubit(state, qubit, n_qubits, rng=None):
+    """
+    Mede apenas um qubit (Capítulo 5, Seção 5.6), retornando o resultado
+    (0 ou 1) e o estado colapsado e renormalizado dos demais qubits.
+    """
+    rng = rng or np.random.default_rng()
+    dim = len(state)
+
+    prob_zero = sum(
+        abs(state[x]) ** 2
+        for x in range(dim)
+        if (x >> (n_qubits - 1 - qubit)) & 1 == 0
+    )
+    outcome = 0 if rng.random() < prob_zero else 1
+
+    collapsed = np.zeros_like(state)
+    for x in range(dim):
+        bit = (x >> (n_qubits - 1 - qubit)) & 1
+        if bit == outcome:
+            collapsed[x] = state[x]
+
+    return outcome, normalize(collapsed)
+```
+
+> **Nota**
+>
+> A expressão `(x >> (n_qubits - 1 - qubit)) & 1` simplesmente lê o bit correspondente ao qubit desejado na representação binária do índice `x`, respeitando a convenção — já usada desde o Capítulo 5 — de que o **primeiro** qubit do ket corresponde ao bit **mais significativo**.
+
+> **💡 Exemplo — Medindo o estado de Bell**
+>
+> ```python
+> bell = kron_n(ket0, ket0)
+> bell = gate_on_qubit(H, 0, 2) @ bell
+> bell = controlled_gate(X, 0, 1, 2) @ bell   # |Phi+> = (|00>+|11>)/sqrt(2)
+>
+> outcome, remaining = measure_qubit(bell, qubit=0, n_qubits=2)
+> print(outcome, remaining)
+> ```
+>
+> Executando esse código repetidas vezes, `outcome` será $0$ ou $1$ aproximadamente com a mesma frequência ($50\%$ cada) — mas, em **qualquer** execução, `remaining` sempre será exatamente igual a `ket0` quando `outcome == 0` e a `ket1` quando `outcome == 1`. Essa é a correlação perfeita do emaranhamento, agora observável diretamente no código, e não apenas no papel.
+
+<details>
+<summary><strong>Exercícios 6.5</strong></summary>
+
+1. Execute `measure_all` sobre o estado $|+\rangle\otimes|0\rangle$ várias vezes (por exemplo, em um laço de 1000 repetições) e conte a frequência de cada resultado (`"00"` e `"10"`). As frequências deveriam se aproximar de quais probabilidades teóricas?
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   from collections import Counter
+   state = kron_n(apply_gate(ket0, H), ket0)
+   results = [measure_all(state, 2) for _ in range(1000)]
+   print(Counter(results))
+   ```
+
+   As frequências devem se aproximar de 50% para `"00"` e 50% para `"10"`, coincidindo com o cálculo já feito no Capítulo 5 (Seção 5.2).
+   </details>
+
+2. Modifique o exemplo desta seção para medir o estado de Bell $|\Psi^-\rangle=\tfrac1{\sqrt2}(|01\rangle-|10\rangle)$ (Capítulo 5, Seção 5.5) em vez de $|\Phi^+\rangle$, e confirme que, se `outcome==0` (primeiro qubit em $|0\rangle$), o qubit restante colapsa para $|1\rangle$ (a menos de fase global).
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   psi_minus = normalize(kron_n(ket0, ket1) - kron_n(ket1, ket0))
+   outcome, remaining = measure_qubit(psi_minus, qubit=0, n_qubits=2)
+   print(outcome, remaining)
+   ```
+
+   Consistente com o resultado obtido "à mão" no Exercício 3 da Seção 5.6.
+   </details>
+
+3. Por que a função `measure_qubit` usa `normalize(collapsed)` em vez de simplesmente dividir por `np.sqrt(prob_zero)` (ou `np.sqrt(1-prob_zero)`)? Os dois métodos deveriam dar o mesmo resultado?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Sim, os dois métodos são matematicamente equivalentes: `prob_zero` (quando `outcome==0`) é exatamente a soma dos módulos ao quadrado das entradas mantidas em `collapsed`, então `np.linalg.norm(collapsed) == np.sqrt(prob_zero)`. Usar `normalize` é apenas mais robusto e genérico — evita recalcular a probabilidade separadamente e lida melhor com pequenos erros de arredondamento numérico.
+   </details>
+
+</details>
+
+---
+
+## 6.6 Protocolos Quânticos
+
+Com o simulador completo — estados, portas, portas controladas e medição — podemos, finalmente, implementar dois dos protocolos mais importantes da computação quântica: o **teletransporte quântico** e a **codificação superdensa**. Ambos usam o mesmo ingrediente central que já vimos repetidas vezes: o par de Bell.
+
+### Teletransporte quântico
+
+O objetivo do teletransporte é transferir um estado quântico **desconhecido** $|\psi\rangle$ de um qubit para outro, usando um par de Bell compartilhado e **dois bits clássicos** de comunicação — sem nunca violar o Teorema da Não-Clonagem (Capítulo 5, Seção 5.8), já que o qubit original é destruído (medido) no processo.
+
+O protocolo usa três qubits: `q0` (o estado $|\psi\rangle$ a ser teletransportado), `q1` (a metade de Alice do par de Bell) e `q2` (a metade de Bob).
+
+```python
+def teleport(psi, n_qubits=3):
+    state = kron_n(psi, ket0, ket0)
+
+    # 1. Preparar um par de Bell entre q1 (Alice) e q2 (Bob)
+    state = gate_on_qubit(H, 1, n_qubits) @ state
+    state = controlled_gate(X, 1, 2, n_qubits) @ state
+
+    # 2. Alice interage seu qubit de dados (q0) com sua metade do par (q1)
+    state = controlled_gate(X, 0, 1, n_qubits) @ state
+    state = gate_on_qubit(H, 0, n_qubits) @ state
+
+    # 3. Alice mede q0 e q1, obtendo dois bits clássicos m0, m1
+    m0, state = measure_qubit(state, 0, n_qubits)
+    m1, state = measure_qubit(state, 1, n_qubits)
+
+    # 4. Bob aplica uma correção em q2, dependendo dos bits recebidos de Alice
+    if m1 == 1:
+        state = gate_on_qubit(X, 2, n_qubits) @ state
+    if m0 == 1:
+        state = gate_on_qubit(Z, 2, n_qubits) @ state
+
+    return m0, m1, state
+```
+
+> **Importante**
+>
+> O passo 4 — a **correção condicionada ao resultado clássico da medição** — é o coração do protocolo, e é exatamente por isso que o teletransporte não viola a relatividade: os bits $m_0,m_1$ precisam ser **enviados classicamente** (por exemplo, por telefone) até Bob antes que ele possa recuperar $|\psi\rangle$. Sem essa comunicação clássica, o qubit de Bob fica em uma mistura sem sentido físico definido.
+
+> **💡 Exemplo — Confirmando o teletransporte**
+>
+> ```python
+> psi = normalize(apply_gate(ket0, Ry(0.7)))  # um estado qualquer, "desconhecido"
+> m0, m1, final_state = teleport(psi)
+> print(m0, m1)
+> print(final_state)   # produto |m0>|m1>|psi>, a menos de fase global
+> ```
+>
+> Repetindo essa execução muitas vezes, `m0` e `m1` variam aleatoriamente entre as quatro combinações possíveis — mas, extraindo apenas a parte do vetor correspondente ao qubit de Bob (`q2`), o resultado é **sempre** $|\psi\rangle$ (a menos de uma fase global irrelevante, Postulado 1), independentemente de qual dos quatro resultados de medição ocorreu. Essa é precisamente a garantia que o protocolo promete.
+
+### Codificação superdensa
+
+A **codificação superdensa** é, em certo sentido, o protocolo "espelhado" do teletransporte: em vez de transmitir um qubit usando dois bits clássicos, ela transmite **dois bits clássicos** usando um único qubit — desde que Alice e Bob já compartilhem um par de Bell de antemão.
+
+```python
+def superdense_encode(bit0, bit1, n_qubits=2):
+    # Par de Bell compartilhado entre Alice (q0) e Bob (q1)
+    state = kron_n(ket0, ket0)
+    state = gate_on_qubit(H, 0, n_qubits) @ state
+    state = controlled_gate(X, 0, 1, n_qubits) @ state
+
+    # Alice codifica dois bits clássicos aplicando portas ao SEU qubit (q0)
+    if bit1 == 1:
+        state = gate_on_qubit(X, 0, n_qubits) @ state
+    if bit0 == 1:
+        state = gate_on_qubit(Z, 0, n_qubits) @ state
+
+    return state  # Alice envia apenas q0 para Bob
+
+def superdense_decode(state, n_qubits=2):
+    # Bob, com os dois qubits em mãos, desfaz o emaranhamento e mede
+    state = controlled_gate(X, 0, 1, n_qubits) @ state
+    state = gate_on_qubit(H, 0, n_qubits) @ state
+    outcome = np.argmax(np.abs(state) ** 2)   # estado é um vetor de base puro
+    return format(outcome, f"0{n_qubits}b")
+```
+
+> **💡 Exemplo — Enviando os quatro pares de bits possíveis**
+>
+> ```python
+> for bit0 in [0, 1]:
+>     for bit1 in [0, 1]:
+>         encoded = superdense_encode(bit0, bit1)
+>         decoded = superdense_decode(encoded)
+>         print(f"enviado {bit0}{bit1} -> recebido {decoded}")
+> ```
+>
+> As quatro execuções confirmam que Bob recupera exatamente os dois bits que Alice codificou, tendo recebido fisicamente apenas **um** qubit — o segundo bit de informação "já estava lá", codificado na correlação do par de Bell compartilhado com antecedência.
+
+<details>
+<summary><strong>Exercícios 6.6</strong></summary>
+
+1. No protocolo de teletransporte, o que aconteceria se Bob **esquecesse** de aplicar a correção do passo 4 (mesmo tendo recebido $m_0,m_1$ corretamente)? O qubit de Bob ainda seria útil? (Dica: pense em quais dos quatro estados de Bell — Capítulo 5, Seção 5.5 — aparecem em cada caso.)
+
+   <details>
+   <summary>Resolução</summary>
+
+   Sem a correção, o qubit de Bob estaria em um de quatro estados possíveis (relacionados a $|\psi\rangle$ por $I$, $X$, $Z$ ou $XZ$, dependendo de $m_0,m_1$) — correto apenas no caso $m_0=m_1=0$. Nos outros três casos, o estado de Bob estaria "errado" de uma forma sistemática e conhecida (não aleatória), mas ainda assim inutilizável sem a correção, pois Bob não saberia, sem os bits classicamente comunicados, qual dos quatro casos ocorreu.
+   </details>
+
+2. Na codificação superdensa, o que acontece se Alice não aplicar **nenhuma** porta (ou seja, `bit0=bit1=0`)? Verifique que Bob ainda decodifica corretamente `"00"`.
+
+   <details>
+   <summary>Resolução</summary>
+
+   Sem portas aplicadas, o estado permanece $|\Phi^+\rangle$. Aplicando a decodificação de Bob (CNOT seguida de $H$ no primeiro qubit), o estado retorna a $|00\rangle$ — o mesmo cálculo, na direção inversa, do Exemplo da Seção 5.5. Bob mede `"00"`, corretamente.
+   </details>
+
+3. Ambos os protocolos desta seção dependem de um par de Bell **pré-compartilhado**. Explique, em uma frase, por que isso não viola o Teorema da Não-Clonagem — isto é, por que compartilhar um par de Bell de antemão é diferente de "copiar" um qubit desconhecido.
+
+   <details>
+   <summary>Resolução</summary>
+
+   O par de Bell é preparado por quem quer que o distribua (por exemplo, um Hadamard seguido de CNOT sobre dois qubits conhecidos em $|0\rangle$), não copiado a partir de um estado desconhecido preexistente — exatamente a mesma distinção discutida no Exercício 3 da Seção 5.8.
+   </details>
+
+</details>
+
+---
+
+## 6.7 Construindo Circuitos com Qiskit
+
+O simulador das seções anteriores foi construído propositalmente do zero, para deixar transparente a conexão entre cada postulado e cada linha de código. Na prática, porém, ninguém escreve simuladores manuais para trabalhar com dezenas ou centenas de qubits — usamos frameworks especializados, altamente otimizados, que também sabem se comunicar com hardware quântico real. O mais usado atualmente é o **Qiskit**, desenvolvido pela IBM.
+
+### Construindo um circuito
+
+A classe central do Qiskit é `QuantumCircuit`. Reconstruir o circuito de Bell da Seção 5.5 é quase uma tradução direta do diagrama:
+
+```python
+from qiskit import QuantumCircuit
+from qiskit.quantum_info import Statevector
+
+qc = QuantumCircuit(2)
+qc.h(0)       # Hadamard no qubit 0
+qc.cx(0, 1)   # CNOT: controle = qubit 0, alvo = qubit 1
+
+print(qc.draw())
+```
+
+```
+     ┌───┐
+q_0: ┤ H ├──■──
+     └───┘┌─┴─┐
+q_1: ─────┤ X ├
+          └───┘
+```
+
+### Composição de circuitos
+
+Circuitos podem ser construídos em partes e combinados com `compose`, o que é útil para reaproveitar sub-rotinas (como a preparação de um par de Bell) dentro de circuitos maiores — exatamente como fizemos "na mão" reaproveitando `gate_on_qubit` e `controlled_gate` ao longo deste capítulo:
+
+```python
+bell_pair = QuantumCircuit(2)
+bell_pair.h(0)
+bell_pair.cx(0, 1)
+
+circuito_maior = QuantumCircuit(3)
+circuito_maior.compose(bell_pair, qubits=[1, 2], inplace=True)
+# ... o restante do protocolo de teletransporte iria aqui
+```
+
+### Obtendo o vetor de estado: `Statevector`
+
+Para inspecionar o estado exato de um circuito — o equivalente ao vetor `numpy` que manipulamos nas seções anteriores —, usamos `Statevector`:
+
+```python
+state = Statevector.from_instruction(qc)
+print(state)
+# Statevector([0.70710678+0.j, 0.+0.j, 0.+0.j, 0.70710678+0.j], dims=(2, 2))
+```
+
+Isso é literalmente o mesmo vetor que calculamos manualmente na Seção 5.5 e novamente na Seção 6.4 — apenas obtido de uma biblioteca otimizada e testada, em vez de `numpy` puro.
+
+### Executando com Sampler e Estimator
+
+Para simular a **medição** de um circuito (Postulado 3) ou calcular **valores esperados** (Seção 6.2) usando as ferramentas padrão do Qiskit, usamos as *primitivas* `Sampler` e `Estimator`:
+
+```python
+from qiskit.primitives import StatevectorSampler, StatevectorEstimator
+from qiskit.quantum_info import SparsePauliOp
+
+qc_medido = qc.copy()
+qc_medido.measure_all()
+
+sampler = StatevectorSampler()
+resultado = sampler.run([qc_medido], shots=1000).result()
+print(resultado[0].data.meas.get_counts())
+# algo como {'00': 503, '11': 497}
+
+estimator = StatevectorEstimator()
+observavel = SparsePauliOp("ZZ")
+resultado = estimator.run([(qc, observavel)]).result()
+print(resultado[0].data.evs)   # valor esperado de Z⊗Z no estado de Bell -> 1.0
+```
+
+O `Sampler` responde à pergunta "se eu medir este circuito muitas vezes, quais resultados eu observo, e com que frequência?" — o análogo direto de `measure_all` da Seção 6.5, mas repetido `shots` vezes automaticamente. O `Estimator` responde à pergunta "qual é o valor esperado deste observável?" — o análogo direto de `expectation` da Seção 6.2, mas calculado (ou estimado, em hardware real) sem que você precise construir a matriz do observável manualmente.
+
+> **Nota**
+>
+> Em um simulador como `StatevectorSampler`, os resultados de `Estimator` são calculados exatamente (como fizemos na Seção 6.2). Ao rodar o **mesmo código** em hardware quântico real — trocando apenas o objeto `sampler`/`estimator` por um conectado a um backend da IBM —, os valores retornados passam a ser **estimativas estatísticas**, sujeitas a ruído físico real, obtidas a partir de um número finito de execuções (`shots`). Essa é uma das grandes vantagens de se apoiar nas primitivas do Qiskit desde o início: o mesmo código roda, sem alterações estruturais, tanto em simulação perfeita quanto em hardware real.
+
+<details>
+<summary><strong>Exercícios 6.7</strong></summary>
+
+1. Usando `QuantumCircuit`, construa o circuito do Exemplo da Seção 5.7 ($H$ e $X$ em paralelo, seguidos de CNOT) e use `Statevector.from_instruction` para confirmar que o resultado é o estado de Bell $|\Psi^+\rangle$.
+
+   <details>
+   <summary>Resolução</summary>
+
+   ```python
+   qc2 = QuantumCircuit(2)
+   qc2.h(0)
+   qc2.x(1)
+   qc2.cx(0, 1)
+   print(Statevector.from_instruction(qc2))
+   # [0.+0.j, 0.70710678+0.j, 0.70710678+0.j, 0.+0.j]  -> |Psi+>
+   ```
+   </details>
+
+2. Adicione `qc.measure_all()` ao circuito de Bell original e execute com `StatevectorSampler` e `shots=2000`. As contagens deveriam se concentrar em quais dois resultados, e aproximadamente em qual proporção?
+
+   <details>
+   <summary>Resolução</summary>
+
+   As contagens devem se concentrar quase exclusivamente em `"00"` e `"11"`, cada um em torno de 50% (1000 ocorrências cada, com flutuação estatística), exatamente como já esperávamos do Capítulo 5 e confirmamos na Seção 6.5.
+   </details>
+
+3. Por que faz sentido que o valor esperado de $Z\otimes Z$ no estado de Bell $|\Phi^+\rangle$ seja exatamente $1.0$, e não, por exemplo, $0$? (Dica: pense nos quatro resultados possíveis de medir $Z$ em cada qubit separadamente, e no sinal do produto dos dois resultados em cada caso.)
+
+   <details>
+   <summary>Resolução</summary>
+
+   Medir $Z$ em cada qubit dá $+1$ (para $|0\rangle$) ou $-1$ (para $|1\rangle$). No estado $|\Phi^+\rangle$, os únicos resultados possíveis são $|00\rangle$ (produto $(+1)(+1)=+1$) e $|11\rangle$ (produto $(-1)(-1)=+1$), cada um com probabilidade $\tfrac12$ — o produto dos resultados é **sempre** $+1$, nunca $-1$. Por isso o valor esperado de $Z\otimes Z$, que é a média desse produto, vale exatamente $1.0$, refletindo a correlação perfeita do emaranhamento (Capítulo 5, Seção 5.6).
+   </details>
+
+</details>
+
+---
+
+## 6.8 Juntando Tudo
+
+Vamos revisar o caminho percorrido neste capítulo:
+
+- Construímos, com `numpy`, um **simulador de qubit** completo — estados como vetores complexos, portas como matrizes, e sistemas de múltiplos qubits via produto tensorial — implementando literalmente os quatro postulados dos Capítulos 4 e 5.
+- Implementamos o **valor esperado** e as **coordenadas de Bloch**, conectando código a visualização.
+- Traduzimos as **portas parametrizadas** ($R_x,R_y,R_z,R_\varphi$) em funções que retornam matrizes, reaproveitando toda a infraestrutura já construída.
+- Generalizamos **portas controladas** para controle e alvo em qualquer posição, e construímos **portas multi-controladas** ($MCX$, $MCZ$) usando projetores.
+- Implementamos a **medição** — total e parcial — como sorteio de um resultado seguido de colapso e renormalização.
+- Usamos tudo isso para implementar, e verificar numericamente, os dois protocolos quânticos fundamentais: **teletransporte** e **codificação superdensa**.
+- Apresentamos o **Qiskit**, mostrando como as mesmas ideias — circuitos, vetores de estado, medição, valores esperados — se expressam em uma ferramenta profissional capaz de rodar em hardware quântico real.
+
+```
+Simulador numpy       →  estados (vetores), portas (matrizes), ⊗ para n qubits
+Visualização           →  <psi|A|psi>, vetor de Bloch (x,y,z)
+Portas Parametrizadas →  Rx(θ), Ry(θ), Rz(θ), Phase(φ)  →  funções -> matrizes
+Portas Multi-Control. →  projetores P0, P1  →  MCX, MCZ para n controles
+Medição                →  sortear resultado (Born) + colapsar + renormalizar
+Protocolos             →  teletransporte, codificação superdensa (via Bell)
+Qiskit                 →  QuantumCircuit, Statevector, Sampler, Estimator, hardware
+```
+
+Com um simulador funcional construído do zero e o Qiskit apresentado como ferramenta profissional, temos agora tudo que precisamos — teoria e prática — para atacar os primeiros **algoritmos quânticos** de verdade: Deutsch–Jozsa, o algoritmo de Grover, a Transformada Quântica de Fourier e o algoritmo de Shor. É para lá que o próximo capítulo nos leva.
+
+---
+
+## Referências
+
+[1] Nielsen, M. A., & Chuang, I. L. (2010). *Quantum Computation and Quantum Information* (10th Anniversary ed.). Cambridge University Press.
+
+[2] Bennett, C. H., Brassard, G., Crépeau, C., Jozsa, R., Peres, A., & Wootters, W. K. (1993). Teleporting an Unknown Quantum State via Dual Classical and Einstein-Podolsky-Rosen Channels. *Physical Review Letters*, 70(13), 1895–1899.
+
+[3] Bennett, C. H., & Wiesner, S. J. (1992). Communication via One- and Two-Particle Operators on Einstein-Podolsky-Rosen States. *Physical Review Letters*, 69(20), 2881–2884.
+
+[4] Qiskit Development Team. *Qiskit Documentation*. IBM Quantum. Disponível em: https://docs.quantum.ibm.com

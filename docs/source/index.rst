@@ -1,7 +1,8 @@
+===========================
 Computational Science Notes
-============================
+===========================
 
-
+   
 About
 ------
 
@@ -37,15 +38,22 @@ Status
    * - Programming
      - 📝 Planned
 
-Table of Contents
-------------------
+
+
+Choose your language:
+------------------------------------------
+
+* `🇧🇷 Português <pt/index.html>`_
+* `🇺🇸 English <en/index.html>`_
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Quantum Computing
+   :maxdepth: 1
+   :hidden:
 
-   quantum_computing/chapter_1_introduction
-   quantum_computing/chapter_2_why_quantum_computing
+   Português 🇧🇷 <pt/index>
+   English 🇺🇸 <en/index>
+
+
 
 License
 -------

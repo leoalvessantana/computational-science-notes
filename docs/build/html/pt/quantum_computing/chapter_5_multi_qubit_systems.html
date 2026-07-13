@@ -1,0 +1,1066 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Sumário" href="../../en/index.html"><link rel="prev" title="Capítulo 4 — Qubits e os Postulados da Computação Quântica" href="chapter_4_qubits_postulados.html">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Capítulo 5 — Sistemas de Múltiplos Qubits - Computational Science Notes 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dff35b1a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Computational Science Notes 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">Computational Science Notes 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Português 🇧🇷</a><input aria-label="Toggle navigation of Português 🇧🇷" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chapter_1_introduction.html">Capítulo 1 — Introdução</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_2_why_quantum_computing.html">Capítulo 2 — Por Que Computação Quântica?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_3_mathematics_for_quantum_computing.html">Capítulo 3 — Matemática para Computação Quântica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_4_qubits_postulados.html">Capítulo 4 — Qubits e os Postulados da Computação Quântica</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Capítulo 5 — Sistemas de Múltiplos Qubits</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../en/index.html">English 🇺🇸</a><input aria-label="Toggle navigation of English 🇺🇸" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_1_introduction.html">Chapter 1 — Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_2_why_quantum_computing.html">Chapter 2 — Why Quantum Computing?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_3_mathematics_for_quantum_computing.html">Chapter 3 — Mathematics for Quantum Computing</a></li>
+</ul>
+</li>
+</ul>
+
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/pt/quantum_computing/chapter_5_multi_qubit_systems.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="capitulo-5-sistemas-de-multiplos-qubits">
+<h1>Capítulo 5 — Sistemas de Múltiplos Qubits<a class="headerlink" href="#capitulo-5-sistemas-de-multiplos-qubits" title="Link to this heading">¶</a></h1>
+<p>No Capítulo 4, definimos formalmente o qubit, enunciamos os quatro postulados da mecânica quântica e construímos as ferramentas para manipular e visualizar <strong>um único qubit</strong>: a Esfera de Bloch e as portas de um qubit. Mas nenhuma computação interessante acontece com um único qubit isolado — o poder da computação quântica emerge quando <strong>múltiplos qubits</strong> são combinados, manipulados conjuntamente e medidos.</p>
+<p>Este capítulo retoma o Postulado 4 (Sistemas Compostos), que já havíamos enunciado no capítulo anterior, e o explora em profundidade. Vamos formalizar o espaço de estados de <span class="math notranslate nohighlight">\(n\)</span> qubits, introduzir as portas controladas — o mecanismo pelo qual qubits interagem entre si —, estudar o emaranhamento em detalhe, generalizar a Regra de Born para medições parciais, estabelecer a notação de circuitos quânticos que usaremos no restante do livro, e terminar com um dos resultados mais surpreendentes da teoria: o <strong>Teorema da Não-Clonagem</strong>.</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Se você sentir que já viu o produto tensorial antes, é porque viu: o Capítulo 3 o introduziu como ferramenta matemática, e o Capítulo 4 o usou para enunciar o Postulado 4. Aqui, vamos usá-lo ativamente para construir e manipular sistemas de vários qubits.</p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="produto-tensorial-revisitado">
+<h2>5.1 Produto Tensorial Revisitado<a class="headerlink" href="#produto-tensorial-revisitado" title="Link to this heading">¶</a></h2>
+<p>Relembrando o Capítulo 3, o produto tensorial <span class="math notranslate nohighlight">\(\otimes\)</span> é a operação que combina dois espaços vetoriais menores em um espaço maior. Dados um vetor <span class="math notranslate nohighlight">\(v\)</span> com <span class="math notranslate nohighlight">\(n\)</span> entradas e um vetor <span class="math notranslate nohighlight">\(w\)</span> com <span class="math notranslate nohighlight">\(m\)</span> entradas, o produto <span class="math notranslate nohighlight">\(v \otimes w\)</span> é um vetor com <span class="math notranslate nohighlight">\(n \times m\)</span> entradas, obtido multiplicando cada entrada de <span class="math notranslate nohighlight">\(v\)</span> por todo o vetor <span class="math notranslate nohighlight">\(w\)</span>.</p>
+<p>Pelo <strong>Postulado 4</strong>, se o subsistema <span class="math notranslate nohighlight">\(A\)</span> está no estado <span class="math notranslate nohighlight">\(|\psi_A\rangle\)</span> e o subsistema <span class="math notranslate nohighlight">\(B\)</span> está no estado <span class="math notranslate nohighlight">\(|\psi_B\rangle\)</span>, o estado do sistema composto é</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle = |\psi_A\rangle \otimes |\psi_B\rangle.
+\]</div>
+</div>
+<p>Como o espaço de um único qubit tem dimensão 2, o espaço de <span class="math notranslate nohighlight">\(n\)</span> qubits tem dimensão</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\underbrace{2 \times 2 \times \cdots \times 2}_{n \text{ vezes}} = 2^n.
+\]</div>
+</div>
+<p>Esse crescimento <strong>exponencial</strong> é o fato mais importante deste capítulo, e vai reaparecer o tempo todo: cada qubit adicionado <em>dobra</em> o tamanho do espaço de estados.</p>
+<p>Para simplificar a notação, adotamos as mesmas convenções já estabelecidas no Capítulo 3:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi_A\rangle \otimes |\psi_B\rangle \;\equiv\; |\psi_A\rangle|\psi_B\rangle \;\equiv\; |\psi_A \, \psi_B\rangle,
+\]</div>
+</div>
+<p>e, para vetores da base computacional, escrevemos simplesmente os bits lado a lado dentro de um único ket: <span class="math notranslate nohighlight">\(|0\rangle\otimes|1\rangle \equiv |01\rangle\)</span>.</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>A ordem dos qubits importa e é fixada pela ordem em que eles aparecem no ket. O primeiro rótulo corresponde ao primeiro qubit, o segundo rótulo ao segundo qubit, e assim por diante. Essa convenção — já usada no Capítulo 3 — é a mesma que Qiskit e a maioria das referências usam para <em>rotular</em> estados, embora a convenção de <em>indexação de fios em circuitos</em> (qubit 0 no topo ou na base do diagrama) varie entre ferramentas.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>💡 Exemplo — Produto tensorial de dois qubits</strong></p>
+<p>Considere o primeiro qubit no estado <span class="math notranslate nohighlight">\(|1\rangle\)</span> e o segundo no estado <span class="math notranslate nohighlight">\(|0\rangle\)</span>. Pelo Postulado 4,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+&gt; |1\rangle \otimes |0\rangle =
+&gt; \begin{pmatrix}0\\1\end{pmatrix}
+&gt; \otimes
+&gt; \begin{pmatrix}1\\0\end{pmatrix}
+&gt; =
+&gt; \begin{pmatrix}0\cdot 1\\ 0\cdot 0\\ 1\cdot 1\\ 1\cdot 0\end{pmatrix}
+&gt; =
+&gt; \begin{pmatrix}0\\0\\1\\0\end{pmatrix}
+&gt; = |10\rangle.
+&gt; \end{split}\]</div>
+</div>
+<p>Note que o vetor resultante tem exatamente uma entrada igual a 1, na posição correspondente à representação binária de “10” (ou seja, o índice decimal 2, contando a partir de 0): <span class="math notranslate nohighlight">\(|10\rangle\)</span> é o terceiro vetor da base computacional de dois qubits.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 5.1</strong></summary>
+<ol class="arabic">
+<li><p>Calcule <span class="math notranslate nohighlight">\(|1\rangle \otimes |1\rangle\)</span> explicitamente como vetor de 4 entradas.</p>
+<details>
+<summary>Resolução</summary>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+   |1\rangle\otimes|1\rangle = \begin{pmatrix}0\\1\end{pmatrix}\otimes\begin{pmatrix}0\\1\end{pmatrix} = \begin{pmatrix}0\\0\\0\\1\end{pmatrix} = |11\rangle.
+   \end{split}\]</div>
+</div>
+</details>
+</li>
+<li><p>Qual é a dimensão do espaço de estados de um sistema de 4 qubits? E de 8 qubits?</p>
+<details>
+<summary>Resolução</summary>
+<p>Para <span class="math notranslate nohighlight">\(n=4\)</span>: <span class="math notranslate nohighlight">\(2^4 = 16\)</span>. Para <span class="math notranslate nohighlight">\(n=8\)</span>: <span class="math notranslate nohighlight">\(2^8 = 256\)</span>.</p>
+</details>
+</li>
+<li><p>Verdadeiro ou falso: o produto tensorial é comutativo, isto é, <span class="math notranslate nohighlight">\(|0\rangle\otimes|1\rangle = |1\rangle\otimes|0\rangle\)</span>. Justifique usando os vetores explícitos.</p>
+<details>
+<summary>Resolução</summary>
+<p>Falso. <span class="math notranslate nohighlight">\(|0\rangle\otimes|1\rangle = |01\rangle = (0,1,0,0)^T\)</span>, enquanto <span class="math notranslate nohighlight">\(|1\rangle\otimes|0\rangle = |10\rangle = (0,0,1,0)^T\)</span>. São vetores diferentes — o produto tensorial preserva a ordem dos fatores.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+<hr class="docutils" />
+<section id="estados-de-dois-qubits">
+<h2>5.2 Estados de Dois Qubits<a class="headerlink" href="#estados-de-dois-qubits" title="Link to this heading">¶</a></h2>
+<p>O caso de dois qubits é o bloco de construção mais importante para tudo o que segue, então vale a pena examiná-lo com cuidado antes de generalizar para <span class="math notranslate nohighlight">\(n\)</span> qubits.</p>
+<p>Um sistema de dois qubits vive no espaço <span class="math notranslate nohighlight">\(\mathbb{C}^4\)</span>, com base computacional</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\{|00\rangle, |01\rangle, |10\rangle, |11\rangle\}.
+\]</div>
+</div>
+<p>Pelo <strong>Postulado 1</strong>, o estado mais geral de dois qubits é uma combinação linear (superposição) desses quatro vetores de base:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle = c_{00}|00\rangle + c_{01}|01\rangle + c_{10}|10\rangle + c_{11}|11\rangle, \qquad c_{ij}\in\mathbb{C},
+\]</div>
+</div>
+<p>sujeita à condição de normalização</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|c_{00}|^2 + |c_{01}|^2 + |c_{10}|^2 + |c_{11}|^2 = 1.
+\]</div>
+</div>
+<p>Pela <strong>Regra de Born</strong> (Postulado 3), medindo os dois qubits na base computacional, o resultado <span class="math notranslate nohighlight">\(ij\)</span> ocorre com probabilidade <span class="math notranslate nohighlight">\(P(ij) = |c_{ij}|^2\)</span>.</p>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p>Um ponto crucial — que será o coração da Seção 5.5 — é que <strong>nem todo</strong> estado de dois qubits pode ser escrito como um produto <span class="math notranslate nohighlight">\(|\psi_A\rangle\otimes|\psi_B\rangle\)</span> de estados individuais. Quando um estado de dois (ou mais) qubits <strong>pode</strong> ser fatorado dessa forma, dizemos que é um <strong>estado produto</strong> (ou separável). Quando não pode, dizemos que é <strong>emaranhado</strong>.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>💡 Exemplo — Um estado produto vs. um estado geral</strong></p>
+<p>O estado <span class="math notranslate nohighlight">\(|+\rangle\otimes|0\rangle\)</span> é um estado produto por construção. Escrevendo-o na base computacional de dois qubits:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+&gt; |+\rangle\otimes|0\rangle = \frac{1}{\sqrt2}(|0\rangle+|1\rangle)\otimes|0\rangle = \frac{1}{\sqrt2}(|00\rangle + |10\rangle) = \frac{1}{\sqrt2}\begin{pmatrix}1\\0\\1\\0\end{pmatrix}.
+&gt; \end{split}\]</div>
+</div>
+<p>Medindo esse estado na base computacional, obtemos <span class="math notranslate nohighlight">\(00\)</span> ou <span class="math notranslate nohighlight">\(10\)</span>, cada um com probabilidade <span class="math notranslate nohighlight">\(\tfrac12\)</span> — mas em ambos os casos o <strong>segundo qubit</strong> é encontrado em <span class="math notranslate nohighlight">\(|0\rangle\)</span> com certeza, exatamente como esperaríamos, já que ele nunca interagiu com o primeiro.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 5.2</strong></summary>
+<ol class="arabic">
+<li><p>Verifique se o estado <span class="math notranslate nohighlight">\(|\psi\rangle = \tfrac12|00\rangle + \tfrac12|01\rangle + \tfrac12|10\rangle + \tfrac12|11\rangle\)</span> é normalizado.</p>
+<details>
+<summary>Resolução</summary>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+   4\times\left(\frac12\right)^2 = 4\times\frac14 = 1.
+   \]</div>
+</div>
+<p>Sim, é normalizado.</p>
+</details>
+</li>
+<li><p>Para o estado do item anterior, calcule a probabilidade de obter o resultado <span class="math notranslate nohighlight">\(11\)</span> ao medir na base computacional.</p>
+<details>
+<summary>Resolução</summary>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+   P(11) = \left|\frac12\right|^2 = \frac14.
+   \]</div>
+</div>
+</details>
+</li>
+<li><p>Mostre que o estado <span class="math notranslate nohighlight">\(\tfrac12|00\rangle + \tfrac12|01\rangle + \tfrac12|10\rangle + \tfrac12|11\rangle\)</span> do item 1 é, na verdade, um estado produto, encontrando <span class="math notranslate nohighlight">\(|\psi_A\rangle\)</span> e <span class="math notranslate nohighlight">\(|\psi_B\rangle\)</span> tais que <span class="math notranslate nohighlight">\(|\psi\rangle = |\psi_A\rangle\otimes|\psi_B\rangle\)</span>. (Dica: compare com <span class="math notranslate nohighlight">\(|+\rangle\otimes|+\rangle\)</span>.)</p>
+<details>
+<summary>Resolução</summary>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+   |+\rangle\otimes|+\rangle = \frac{1}{\sqrt2}(|0\rangle+|1\rangle)\otimes\frac{1}{\sqrt2}(|0\rangle+|1\rangle) = \frac12(|00\rangle+|01\rangle+|10\rangle+|11\rangle).
+   \]</div>
+</div>
+<p>Esse é exatamente o estado dado. Logo <span class="math notranslate nohighlight">\(|\psi_A\rangle = |\psi_B\rangle = |+\rangle\)</span>, e o estado é separável.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+<hr class="docutils" />
+<section id="espaco-de-estados-de-multiplos-qubits">
+<h2>5.3 Espaço de Estados de Múltiplos Qubits<a class="headerlink" href="#espaco-de-estados-de-multiplos-qubits" title="Link to this heading">¶</a></h2>
+<p>Generalizando a Seção 5.2, um sistema de <span class="math notranslate nohighlight">\(n\)</span> qubits tem <span class="math notranslate nohighlight">\(2^n\)</span> vetores de base computacional, rotulados por strings binárias de comprimento <span class="math notranslate nohighlight">\(n\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|x_1 x_2 \cdots x_n\rangle, \qquad x_i \in \{0,1\}.
+\]</div>
+</div>
+<p>O estado mais geral desse sistema é</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle = \sum_{x \in \{0,1\}^n} c_x |x\rangle, \qquad \sum_{x} |c_x|^2 = 1,
+\]</div>
+</div>
+<p>onde a soma percorre todas as <span class="math notranslate nohighlight">\(2^n\)</span> strings binárias possíveis. Cada string binária <span class="math notranslate nohighlight">\(x\)</span> também pode ser lida como um número inteiro em base decimal — por exemplo, para <span class="math notranslate nohighlight">\(n=3\)</span>, <span class="math notranslate nohighlight">\(|011\rangle\)</span> corresponde ao índice decimal 3, e é o quarto vetor da base (contando a partir do índice 0), exatamente na mesma ordem que a construção iterada do produto tensorial produz.</p>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p>Descrever completamente o estado de <span class="math notranslate nohighlight">\(n\)</span> qubits exige <span class="math notranslate nohighlight">\(2^n\)</span> números complexos. Esse é exatamente o contraste que anunciamos na Seção 4.1: um registrador de <span class="math notranslate nohighlight">\(n\)</span> <strong>bits clássicos</strong> ocupa um único estado entre <span class="math notranslate nohighlight">\(2^n\)</span> possíveis e é descrito por apenas <span class="math notranslate nohighlight">\(n\)</span> bits; um registrador de <span class="math notranslate nohighlight">\(n\)</span> <strong>qubits</strong> pode existir em uma superposição de todos os <span class="math notranslate nohighlight">\(2^n\)</span> estados e exige <span class="math notranslate nohighlight">\(2^n\)</span> amplitudes complexas para ser descrito.</p>
+</div></blockquote>
+<p>A tabela abaixo mostra como esse crescimento se torna, muito rapidamente, inviável para simulação clássica:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">n</span> <span class="p">(</span><span class="n">qubits</span><span class="p">)</span>     <span class="mi">2</span><span class="o">^</span><span class="n">n</span> <span class="p">(</span><span class="n">amplitudes</span> <span class="n">complexas</span><span class="p">)</span>
+ <span class="o">----------</span>     <span class="o">---------------------------</span>
+     <span class="mi">1</span>                      <span class="mi">2</span>
+     <span class="mi">2</span>                      <span class="mi">4</span>
+    <span class="mi">10</span>                   <span class="mi">1</span> <span class="mi">024</span>
+    <span class="mi">20</span>               <span class="mi">1</span> <span class="mi">048</span> <span class="mi">576</span>
+    <span class="mi">50</span>    <span class="mi">1</span> <span class="mi">125</span> <span class="mi">899</span> <span class="mi">906</span> <span class="mi">842</span> <span class="mi">624</span>
+</pre></div>
+</div>
+<p>Com apenas 50 qubits, armazenar o estado completo (em números complexos de precisão dupla) exigiria mais memória do que existe em qualquer supercomputador atual — e é justamente essa explosão de complexidade que a computação quântica se propõe a explorar.</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Esse contraste não significa que um computador quântico “testa todas as possibilidades ao mesmo tempo” no sentido ingênuo de paralelismo clássico. As amplitudes <span class="math notranslate nohighlight">\(c_x\)</span> interferem entre si — construtiva e destrutivamente — e é justamente o desenho cuidadoso dessa interferência, em algoritmos como os do Capítulo 7, que produz vantagem computacional. Simplesmente ter um estado com <span class="math notranslate nohighlight">\(2^n\)</span> amplitudes não garante, por si só, nenhuma vantagem.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>💡 Exemplo — Base computacional de 3 qubits</strong></p>
+<p>Para <span class="math notranslate nohighlight">\(n=3\)</span>, existem <span class="math notranslate nohighlight">\(2^3=8\)</span> vetores de base:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; |000\rangle,\ |001\rangle,\ |010\rangle,\ |011\rangle,\ |100\rangle,\ |101\rangle,\ |110\rangle,\ |111\rangle.
+&gt; \]</div>
+</div>
+<p>O vetor <span class="math notranslate nohighlight">\(|101\rangle\)</span>, por exemplo, é o vetor de <span class="math notranslate nohighlight">\(\mathbb{C}^8\)</span> com um 1 na posição de índice decimal 5 (contando de 0) e zero em todas as outras posições.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 5.3</strong></summary>
+<ol class="arabic">
+<li><p>Quantos vetores de base computacional existem para um sistema de 6 qubits? Liste os quatro primeiros, em ordem crescente do índice decimal correspondente.</p>
+<details>
+<summary>Resolução</summary>
+<p>Existem <span class="math notranslate nohighlight">\(2^6=64\)</span> vetores. Os quatro primeiros são <span class="math notranslate nohighlight">\(|000000\rangle, |000001\rangle, |000010\rangle, |000011\rangle\)</span>, correspondendo aos índices decimais 0, 1, 2 e 3.</p>
+</details>
+</li>
+<li><p>Quantos números complexos são necessários para especificar completamente o estado de um sistema de 15 qubits?</p>
+<details>
+<summary>Resolução</summary>
+<p><span class="math notranslate nohighlight">\(2^{15} = 32\,768\)</span> amplitudes complexas.</p>
+</details>
+</li>
+<li><p>A que índice decimal corresponde o vetor de base <span class="math notranslate nohighlight">\(|1010\rangle\)</span> (sistema de 4 qubits)? Em qual posição do vetor de <span class="math notranslate nohighlight">\(\mathbb{C}^{16}\)</span> está o único valor não nulo?</p>
+<details>
+<summary>Resolução</summary>
+<p>Lendo <span class="math notranslate nohighlight">\(1010\)</span> em binário: <span class="math notranslate nohighlight">\(1\cdot 2^3 + 0\cdot2^2+1\cdot2^1+0\cdot2^0 = 8+2=10\)</span>. O valor 1 está na posição de índice 10 (contando de 0) do vetor de 16 entradas.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+<hr class="docutils" />
+<section id="portas-controladas">
+<h2>5.4 Portas Controladas<a class="headerlink" href="#portas-controladas" title="Link to this heading">¶</a></h2>
+<p>Até agora, todas as portas que estudamos (Capítulo 4, Seção 4.5) atuam sobre <strong>um único qubit</strong> de cada vez. Para que qubits interajam entre si — o que é essencial para gerar emaranhamento e para a maioria dos algoritmos quânticos — precisamos de portas que atuam sobre <strong>dois ou mais qubits simultaneamente</strong>. A família mais importante dessas portas são as <strong>portas controladas</strong>.</p>
+<p><strong>Definição.</strong> Dada uma porta de um qubit <span class="math notranslate nohighlight">\(U\)</span>, a porta <strong>controlada-<span class="math notranslate nohighlight">\(U\)</span></strong> (notação <span class="math notranslate nohighlight">\(CU\)</span>) atua sobre dois qubits — um qubit de <strong>controle</strong> e um qubit <strong>alvo</strong> — da seguinte forma: se o qubit de controle está em <span class="math notranslate nohighlight">\(|0\rangle\)</span>, o alvo permanece inalterado; se o controle está em <span class="math notranslate nohighlight">\(|1\rangle\)</span>, <span class="math notranslate nohighlight">\(U\)</span> é aplicada ao alvo. Em símbolos, sobre os vetores da base computacional (controle primeiro, alvo segundo):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+CU|0\rangle|\phi\rangle = |0\rangle|\phi\rangle, \qquad CU|1\rangle|\phi\rangle = |1\rangle\big(U|\phi\rangle\big).
+\]</div>
+</div>
+<p>Em forma de matriz em blocos <span class="math notranslate nohighlight">\(2\times2\)</span>, isso se escreve de maneira compacta como</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+CU = \begin{pmatrix} I &amp; 0 \\ 0 &amp; U \end{pmatrix},
+\end{split}\]</div>
+</div>
+<p>onde cada bloco é uma matriz <span class="math notranslate nohighlight">\(2\times2\)</span> (logo <span class="math notranslate nohighlight">\(CU\)</span> é uma matriz <span class="math notranslate nohighlight">\(4\times4\)</span>): o bloco superior esquerdo <span class="math notranslate nohighlight">\(I\)</span> atua quando o controle é <span class="math notranslate nohighlight">\(|0\rangle\)</span>, e o bloco inferior direito <span class="math notranslate nohighlight">\(U\)</span> atua quando o controle é <span class="math notranslate nohighlight">\(|1\rangle\)</span>.</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Como <span class="math notranslate nohighlight">\(I\)</span> e <span class="math notranslate nohighlight">\(U\)</span> são ambas unitárias, <span class="math notranslate nohighlight">\(CU\)</span> também é unitária — consistente com o Postulado 2, que exige que toda evolução (incluindo portas de múltiplos qubits) seja representada por uma matriz unitária.</p>
+</div></blockquote>
+<section id="a-porta-cnot-controlled-x">
+<h3>A porta CNOT (Controlled-X)<a class="headerlink" href="#a-porta-cnot-controlled-x" title="Link to this heading">¶</a></h3>
+<p>O caso <span class="math notranslate nohighlight">\(U=X\)</span> é chamado de <strong>CNOT</strong> (<em>controlled-NOT</em>, também escrita <span class="math notranslate nohighlight">\(CX\)</span>), a porta de dois qubits mais usada em toda a computação quântica. Explicitamente,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\text{CNOT} =
+\begin{pmatrix}
+1&amp;0&amp;0&amp;0\\
+0&amp;1&amp;0&amp;0\\
+0&amp;0&amp;0&amp;1\\
+0&amp;0&amp;1&amp;0
+\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p>Sua ação sobre a base computacional é:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|00\rangle\to|00\rangle,\quad |01\rangle\to|01\rangle,\quad |10\rangle\to|11\rangle,\quad |11\rangle\to|10\rangle.
+\]</div>
+</div>
+<p>Em palavras: o segundo qubit (alvo) é invertido <strong>se e somente se</strong> o primeiro qubit (controle) for <span class="math notranslate nohighlight">\(|1\rangle\)</span>.</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>A CNOT generaliza a porta clássica XOR de forma reversível: o resultado <span class="math notranslate nohighlight">\((\text{controle}, \text{controle}\oplus\text{alvo})\)</span> preserva o valor do controle exatamente para que a operação possa ser desfeita (basta aplicar CNOT de novo). Essa reversibilidade é obrigatória, como já discutimos na Seção 4.1 — toda porta quântica é unitária, e toda matriz unitária é invertível.</p>
+</div></blockquote>
+</section>
+<section id="outras-portas-controladas-uteis">
+<h3>Outras portas controladas úteis<a class="headerlink" href="#outras-portas-controladas-uteis" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>CZ (controlled-<span class="math notranslate nohighlight">\(Z\)</span>):</strong> aplica <span class="math notranslate nohighlight">\(Z\)</span> ao alvo quando o controle é <span class="math notranslate nohighlight">\(|1\rangle\)</span>. Diferente da CNOT, a CZ é <strong>simétrica</strong>: não importa qual dos dois qubits chamamos de “controle”, o resultado é o mesmo, já que <span class="math notranslate nohighlight">\(Z\)</span> atua apenas com uma fase <span class="math notranslate nohighlight">\(-1\)</span> sobre <span class="math notranslate nohighlight">\(|1\rangle\)</span>.</p></li>
+<li><p><strong>Toffoli (CCX, controlled-controlled-<span class="math notranslate nohighlight">\(X\)</span>):</strong> generaliza a CNOT para <strong>dois</strong> qubits de controle — o alvo é invertido apenas se <strong>ambos</strong> os controles estiverem em <span class="math notranslate nohighlight">\(|1\rangle\)</span>. É uma porta de três qubits, unitária de dimensão <span class="math notranslate nohighlight">\(8\times8\)</span>, e é a base para construir portas multi-controladas mais gerais (retomaremos isso no Capítulo 6).</p></li>
+</ul>
+<blockquote>
+<div><p><strong>💡 Exemplo — Aplicando CNOT a <span class="math notranslate nohighlight">\(|10\rangle\)</span></strong></p>
+<p>Vamos verificar diretamente pela matriz que <span class="math notranslate nohighlight">\(\text{CNOT}|10\rangle = |11\rangle\)</span>.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+&gt; \text{CNOT}\begin{pmatrix}0\\0\\1\\0\end{pmatrix} =
+&gt; \begin{pmatrix}
+&gt; 1&amp;0&amp;0&amp;0\\
+&gt; 0&amp;1&amp;0&amp;0\\
+&gt; 0&amp;0&amp;0&amp;1\\
+&gt; 0&amp;0&amp;1&amp;0
+&gt; \end{pmatrix}
+&gt; \begin{pmatrix}0\\0\\1\\0\end{pmatrix}
+&gt; =
+&gt; \begin{pmatrix}0\\0\\0\\1\end{pmatrix} = |11\rangle.
+&gt; \end{split}\]</div>
+</div>
+<p>O resultado confirma a regra: como o controle estava em <span class="math notranslate nohighlight">\(|1\rangle\)</span>, o alvo (que estava em <span class="math notranslate nohighlight">\(|0\rangle\)</span>) foi invertido para <span class="math notranslate nohighlight">\(|1\rangle\)</span>.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 5.4</strong></summary>
+<ol class="arabic">
+<li><p>Calcule <span class="math notranslate nohighlight">\(\text{CNOT}|01\rangle\)</span> diretamente pela matriz, e confirme que o resultado coincide com a regra “inverte o alvo se o controle é 1”.</p>
+<details>
+<summary>Resolução</summary>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+   \text{CNOT}\begin{pmatrix}0\\1\\0\\0\end{pmatrix} = \begin{pmatrix}0\\1\\0\\0\end{pmatrix} = |01\rangle.
+   \end{split}\]</div>
+</div>
+<p>O controle é <span class="math notranslate nohighlight">\(|0\rangle\)</span>, então o alvo permanece inalterado — coincide com a regra.</p>
+</details>
+</li>
+<li><p>Escreva explicitamente a matriz <span class="math notranslate nohighlight">\(4\times4\)</span> da porta <span class="math notranslate nohighlight">\(CZ\)</span> (controlada-<span class="math notranslate nohighlight">\(Z\)</span>), usando a definição em blocos <span class="math notranslate nohighlight">\(CZ = \begin{pmatrix}I&amp;0\\0&amp;Z\end{pmatrix}\)</span>.</p>
+<details>
+<summary>Resolução</summary>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+   CZ = \begin{pmatrix}
+   1&amp;0&amp;0&amp;0\\
+   0&amp;1&amp;0&amp;0\\
+   0&amp;0&amp;1&amp;0\\
+   0&amp;0&amp;0&amp;-1
+   \end{pmatrix}.
+   \end{split}\]</div>
+</div>
+</details>
+</li>
+<li><p>Mostre que <span class="math notranslate nohighlight">\(\text{CNOT}^2 = I\)</span> (isto é, aplicar CNOT duas vezes seguidas devolve o estado original), calculando <span class="math notranslate nohighlight">\(\text{CNOT}\cdot\text{CNOT}\)</span>.</p>
+<details>
+<summary>Resolução</summary>
+<p>Multiplicando a matriz de CNOT por ela mesma, cada linha “troca de volta” com a linha com a qual havia trocado, resultando na matriz identidade <span class="math notranslate nohighlight">\(4\times4\)</span>. Isso confirma que CNOT é sua própria inversa — assim como <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Z\)</span> e <span class="math notranslate nohighlight">\(H\)</span> no caso de um qubit.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="emaranhamento">
+<h2>5.5 Emaranhamento<a class="headerlink" href="#emaranhamento" title="Link to this heading">¶</a></h2>
+<p>Já anunciamos, na Nota da Seção 4.2 e novamente na Seção 5.2, que alguns estados de múltiplos qubits <strong>não podem</strong> ser escritos como um produto <span class="math notranslate nohighlight">\(|\psi_A\rangle\otimes|\psi_B\rangle\)</span>. Chegou a hora de formalizar essa ideia.</p>
+<p><strong>Definição.</strong> Um estado <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> de dois (ou mais) qubits é <strong>separável</strong> (ou um estado produto) se existem estados de um qubit <span class="math notranslate nohighlight">\(|\psi_A\rangle\)</span> e <span class="math notranslate nohighlight">\(|\psi_B\rangle\)</span> tais que <span class="math notranslate nohighlight">\(|\psi\rangle = |\psi_A\rangle\otimes|\psi_B\rangle\)</span>. Caso contrário, <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> é chamado de <strong>emaranhado</strong>.</p>
+<p>O exemplo mais famoso — e mais importante — de estado emaranhado é o <strong>estado de Bell</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\Phi^+\rangle = \frac{|00\rangle + |11\rangle}{\sqrt2}.
+\]</div>
+</div>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p>Não existem <span class="math notranslate nohighlight">\(|\psi_A\rangle,|\psi_B\rangle\)</span> tais que <span class="math notranslate nohighlight">\(|\psi_A\rangle\otimes|\psi_B\rangle = \tfrac{1}{\sqrt2}(|00\rangle+|11\rangle)\)</span>. Escrevendo <span class="math notranslate nohighlight">\(|\psi_A\rangle=a_0|0\rangle+a_1|1\rangle\)</span> e <span class="math notranslate nohighlight">\(|\psi_B\rangle=b_0|0\rangle+b_1|1\rangle\)</span> genéricos, o produto tensorial produz</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; |\psi_A\rangle\otimes|\psi_B\rangle = a_0b_0|00\rangle + a_0b_1|01\rangle + a_1b_0|10\rangle + a_1b_1|11\rangle.
+&gt; \]</div>
+</div>
+<p>Para igualar isso a <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span>, precisaríamos de <span class="math notranslate nohighlight">\(a_0b_1=0\)</span> e <span class="math notranslate nohighlight">\(a_1b_0=0\)</span> (os coeficientes de <span class="math notranslate nohighlight">\(|01\rangle\)</span> e <span class="math notranslate nohighlight">\(|10\rangle\)</span> são nulos), mas também <span class="math notranslate nohighlight">\(a_0b_0=a_1b_1=\tfrac{1}{\sqrt2}\neq0\)</span>. Da primeira condição, <span class="math notranslate nohighlight">\(a_0=0\)</span> ou <span class="math notranslate nohighlight">\(b_1=0\)</span>; em qualquer um dos dois casos, um dos produtos <span class="math notranslate nohighlight">\(a_0b_0\)</span> ou <span class="math notranslate nohighlight">\(a_1b_1\)</span> seria forçado a zero — contradizendo a segunda condição. Logo, nenhuma fatoração é possível.</p>
+</div></blockquote>
+<p>Existem exatamente quatro estados de Bell, formando uma base ortonormal alternativa para o espaço de dois qubits (a <strong>base de Bell</strong>):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\Phi^+\rangle = \frac{|00\rangle+|11\rangle}{\sqrt2}, \qquad
+|\Phi^-\rangle = \frac{|00\rangle-|11\rangle}{\sqrt2},
+\]</div>
+</div>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\Psi^+\rangle = \frac{|01\rangle+|10\rangle}{\sqrt2}, \qquad
+|\Psi^-\rangle = \frac{|01\rangle-|10\rangle}{\sqrt2}.
+\]</div>
+</div>
+<section id="construindo-um-estado-de-bell-com-um-circuito">
+<h3>Construindo um estado de Bell com um circuito<a class="headerlink" href="#construindo-um-estado-de-bell-com-um-circuito" title="Link to this heading">¶</a></h3>
+<p>Os estados de Bell não surgem “do nada” — eles são produzidos combinando exatamente as ferramentas das Seções 5.1 e 5.4: uma porta Hadamard seguida de uma CNOT.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>|0⟩ ──[H]──●──   (qubit de controle)
+           │
+|0⟩ ───────X──   (qubit alvo)
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Derivando <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span></strong></p>
+<p>Partindo de <span class="math notranslate nohighlight">\(|00\rangle\)</span>, aplicamos <span class="math notranslate nohighlight">\(H\)</span> ao primeiro qubit (e a identidade ao segundo):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; (H\otimes I)|00\rangle = H|0\rangle \otimes I|0\rangle = |+\rangle\otimes|0\rangle = \frac{1}{\sqrt2}(|00\rangle+|10\rangle).
+&gt; \]</div>
+</div>
+<p>Agora aplicamos CNOT (controle = primeiro qubit, alvo = segundo qubit) a esse resultado. Usando a linearidade (o Postulado 2 garante que <span class="math notranslate nohighlight">\(U\)</span> é linear) e a tabela de ação da CNOT da Seção 5.4:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; \text{CNOT}\cdot\frac{1}{\sqrt2}(|00\rangle+|10\rangle) = \frac{1}{\sqrt2}\big(\text{CNOT}|00\rangle+\text{CNOT}|10\rangle\big) = \frac{1}{\sqrt2}(|00\rangle+|11\rangle) = |\Phi^+\rangle.
+&gt; \]</div>
+</div>
+<p>Esse pequeno circuito de duas portas — <span class="math notranslate nohighlight">\(H\)</span> seguida de CNOT — é, sem exagero, o circuito mais importante de toda a computação quântica: é o ponto de partida para o teletransporte quântico, a codificação superdensa e inúmeros protocolos que veremos no Capítulo 6.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>O emaranhamento produz <strong>correlações</strong> entre os resultados de medição dos dois qubits que não podem ser explicadas por nenhuma variável clássica compartilhada de antemão — um fato demonstrado experimentalmente através da violação das desigualdades de Bell [2]. Vamos quantificar exatamente essas correlações na próxima seção, quando estudarmos a medição de sistemas de múltiplos qubits.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 5.5</strong></summary>
+<ol class="arabic">
+<li><p>O estado <span class="math notranslate nohighlight">\(|01\rangle\)</span> é separável ou emaranhado? Justifique exibindo a fatoração, se existir.</p>
+<details>
+<summary>Resolução</summary>
+<p>É separável: <span class="math notranslate nohighlight">\(|01\rangle = |0\rangle\otimes|1\rangle\)</span>, trivialmente. Todo vetor de base computacional é, por construção, um estado produto.</p>
+</details>
+</li>
+<li><p>Verifique se o estado <span class="math notranslate nohighlight">\(\tfrac12(|00\rangle+|01\rangle-|10\rangle-|11\rangle)\)</span> é separável, tentando encontrar <span class="math notranslate nohighlight">\(|\psi_A\rangle,|\psi_B\rangle\)</span> explícitos. (Dica: agrupe os termos por qubit.)</p>
+<details>
+<summary>Resolução</summary>
+<p>Agrupando: <span class="math notranslate nohighlight">\(\tfrac12\big[(|0\rangle-|1\rangle)\otimes|0\rangle + (|0\rangle-|1\rangle)\otimes|1\rangle\big] = \tfrac12(|0\rangle-|1\rangle)\otimes(|0\rangle+|1\rangle) = |-\rangle\otimes|+\rangle\)</span> (a menos do fator de normalização <span class="math notranslate nohighlight">\(\tfrac1{\sqrt2}\cdot\tfrac1{\sqrt2}=\tfrac12\)</span>, que já está correto). É separável.</p>
+</details>
+</li>
+<li><p>Construa, passo a passo (como no exemplo desta seção), o estado resultante do circuito <span class="math notranslate nohighlight">\(H\)</span> no primeiro qubit seguido de CNOT, partindo de <span class="math notranslate nohighlight">\(|10\rangle\)</span> em vez de <span class="math notranslate nohighlight">\(|00\rangle\)</span>. A que estado de Bell isso corresponde?</p>
+<details>
+<summary>Resolução</summary>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+   (H\otimes I)|10\rangle = |-\rangle\otimes|0\rangle = \frac{1}{\sqrt2}(|00\rangle-|10\rangle).
+   \]</div>
+</div>
+<p>Aplicando CNOT:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+   \frac{1}{\sqrt2}(\text{CNOT}|00\rangle - \text{CNOT}|10\rangle) = \frac{1}{\sqrt2}(|00\rangle-|11\rangle) = |\Phi^-\rangle.
+   \]</div>
+</div>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="medicao-de-sistemas-de-multiplos-qubits">
+<h2>5.6 Medição de Sistemas de Múltiplos Qubits<a class="headerlink" href="#medicao-de-sistemas-de-multiplos-qubits" title="Link to this heading">¶</a></h2>
+<p>O <strong>Postulado 3</strong> (Regra de Born), enunciado no Capítulo 4 para um único qubit, se generaliza diretamente para <span class="math notranslate nohighlight">\(n\)</span> qubits: medindo todos os <span class="math notranslate nohighlight">\(n\)</span> qubits na base computacional, o resultado <span class="math notranslate nohighlight">\(x\in\{0,1\}^n\)</span> ocorre com probabilidade</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(x) = |\langle x|\psi\rangle|^2 = |c_x|^2,
+\]</div>
+</div>
+<p>e, imediatamente após a medição, o estado colapsa para <span class="math notranslate nohighlight">\(|x\rangle\)</span>.</p>
+<section id="medicao-parcial">
+<h3>Medição parcial<a class="headerlink" href="#medicao-parcial" title="Link to this heading">¶</a></h3>
+<p>Uma situação nova, que não existe para um único qubit, é a <strong>medição parcial</strong>: medir apenas um subconjunto dos qubits, deixando os demais intactos (ainda quânticos). Isso é extremamente comum na prática — por exemplo, medir um qubit “ancilla” no meio de um circuito, sem perturbar o restante do registrador.</p>
+<p>Para medir apenas o primeiro qubit de um estado de dois qubits <span class="math notranslate nohighlight">\(|\psi\rangle = \sum_{ij} c_{ij}|ij\rangle\)</span>, a probabilidade de obter o resultado <span class="math notranslate nohighlight">\(i\in\{0,1\}\)</span> é obtida somando as probabilidades de <strong>todas</strong> as configurações do segundo qubit compatíveis com esse resultado:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(i) = \sum_{j\in\{0,1\}} |c_{ij}|^2.
+\]</div>
+</div>
+<p>Se o resultado <span class="math notranslate nohighlight">\(i\)</span> é observado, o estado dos qubits restantes colapsa para a superposição normalizada dos termos compatíveis com <span class="math notranslate nohighlight">\(i\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle \;\longrightarrow\; \frac{1}{\sqrt{P(i)}}\sum_{j} c_{ij}|j\rangle.
+\]</div>
+</div>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>A divisão por <span class="math notranslate nohighlight">\(\sqrt{P(i)}\)</span> é exatamente a mesma <strong>renormalização</strong> que já vimos em outros contextos: depois do colapso, o vetor resultante precisa voltar a ter norma 1 para continuar sendo um estado quântico válido (Postulado 1).</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>💡 Exemplo — Medindo o primeiro qubit de <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span></strong></p>
+<p>Considere <span class="math notranslate nohighlight">\(|\Phi^+\rangle = \tfrac{1}{\sqrt2}(|00\rangle+|11\rangle)\)</span>, e suponha que medimos apenas o <strong>primeiro</strong> qubit.</p>
+<p>A probabilidade de obter <span class="math notranslate nohighlight">\(0\)</span> é <span class="math notranslate nohighlight">\(P(0) = |c_{00}|^2 = \tfrac12\)</span> (o termo <span class="math notranslate nohighlight">\(|01\rangle\)</span> não aparece, então não contribui). Da mesma forma, <span class="math notranslate nohighlight">\(P(1)=|c_{11}|^2=\tfrac12\)</span>.</p>
+<p>Se o resultado observado for <span class="math notranslate nohighlight">\(0\)</span>, o estado colapsa para</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; \frac{1}{\sqrt{1/2}}\cdot\frac{1}{\sqrt2}|0\rangle = |0\rangle,
+&gt; \]</div>
+</div>
+<p>ou seja, o <strong>segundo</strong> qubit — que não foi medido diretamente — fica determinado com certeza como <span class="math notranslate nohighlight">\(|0\rangle\)</span>. Da mesma forma, se o resultado for <span class="math notranslate nohighlight">\(1\)</span>, o segundo qubit colapsa para <span class="math notranslate nohighlight">\(|1\rangle\)</span>.</p>
+<p>Essa é precisamente a correlação perfeita que caracteriza o emaranhamento: os dois qubits sempre “combinam” no resultado, mesmo que cada medição individual, isoladamente, seja completamente aleatória (<span class="math notranslate nohighlight">\(50\%/50\%\)</span>).</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p>Note o contraste com um estado produto (Seção 5.2, exemplo de <span class="math notranslate nohighlight">\(|+\rangle\otimes|0\rangle\)</span>): lá, o resultado da medição do segundo qubit já era certo (<span class="math notranslate nohighlight">\(|0\rangle\)</span>) <strong>antes mesmo</strong> de qualquer medição, pois os qubits nunca haviam interagido. No estado de Bell, o resultado do segundo qubit só fica determinado <strong>depois</strong> que o primeiro é medido — e o valor específico (0 ou 1) é imprevisível até esse momento. É essa distinção que torna o emaranhamento genuinamente diferente de qualquer correlação clássica pré-combinada.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 5.6</strong></summary>
+<ol class="arabic">
+<li><p>Para o estado produto <span class="math notranslate nohighlight">\(|+\rangle\otimes|0\rangle = \tfrac{1}{\sqrt2}(|00\rangle+|10\rangle)\)</span>, calcule a probabilidade de medir o primeiro qubit e obter <span class="math notranslate nohighlight">\(0\)</span>, e descreva o estado colapsado do segundo qubit nesse caso.</p>
+<details>
+<summary>Resolução</summary>
+<p><span class="math notranslate nohighlight">\(P(0) = |c_{00}|^2 = \tfrac12\)</span>. O estado colapsado do segundo qubit é <span class="math notranslate nohighlight">\(\frac{1}{\sqrt{1/2}}\cdot\frac{1}{\sqrt2}|0\rangle = |0\rangle\)</span> — como esperado, já que o segundo qubit sempre estava em <span class="math notranslate nohighlight">\(|0\rangle\)</span>, independente do resultado do primeiro.</p>
+</details>
+</li>
+<li><p>Repita o Exemplo desta seção, mas medindo o <strong>segundo</strong> qubit de <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span> em vez do primeiro. O resultado é diferente?</p>
+<details>
+<summary>Resolução</summary>
+<p>Por simetria da expressão <span class="math notranslate nohighlight">\(\tfrac{1}{\sqrt2}(|00\rangle+|11\rangle)\)</span> em relação à troca dos dois qubits, o resultado é idêntico: <span class="math notranslate nohighlight">\(P(0)=P(1)=\tfrac12\)</span>, e o primeiro qubit colapsa para o mesmo valor observado no segundo.</p>
+</details>
+</li>
+<li><p>Considere o estado <span class="math notranslate nohighlight">\(|\Psi^-\rangle = \tfrac{1}{\sqrt2}(|01\rangle-|10\rangle)\)</span>. Se o primeiro qubit é medido e o resultado é <span class="math notranslate nohighlight">\(1\)</span>, para qual estado o segundo qubit colapsa?</p>
+<details>
+<summary>Resolução</summary>
+<p>Isolando os termos com o primeiro qubit igual a 1: apenas <span class="math notranslate nohighlight">\(-\tfrac{1}{\sqrt2}|10\rangle\)</span>. A probabilidade é <span class="math notranslate nohighlight">\(P(1)=\tfrac12\)</span>, e o estado renormalizado do segundo qubit é <span class="math notranslate nohighlight">\(\frac{1}{\sqrt{1/2}}\cdot\left(-\frac1{\sqrt2}\right)|0\rangle = -|0\rangle\)</span>, que — a menos de uma fase global irrelevante (Postulado 1) — é o mesmo estado físico que <span class="math notranslate nohighlight">\(|0\rangle\)</span>.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="circuitos-quanticos">
+<h2>5.7 Circuitos Quânticos<a class="headerlink" href="#circuitos-quanticos" title="Link to this heading">¶</a></h2>
+<p>Já usamos diagramas informais nas seções anteriores; nesta seção, formalizamos a notação de <strong>circuitos quânticos</strong>, que usaremos extensivamente a partir do Capítulo 6.</p>
+<p>Em um circuito quântico:</p>
+<ul class="simple">
+<li><p>Cada <strong>fio horizontal</strong> representa um qubit, e o tempo flui da <strong>esquerda para a direita</strong>.</p></li>
+<li><p>Uma <strong>caixa</strong> sobre um fio representa uma porta de um qubit (ex.: <code class="docutils literal notranslate"><span class="pre">[H]</span></code>, <code class="docutils literal notranslate"><span class="pre">[X]</span></code>).</p></li>
+<li><p>Uma <strong>linha vertical</strong> conectando um <strong>ponto preto</strong> (●, controle) a um símbolo de porta (⊕ para CNOT, ou uma caixa <code class="docutils literal notranslate"><span class="pre">[Z]</span></code> para CZ) representa uma porta controlada, exatamente como nos diagramas das Seções 5.4 e 5.5.</p></li>
+<li><p>Um símbolo de <strong>medidor</strong> (▭ com um mostrador, aqui representado por <code class="docutils literal notranslate"><span class="pre">[M]</span></code>) indica uma medição na base computacional, encerrando a evolução quântica daquele fio.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>q0: ──[H]──●──────
+           │
+q1: ───────⊕──[M]──
+</pre></div>
+</div>
+<p>Esse é exatamente o circuito de preparação de um estado de Bell (Seção 5.5), seguido de uma medição no segundo qubit.</p>
+<section id="regras-de-composicao">
+<h3>Regras de composição<a class="headerlink" href="#regras-de-composicao" title="Link to this heading">¶</a></h3>
+<p>Dois princípios governam como calcular o efeito de um circuito inteiro:</p>
+<ol class="arabic simple">
+<li><p><strong>Portas em sequência</strong> (mesma fila de qubits, uma depois da outra) correspondem a <strong>multiplicação de matrizes</strong>, na ordem <em>inversa</em> à leitura visual: se o circuito aplica primeiro <span class="math notranslate nohighlight">\(U_1\)</span> e depois <span class="math notranslate nohighlight">\(U_2\)</span>, o efeito total é <span class="math notranslate nohighlight">\(U_2 U_1\)</span> (a matriz mais à direita no produto age primeiro sobre o estado).</p></li>
+<li><p><strong>Portas em paralelo</strong> (em fios diferentes, na mesma “coluna” temporal) correspondem ao <strong>produto tensorial</strong> das portas envolvidas: aplicar <span class="math notranslate nohighlight">\(U\)</span> ao qubit 0 e <span class="math notranslate nohighlight">\(V\)</span> ao qubit 1 simultaneamente é representado por <span class="math notranslate nohighlight">\(U\otimes V\)</span>.</p></li>
+</ol>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Essas duas regras são exatamente o que já usamos, de forma implícita, no Exemplo da Seção 5.5: a “coluna” com <span class="math notranslate nohighlight">\(H\)</span> no primeiro qubit e nada (identidade) no segundo foi escrita como <span class="math notranslate nohighlight">\(H\otimes I\)</span> (regra 2), e a CNOT que veio depois foi aplicada multiplicando à esquerda (regra 1).</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>💡 Exemplo — Matriz de um circuito com portas em paralelo seguidas de CNOT</strong></p>
+<p>Considere o circuito</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>q0: ──[H]──●──
+           │
+q1: ──[X]──⊕──
+</pre></div>
+</div>
+<p>A matriz total é <span class="math notranslate nohighlight">\(U = \text{CNOT}\cdot(H\otimes X)\)</span> (primeiro a coluna paralela, depois a CNOT — lembrando que a ordem de multiplicação é invertida em relação à leitura visual). Partindo de <span class="math notranslate nohighlight">\(|00\rangle\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; (H\otimes X)|00\rangle = H|0\rangle\otimes X|0\rangle = |+\rangle\otimes|1\rangle = \frac{1}{\sqrt2}(|01\rangle+|11\rangle).
+&gt; \]</div>
+</div>
+<p>Aplicando CNOT:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; \text{CNOT}\cdot\frac{1}{\sqrt2}(|01\rangle+|11\rangle) = \frac{1}{\sqrt2}(|01\rangle+|10\rangle) = |\Psi^+\rangle.
+&gt; \]</div>
+</div>
+<p>Esse é outro dos quatro estados de Bell, produzido por uma pequena variação do circuito da Seção 5.5.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 5.7</strong></summary>
+<ol class="arabic">
+<li><p>Escreva, em termos de produto tensorial e produto de matrizes, a matriz total do circuito que aplica <span class="math notranslate nohighlight">\(Z\)</span> ao qubit 0 e <span class="math notranslate nohighlight">\(H\)</span> ao qubit 1 em paralelo, seguido de uma CZ.</p>
+<details>
+<summary>Resolução</summary>
+<p><span class="math notranslate nohighlight">\(U = CZ\cdot(Z\otimes H)\)</span>.</p>
+</details>
+</li>
+<li><p>No circuito do Exemplo desta seção, qual seria o estado final se, em vez de <span class="math notranslate nohighlight">\(X\)</span>, aplicássemos <span class="math notranslate nohighlight">\(I\)</span> (nada) ao segundo qubit antes da CNOT? A que estado de Bell isso corresponde? (Dica: compare com a Seção 5.5.)</p>
+<details>
+<summary>Resolução</summary>
+<p>Seria exatamente o circuito da Seção 5.5, produzindo <span class="math notranslate nohighlight">\(|\Phi^+\rangle\)</span>.</p>
+</details>
+</li>
+<li><p>Quantos “andares” (colunas temporais) tem o circuito do Exemplo desta seção? Esse número é chamado de <strong>profundidade</strong> do circuito — por que essa métrica é relevante na prática (pense em como qubits reais se comportam ao longo do tempo)?</p>
+<details>
+<summary>Resolução</summary>
+<p>Duas colunas: a coluna paralela (<span class="math notranslate nohighlight">\(H\)</span> e <span class="math notranslate nohighlight">\(X\)</span>) e a coluna da CNOT — profundidade 2. Na prática, qubits físicos perdem coerência ao longo do tempo (um fenômeno chamado <em>decoerência</em>), então circuitos com menor profundidade tendem a sofrer menos erros ao serem executados em hardware real — um tema que retomaremos no Capítulo 6.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="teorema-da-nao-clonagem">
+<h2>5.8 Teorema da Não-Clonagem<a class="headerlink" href="#teorema-da-nao-clonagem" title="Link to this heading">¶</a></h2>
+<p>Encerramos o capítulo com um resultado que é, ao mesmo tempo, surpreendente e uma consequência direta e simples de tudo o que construímos até aqui: é <strong>impossível</strong> criar uma cópia perfeita de um estado quântico arbitrário e desconhecido.</p>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p><strong>Teorema da Não-Clonagem.</strong> Não existe uma transformação unitária <span class="math notranslate nohighlight">\(U\)</span> que, para <strong>todo</strong> estado <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> de um qubit, satisfaça</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; U\big(|\psi\rangle\otimes|0\rangle\big) = |\psi\rangle\otimes|\psi\rangle.
+&gt; \]</div>
+</div>
+</div></blockquote>
+<p><strong>Ideia da demonstração.</strong> Suponha, por absurdo, que tal <span class="math notranslate nohighlight">\(U\)</span> exista, e que ela funcione para dois estados específicos <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> e <span class="math notranslate nohighlight">\(|\phi\rangle\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+U(|\psi\rangle\otimes|0\rangle) = |\psi\rangle\otimes|\psi\rangle, \qquad U(|\phi\rangle\otimes|0\rangle) = |\phi\rangle\otimes|\phi\rangle.
+\]</div>
+</div>
+<p>Considere agora o estado de entrada <span class="math notranslate nohighlight">\(\tfrac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle)\otimes|0\rangle\)</span>. Pelo <strong>Postulado 2</strong>, <span class="math notranslate nohighlight">\(U\)</span> é uma transformação unitária, e toda transformação unitária é <strong>linear</strong>. Logo,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+U\left[\frac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle)\otimes|0\rangle\right] = \frac{1}{\sqrt2}\Big(U(|\psi\rangle\otimes|0\rangle)+U(|\phi\rangle\otimes|0\rangle)\Big) = \frac{1}{\sqrt2}\big(|\psi\rangle|\psi\rangle+|\phi\rangle|\phi\rangle\big).
+\]</div>
+</div>
+<p>Mas se <span class="math notranslate nohighlight">\(U\)</span> realmente clonasse <strong>qualquer</strong> estado — em particular, a superposição <span class="math notranslate nohighlight">\(\tfrac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle)\)</span> em si —, o resultado deveria ser</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle)\otimes\frac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle) = \frac12\big(|\psi\rangle|\psi\rangle + |\psi\rangle|\phi\rangle + |\phi\rangle|\psi\rangle + |\phi\rangle|\phi\rangle\big).
+\]</div>
+</div>
+<p>Essas duas expressões são, em geral, diferentes (a primeira não tem os termos cruzados <span class="math notranslate nohighlight">\(|\psi\rangle|\phi\rangle\)</span> e <span class="math notranslate nohighlight">\(|\phi\rangle|\psi\rangle\)</span>, exceto no caso trivial em que <span class="math notranslate nohighlight">\(|\psi\rangle=|\phi\rangle\)</span>). A contradição mostra que nenhuma <span class="math notranslate nohighlight">\(U\)</span> unitária pode clonar dois estados diferentes e quaisquer superposições deles simultaneamente — logo, não pode clonar um estado <strong>arbitrário</strong> e desconhecido.</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>A demonstração usa apenas a <strong>linearidade</strong>, que vem diretamente do Postulado 2. Por isso o Teorema da Não-Clonagem não é uma limitação tecnológica — que poderia, em princípio, ser superada por engenharia melhor —, mas uma consequência estrutural da própria mecânica quântica.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p>É perfeitamente possível copiar os vetores de base computacional <span class="math notranslate nohighlight">\(|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|1\rangle\)</span> isoladamente — basta usar CNOT com o qubit a copiar como controle e um qubit auxiliar em <span class="math notranslate nohighlight">\(|0\rangle\)</span> como alvo: <span class="math notranslate nohighlight">\(\text{CNOT}(|0\rangle\otimes|0\rangle) = |00\rangle\)</span> e <span class="math notranslate nohighlight">\(\text{CNOT}(|1\rangle\otimes|0\rangle)=|11\rangle\)</span>. O que o teorema proíbe é fazer isso para <strong>superposições arbitrárias e desconhecidas</strong> com a <strong>mesma</strong> transformação fixa — como o próprio cálculo acima demonstra ao aplicar essa mesma CNOT a <span class="math notranslate nohighlight">\(|+\rangle\otimes|0\rangle\)</span>.</p>
+</div></blockquote>
+<p>O Teorema da Não-Clonagem tem consequências profundas: ele é o que torna a criptografia quântica segura contra espionagem (um espião não pode simplesmente copiar os qubits transmitidos sem ser detectado), e é uma das razões pelas quais a <strong>correção de erros quânticos</strong> — necessária para computadores quânticos em grande escala — exige técnicas fundamentalmente diferentes das usadas na correção de erros clássica, onde copiar bits é trivial.</p>
+<details>
+<summary><strong>Exercícios 5.8</strong></summary>
+<ol class="arabic">
+<li><p>Verifique diretamente, usando a matriz da CNOT (Seção 5.4), que <span class="math notranslate nohighlight">\(\text{CNOT}(|0\rangle\otimes|0\rangle)=|00\rangle\)</span> e <span class="math notranslate nohighlight">\(\text{CNOT}(|1\rangle\otimes|0\rangle)=|11\rangle\)</span> — isto é, que a CNOT “copia” corretamente os dois vetores de base.</p>
+<details>
+<summary>Resolução</summary>
+<p><span class="math notranslate nohighlight">\(\text{CNOT}|00\rangle = |00\rangle\)</span> (controle 0, alvo inalterado) e <span class="math notranslate nohighlight">\(\text{CNOT}|10\rangle=|11\rangle\)</span> (controle 1, alvo invertido de 0 para 1) — ambos diretamente da tabela de ação da CNOT. Em ambos os casos, o segundo qubit termina igual ao primeiro, “copiando” o valor.</p>
+</details>
+</li>
+<li><p>Usando a CNOT como o “clonador” <span class="math notranslate nohighlight">\(U\)</span> da demonstração, com <span class="math notranslate nohighlight">\(|\psi\rangle=|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|\phi\rangle=|1\rangle\)</span>, calcule explicitamente <span class="math notranslate nohighlight">\(\text{CNOT}\big(|+\rangle\otimes|0\rangle\big)\)</span> e compare com <span class="math notranslate nohighlight">\(|+\rangle\otimes|+\rangle\)</span>, mostrando que são estados diferentes (esse é exatamente o estado de Bell que já calculamos na Seção 5.5!).</p>
+<details>
+<summary>Resolução</summary>
+<p>Já calculamos, na Seção 5.5, que <span class="math notranslate nohighlight">\(\text{CNOT}(|+\rangle\otimes|0\rangle) = |\Phi^+\rangle = \tfrac1{\sqrt2}(|00\rangle+|11\rangle)\)</span> — um estado <strong>emaranhado</strong>. Por outro lado, <span class="math notranslate nohighlight">\(|+\rangle\otimes|+\rangle = \tfrac12(|00\rangle+|01\rangle+|10\rangle+|11\rangle)\)</span> — um estado <strong>produto</strong>, com os quatro termos igualmente presentes. Os dois resultados têm coeficientes completamente diferentes (<span class="math notranslate nohighlight">\(|01\rangle\)</span> e <span class="math notranslate nohighlight">\(|10\rangle\)</span> têm coeficiente zero em um caso e <span class="math notranslate nohighlight">\(\tfrac12\)</span> no outro), confirmando que a CNOT falha em clonar a superposição <span class="math notranslate nohighlight">\(|+\rangle\)</span>, exatamente como previsto pelo teorema.</p>
+</details>
+</li>
+<li><p>O Teorema da Não-Clonagem impede copiar um estado <em>desconhecido</em>. Isso contradiz o fato de que, em um laboratório, é possível preparar quantos qubits quisermos no mesmo estado <span class="math notranslate nohighlight">\(|+\rangle\)</span> (por exemplo, aplicando <span class="math notranslate nohighlight">\(H\)</span> a vários qubits em <span class="math notranslate nohighlight">\(|0\rangle\)</span>)? Explique a diferença.</p>
+<details>
+<summary>Resolução</summary>
+<p>Não há contradição. Preparar vários qubits em <span class="math notranslate nohighlight">\(|+\rangle\)</span> aplicando <span class="math notranslate nohighlight">\(H\)</span> a cada um deles não é “clonar” no sentido do teorema: em cada caso, sabemos exatamente qual estado estamos preparando e usamos o procedimento de preparação (não uma cópia de um estado físico já existente e desconhecido). O teorema proíbe especificamente pegar um qubit já existente, em um estado que <strong>não conhecemos</strong>, e produzir uma segunda cópia física idêntica a partir dele — sem saber de antemão qual é esse estado.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+<hr class="docutils" />
+<section id="juntando-tudo">
+<h2>5.9 Juntando Tudo<a class="headerlink" href="#juntando-tudo" title="Link to this heading">¶</a></h2>
+<p>Vamos revisar o caminho percorrido neste capítulo:</p>
+<ul class="simple">
+<li><p>Revisitamos o <strong>produto tensorial</strong> (Postulado 4) como a ferramenta que combina qubits individuais em sistemas maiores, com dimensão do espaço crescendo como <span class="math notranslate nohighlight">\(2^n\)</span>.</p></li>
+<li><p>Descrevemos os <strong>estados de dois qubits</strong> e, em seguida, o caso geral de <strong><span class="math notranslate nohighlight">\(n\)</span> qubits</strong>, destacando o crescimento exponencial do número de amplitudes complexas necessárias.</p></li>
+<li><p>Introduzimos as <strong>portas controladas</strong> — CNOT, CZ e Toffoli — como o mecanismo pelo qual qubits interagem, generalizando a lógica reversível clássica.</p></li>
+<li><p>Formalizamos o <strong>emaranhamento</strong>: estados que não podem ser fatorados em subsistemas independentes, com os quatro <strong>estados de Bell</strong> como exemplo central, produzidos pelo circuito <span class="math notranslate nohighlight">\(H\)</span>+CNOT.</p></li>
+<li><p>Generalizamos a <strong>Regra de Born</strong> para <strong>medição parcial</strong> de sistemas de múltiplos qubits, revelando as correlações características do emaranhamento.</p></li>
+<li><p>Formalizamos a notação de <strong>circuitos quânticos</strong>, com suas duas regras de composição: produto de matrizes (sequência) e produto tensorial (paralelismo).</p></li>
+<li><p>Demonstramos o <strong>Teorema da Não-Clonagem</strong>, uma consequência direta da linearidade das transformações unitárias (Postulado 2).</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Produto Tensorial      →  combina n qubits, espaço de dimensão 2^n
+Estados de n qubits    →  Σ c_x |x⟩, Σ|c_x|² = 1, x ∈ {0,1}^n
+Portas Controladas     →  CNOT, CZ, Toffoli  →  qubits interagem
+Emaranhamento          →  estados não fatoráveis; Estados de Bell
+Medição Parcial        →  Born generalizada + colapso + renormalização
+Circuitos Quânticos    →  sequência = produto de matrizes; paralelo = ⊗
+Não-Clonagem           →  nenhuma U unitária copia um |ψ⟩ desconhecido
+</pre></div>
+</div>
+<p>Com o espaço de múltiplos qubits, as portas controladas, o emaranhamento e a notação de circuitos devidamente estabelecidos, temos agora toda a base teórica necessária para sair da matemática pura e começar a <strong>programar</strong> — construindo um simulador de qubits, implementando portas e medições, e finalmente executando protocolos quânticos completos, como o teletransporte quântico. É para lá que o próximo capítulo nos leva.</p>
+</section>
+<hr class="docutils" />
+<section id="referencias">
+<h2>Referências<a class="headerlink" href="#referencias" title="Link to this heading">¶</a></h2>
+<p>[1] Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</p>
+<p>[2] Bell, J. S. (1964). On the Einstein Podolsky Rosen Paradox. <em>Physics Physique Fizika</em>, 1(3), 195–200.</p>
+<p>[3] Wootters, W. K., &amp; Zurek, W. H. (1982). A Single Quantum Cannot be Cloned. <em>Nature</em>, 299, 802–803.</p>
+<p>[4] Sakurai, J. J., &amp; Napolitano, J. (2017). <em>Modern Quantum Mechanics</em> (2nd ed.). Cambridge University Press.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../../en/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Sumário</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="chapter_4_qubits_postulados.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Capítulo 4 — Qubits e os Postulados da Computação Quântica</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Leonardo Alves Santana
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Capítulo 5 — Sistemas de Múltiplos Qubits</a><ul>
+<li><a class="reference internal" href="#produto-tensorial-revisitado">5.1 Produto Tensorial Revisitado</a></li>
+<li><a class="reference internal" href="#estados-de-dois-qubits">5.2 Estados de Dois Qubits</a></li>
+<li><a class="reference internal" href="#espaco-de-estados-de-multiplos-qubits">5.3 Espaço de Estados de Múltiplos Qubits</a></li>
+<li><a class="reference internal" href="#portas-controladas">5.4 Portas Controladas</a><ul>
+<li><a class="reference internal" href="#a-porta-cnot-controlled-x">A porta CNOT (Controlled-X)</a></li>
+<li><a class="reference internal" href="#outras-portas-controladas-uteis">Outras portas controladas úteis</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#emaranhamento">5.5 Emaranhamento</a><ul>
+<li><a class="reference internal" href="#construindo-um-estado-de-bell-com-um-circuito">Construindo um estado de Bell com um circuito</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#medicao-de-sistemas-de-multiplos-qubits">5.6 Medição de Sistemas de Múltiplos Qubits</a><ul>
+<li><a class="reference internal" href="#medicao-parcial">Medição parcial</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#circuitos-quanticos">5.7 Circuitos Quânticos</a><ul>
+<li><a class="reference internal" href="#regras-de-composicao">Regras de composição</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#teorema-da-nao-clonagem">5.8 Teorema da Não-Clonagem</a></li>
+<li><a class="reference internal" href="#juntando-tudo">5.9 Juntando Tudo</a></li>
+<li><a class="reference internal" href="#referencias">Referências</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    </body>
+</html>

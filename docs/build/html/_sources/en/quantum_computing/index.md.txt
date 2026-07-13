@@ -1,0 +1,14 @@
+
+# Quantum Computing
+
+Welcome to the Quantum Computing section. Here we will explore the fundamentals of quantum mechanics, qubits, gates, and algorithms.
+
+```toml
+---
+toctree:
+  maxdepth: 2
+---
+chapter_1_introduction
+chapter_2_why_quantum_computing
+chapter_3_mathematics_for_quantum_computing
+

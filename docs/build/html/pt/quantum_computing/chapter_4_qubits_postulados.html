@@ -1,0 +1,2073 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Capítulo 5 — Sistemas de Múltiplos Qubits" href="chapter_5_multi_qubit_systems.html"><link rel="prev" title="Capítulo 3 — Matemática para Computação Quântica" href="chapter_3_mathematics_for_quantum_computing.html">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Capítulo 4 — Qubits e os Postulados da Computação Quântica - Computational Science Notes 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dff35b1a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Computational Science Notes 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">Computational Science Notes 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Português 🇧🇷</a><input aria-label="Toggle navigation of Português 🇧🇷" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chapter_1_introduction.html">Capítulo 1 — Introdução</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_2_why_quantum_computing.html">Capítulo 2 — Por Que Computação Quântica?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_3_mathematics_for_quantum_computing.html">Capítulo 3 — Matemática para Computação Quântica</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Capítulo 4 — Qubits e os Postulados da Computação Quântica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_5_multi_qubit_systems.html">Capítulo 5 — Sistemas de Múltiplos Qubits</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../en/index.html">English 🇺🇸</a><input aria-label="Toggle navigation of English 🇺🇸" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_1_introduction.html">Chapter 1 — Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_2_why_quantum_computing.html">Chapter 2 — Why Quantum Computing?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_3_mathematics_for_quantum_computing.html">Chapter 3 — Mathematics for Quantum Computing</a></li>
+</ul>
+</li>
+</ul>
+
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/pt/quantum_computing/chapter_4_qubits_postulados.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="capitulo-4-qubits-e-os-postulados-da-computacao-quantica">
+<h1>Capítulo 4 — Qubits e os Postulados da Computação Quântica<a class="headerlink" href="#capitulo-4-qubits-e-os-postulados-da-computacao-quantica" title="Link to this heading">¶</a></h1>
+<p>No Capítulo 3, construímos toda a linguagem matemática de que precisaríamos: números complexos, vetores, o produto interno, a notação de Dirac, matrizes unitárias e o produto tensorial. Em vários pontos daquele capítulo, prometemos voltar e usar essas ferramentas para dizer, com precisão, o que é um qubit e por que a mecânica quântica funciona da forma como funciona.</p>
+<p>É exatamente isso que faremos agora. Vamos partir do bit clássico — para relembrar exatamente o que estamos generalizando —, depois enunciar os <strong>postulados da mecânica quântica</strong> (as regras fundamentais e não demonstráveis sobre as quais tudo o mais é construído), e só então definir o qubit formalmente. Terminaremos com duas ferramentas indispensáveis para visualizar e manipular qubits: a <strong>Esfera de Bloch</strong> e as <strong>portas quânticas</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Se você sentir que já viu partes deste capítulo antes, é porque viu: o Capítulo 3 usou a porta <span class="math notranslate nohighlight">\(X\)</span>, os estados <span class="math notranslate nohighlight">\(|0\rangle,|1\rangle,|+\rangle,|-\rangle\)</span> e a ideia de superposição como exemplos matemáticos. Aqui, esses mesmos objetos ganham finalmente seu significado físico completo.</p>
+</div>
+<section id="bits-classicos">
+<h2>4.1 Bits Clássicos<a class="headerlink" href="#bits-classicos" title="Link to this heading">¶</a></h2>
+<p>Antes de generalizar, vale a pena ser preciso sobre aquilo que estamos generalizando. Um <strong>bit clássico</strong> é a unidade fundamental de informação em um computador convencional. Ele pode assumir exatamente um de dois valores,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+b \in \{0, 1\},
+\]</div>
+</div>
+<p>e, a qualquer instante, seu valor é perfeitamente definido: um bit nunca está “um pouco” em 0 e “um pouco” em 1. Fisicamente, um bit costuma ser representado por algo como um nível de voltagem (alto ou baixo), a orientação de um domínio magnético, ou a presença ou ausência de carga elétrica — mas a implementação física é irrelevante para a matemática. O que importa é que o espaço de estados possíveis de um bit tem exatamente dois pontos, e nenhum outro.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Espaço de estados de 1 bit clássico:
+
+   0 ●───────────────● 1
+
+   (apenas estes dois pontos são permitidos)
+</pre></div>
+</div>
+<p>Quando combinamos vários bits, o número de estados possíveis cresce rapidamente. Com <span class="math notranslate nohighlight">\(n\)</span> bits clássicos, existem <span class="math notranslate nohighlight">\(2^n\)</span> configurações possíveis (000, 001, 010, …), mas — e este ponto será crucial na Seção 4.3 — <strong>a qualquer instante, o sistema está em exatamente uma dessas configurações</strong>. Descrever o estado de <span class="math notranslate nohighlight">\(n\)</span> bits clássicos exige apenas <span class="math notranslate nohighlight">\(n\)</span> valores binários, não <span class="math notranslate nohighlight">\(2^n\)</span> números.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Guarde esse contraste: um sistema de <span class="math notranslate nohighlight">\(n\)</span> bits clássicos ocupa <strong>um único</strong> entre <span class="math notranslate nohighlight">\(2^n\)</span> estados possíveis, e descrevê-lo custa apenas <span class="math notranslate nohighlight">\(n\)</span> bits de informação. Veremos na Seção 4.3 que um sistema de <span class="math notranslate nohighlight">\(n\)</span> qubits, em contraste, pode existir em uma combinação de <strong>todos</strong> os <span class="math notranslate nohighlight">\(2^n\)</span> estados simultaneamente, e descrevê-lo completamente exige <span class="math notranslate nohighlight">\(2^n\)</span> números complexos — exatamente a contagem que já havíamos encontrado na Seção 5.5 do Capítulo 3.</p>
+</div>
+<p>Um computador clássico manipula bits através de <strong>portas lógicas</strong> — AND, OR, NOT, XOR, e assim por diante — cada uma delas uma função determinística que mapeia uma ou mais entradas binárias para uma saída binária. Na Seção 4.5 veremos que as portas quânticas desempenham um papel análogo, mas com uma diferença fundamental: elas são sempre <strong>reversíveis</strong>, uma consequência direta da unitariedade que já estudamos no Capítulo 3.</p>
+<section id="exercicios">
+<h3>Exercícios<a class="headerlink" href="#exercicios" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Quantos estados possíveis existem para um registrador de 5 bits clássicos?</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+2^5 = 32.
+\]</div>
+</div>
+</div>
+</details><ol class="arabic simple" start="2">
+<li><p>Quantos valores binários são necessários para especificar completamente o estado de um registrador de 5 bits clássicos, em um dado instante?</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Apenas 5 — um valor (0 ou 1) para cada bit, já que o registrador está em exatamente uma das 32 configurações possíveis a cada instante.</p>
+</div>
+</details><ol class="arabic simple" start="3">
+<li><p>Verdadeiro ou falso: um bit clássico pode estar simultaneamente “um pouco em 0 e um pouco em 1”. Justifique.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Falso. Por definição, um bit clássico assume exatamente um dos dois valores <span class="math notranslate nohighlight">\(\{0,1\}\)</span> a cada instante. A possibilidade de estar em uma combinação dos dois é uma característica exclusivamente quântica, que veremos a partir da Seção 4.3.</p>
+</div>
+</details></section>
+</section>
+<section id="os-postulados-da-mecanica-quantica">
+<h2>4.2 Os Postulados da Mecânica Quântica<a class="headerlink" href="#os-postulados-da-mecanica-quantica" title="Link to this heading">¶</a></h2>
+<p>Toda teoria física é construída sobre um pequeno conjunto de regras fundamentais, aceitas não porque são demonstradas matematicamente a partir de algo mais básico, mas porque suas consequências foram confirmadas repetidamente por experimentos. Essas regras são chamadas de <strong>postulados</strong>.</p>
+<p>Vamos enunciar quatro postulados. Cada um deles usa diretamente uma ferramenta construída no Capítulo 3 — e é exatamente por isso que precisávamos daquele capítulo antes deste.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Existem formulações mais gerais e completas dos postulados da mecânica quântica, cobrindo sistemas contínuos, mistura estatística de estados, e outros casos que este livro não trata em detalhe, já que nosso foco é o <strong>modelo de circuitos quânticos</strong> — sistemas de estado finito (qubits) manipulados por portas discretas. Para o tratamento axiomático completo, veja Nielsen &amp; Chuang (2010) [1] ou Sakurai &amp; Napolitano (2017) [4].</p>
+</div>
+<section id="postulado-1-estados">
+<h3>Postulado 1 — Estados<a class="headerlink" href="#postulado-1-estados" title="Link to this heading">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Postulado 1 (Estados).</strong> A cada sistema físico isolado associa-se um espaço de Hilbert complexo (um espaço vetorial complexo equipado com um produto interno). O estado do sistema é representado por um vetor unitário (normalizado) <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> desse espaço. Vetores que diferem apenas por uma fase global descrevem o mesmo estado físico.</p>
+</div>
+<p>O primeiro postulado estabelece como representamos matematicamente um sistema quântico. O termo <strong>espaço de Hilbert</strong> pode parecer novo, mas, no contexto deste livro, basta pensar nele como um espaço vetorial complexo no qual também podemos definir produto interno, norma e ortogonalidade — exatamente as ferramentas matemáticas desenvolvidas no Capítulo 3.</p>
+<p>Assim, o estado de um sistema quântico é representado por um <strong>ket</strong> normalizado,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\lVert |\psi\rangle \rVert = 1.
+\]</div>
+</div>
+<p>A condição de normalização não é apenas um detalhe matemático: ela garante que as probabilidades obtidas a partir do estado (Postulado 3, a seguir) somem exatamente a 1.</p>
+<p>Neste livro trabalharemos apenas com sistemas de dimensão finita, isto é, registros formados por um número finito de qubits. Nesses casos, o espaço de Hilbert é simplesmente o espaço vetorial complexo <span class="math notranslate nohighlight">\(\mathbb{C}^{2^n}\)</span>, onde <span class="math notranslate nohighlight">\(n\)</span> é o número de qubits do sistema.</p>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo — O estado de um qubit</p>
+<p>Considere um único qubit no estado</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle=\frac{\sqrt3}{2}|0\rangle+\frac12|1\rangle.
+\]</div>
+</div>
+<p>Escrevendo esse estado na forma vetorial,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+|\psi\rangle=
+\begin{bmatrix}
+\frac{\sqrt3}{2}\\[2mm]
+\frac12
+\end{bmatrix}.
+\end{split}\]</div>
+</div>
+<p>A norma desse vetor é</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\left\| |\psi\rangle \right\|
+=
+\sqrt{\left|\frac{\sqrt3}{2}\right|^2+\left|\frac12\right|^2}
+=
+\sqrt{\frac34+\frac14}
+=
+1.
+\]</div>
+</div>
+<p>Portanto, esse é um estado quântico válido, pois satisfaz a condição de normalização exigida pelo Postulado 1.</p>
+</div>
+</section>
+<section id="postulado-2-evolucao">
+<h3>Postulado 2 — Evolução<a class="headerlink" href="#postulado-2-evolucao" title="Link to this heading">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Postulado 2 (Evolução).</strong> A evolução de um sistema quântico isolado é descrita por uma transformação unitária. Se o estado inicial do sistema é <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>, então, após a evolução,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi'\rangle = U|\psi\rangle,
+\]</div>
+</div>
+<p>onde <span class="math notranslate nohighlight">\(U\)</span> é uma matriz unitária.</p>
+</div>
+<p>O segundo postulado descreve como um estado quântico muda ao longo do tempo. Enquanto o sistema permanece isolado — isto é, sem sofrer medições nem interagir com o ambiente — sua evolução é completamente determinada pela aplicação de uma matriz unitária ao vetor de estado.</p>
+<p>A exigência de que <span class="math notranslate nohighlight">\(U\)</span> seja unitária não é arbitrária. Como vimos no Capítulo 3, matrizes unitárias preservam a norma dos vetores. Como os estados quânticos devem permanecer normalizados,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\lVert |\psi\rangle \rVert = 1,
+\]</div>
+</div>
+<p>a evolução também deve preservar essa propriedade, garantindo que as probabilidades continuem somando exatamente a 1.</p>
+<p>Na computação quântica, esse postulado tem uma consequência imediata: <strong>toda porta quântica é representada por uma matriz unitária</strong>. Assim, executar um circuito quântico consiste simplesmente em aplicar uma sequência de transformações unitárias ao estado do sistema.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Em formulações mais gerais da mecânica quântica, a evolução é descrita pela <strong>equação de Schrödinger</strong>,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[i\hbar\frac{d}{dt}\vert{}\psi(t)\rangle = H\vert{}\psi(t)\rangle,\]</div>
+</div>
+<p>onde <span class="math notranslate nohighlight">\(H\)</span> é o <strong>Hamiltoniano</strong> do sistema, que representa sua energia total, e <span class="math notranslate nohighlight">\(\hbar = h/(2\pi)\)</span> é a <strong>constante de Planck reduzida</strong>.</p>
+<p>Para um Hamiltoniano independente do tempo, a solução dessa equação diferencial pode ser escrita explicitamente através do operador de evolução temporal</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[U(t) = \exp\left(-\frac{iHt}{\hbar}\right),\]</div>
+</div>
+<p>de modo que o estado no instante <span class="math notranslate nohighlight">\(t\)</span> é dado por <span class="math notranslate nohighlight">\(\vert{}\psi(t)\rangle = U(t)\vert{}\psi(0)\rangle\)</span>. Como <span class="math notranslate nohighlight">\(H\)</span> é um operador hermitiano (<span class="math notranslate nohighlight">\(H = H^\dagger\)</span>), sua exponencial complexa garante que <span class="math notranslate nohighlight">\(U(t)\)</span> seja uma matriz unitária.</p>
+<p>Neste livro adotaremos o <strong>modelo de circuitos quânticos</strong>, no qual a evolução é tratada como uma sequência discreta de portas quânticas. Por isso, utilizaremos quase sempre a forma simplificada</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\vert{}\psi'\rangle = U\vert{}\psi\rangle,\]</div>
+</div>
+<p>que captura exatamente a mesma ideia sem introduzir explicitamente a dependência temporal.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo — A porta Hadamard</p>
+<p>Considere o operador</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+U=
+\frac{1}{\sqrt2}
+\begin{bmatrix}
+1&amp;1\\
+1&amp;-1
+\end{bmatrix}.
+\end{split}\]</div>
+</div>
+<p>Primeiro, verifiquemos que ele é unitário. Como todos os elementos da matriz são reais,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+U^\dagger = U^T=
+\frac{1}{\sqrt2}
+\begin{bmatrix}
+1&amp;1\\
+1&amp;-1
+\end{bmatrix}.
+\end{split}\]</div>
+</div>
+<p>Assim,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+U^\dagger U
+=
+\frac12
+\begin{bmatrix}
+1&amp;1\\
+1&amp;-1
+\end{bmatrix}
+\begin{bmatrix}
+1&amp;1\\
+1&amp;-1
+\end{bmatrix}
+=
+\frac12
+\begin{bmatrix}
+2&amp;0\\
+0&amp;2
+\end{bmatrix}
+=
+I.
+\end{split}\]</div>
+</div>
+<p>Portanto, <span class="math notranslate nohighlight">\(U\)</span> é uma matriz unitária.</p>
+<p>Agora vejamos como ela atua sobre os estados da base computacional.</p>
+<p>Aplicando <span class="math notranslate nohighlight">\(U\)</span> ao estado <span class="math notranslate nohighlight">\(|0\rangle\)</span>,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+U|0\rangle
+=
+\frac{|0\rangle+|1\rangle}{\sqrt2}
+=
+|+\rangle.
+\]</div>
+</div>
+<p>Da mesma forma,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+U|1\rangle
+=
+\frac{|0\rangle-|1\rangle}{\sqrt2}
+=
+|-\rangle.
+\]</div>
+</div>
+<p>Observe que os estados continuam normalizados, exatamente como afirma o Postulado 2.</p>
+<p>O operador <span class="math notranslate nohighlight">\(U\)</span> é conhecido como <strong>porta Hadamard</strong> e costuma ser representado pela letra</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+H=
+\frac1{\sqrt2}
+\begin{bmatrix}
+1&amp;1\\
+1&amp;-1
+\end{bmatrix}.
+\end{split}\]</div>
+</div>
+<p>Ela é uma das portas quânticas mais importantes da computação quântica e será utilizada repetidamente ao longo deste livro.</p>
+</div>
+</section>
+<section id="postulado-3-medicao">
+<h3>Postulado 3 — Medição<a class="headerlink" href="#postulado-3-medicao" title="Link to this heading">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Postulado 3 (Medição ou Regra de Born).</strong> Quando um sistema quântico é medido em uma base ortonormal <span class="math notranslate nohighlight">\(\{|e_1\rangle, |e_2\rangle, \dots, |e_n\rangle\}\)</span>, o resultado correspondente ao vetor <span class="math notranslate nohighlight">\(|e_i\rangle\)</span> é obtido com probabilidade</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(i)=|\langle e_i|\psi\rangle|^2.
+\]</div>
+</div>
+<p>Imediatamente após a medição, o estado do sistema passa a ser o estado correspondente ao resultado observado,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle \longrightarrow |e_i\rangle.
+\]</div>
+</div>
+</div>
+<p>O terceiro postulado descreve como extraímos informação de um sistema quântico. Diferentemente de uma evolução unitária, uma medição não preserva, em geral, o estado original: ela produz um resultado clássico e altera o estado do sistema.</p>
+<p>A quantidade</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle e_i|\psi\rangle
+\]</div>
+</div>
+<p>é chamada de <strong>amplitude de probabilidade</strong> para o resultado <span class="math notranslate nohighlight">\(i\)</span>. Como essa amplitude pode ser um número complexo, ela não pode ser interpretada diretamente como uma probabilidade. A <strong>Regra de Born</strong> estabelece que a probabilidade observada experimentalmente é o módulo ao quadrado dessa amplitude,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(i)=|\langle e_i|\psi\rangle|^2.
+\]</div>
+</div>
+<p>Como o estado <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> é normalizado e a base de medição é ortonormal, essas probabilidades sempre satisfazem</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\sum_i P(i)=1.
+\]</div>
+</div>
+<p>Após a medição, o sistema deixa de estar no estado original e passa a ocupar o estado correspondente ao resultado obtido. Esse processo é conhecido como <strong>colapso do estado</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Uma consequência importante da Regra de Born é que estados que diferem apenas por uma <strong>fase global</strong>, como</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle
+\quad\text{e}\quad
+e^{i\gamma}|\psi\rangle,
+\]</div>
+</div>
+<p>produzem exatamente as mesmas probabilidades de medição, pois</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|e^{i\gamma}|=1.
+\]</div>
+</div>
+<p>Por essa razão, esses dois vetores representam o <strong>mesmo estado físico</strong>. Essa observação será fundamental quando introduzirmos a Esfera de Bloch na Seção 4.4 — e reaparecerá na Seção 4.5, quando compararmos as portas de rotação com as portas de Pauli e de fase.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo — Medindo o estado <span class="math notranslate nohighlight">\(|+\rangle\)</span></p>
+<p>Considere o estado</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|+\rangle=\frac{|0\rangle+|1\rangle}{\sqrt2},
+\]</div>
+</div>
+<p>e suponha que ele seja medido na base computacional
+<span class="math notranslate nohighlight">\(\{|0\rangle,|1\rangle\}\)</span>.</p>
+<p>A probabilidade de obter o resultado <span class="math notranslate nohighlight">\(0\)</span> é</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(0)=|\langle0|+\rangle|^2
+=\left|\frac1{\sqrt2}\right|^2
+=\frac12.
+\]</div>
+</div>
+<p>De forma análoga,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(1)=|\langle1|+\rangle|^2
+=\frac12.
+\]</div>
+</div>
+<p>Portanto, os dois resultados são igualmente prováveis.</p>
+<p>Se o resultado observado for <span class="math notranslate nohighlight">\(0\)</span>, imediatamente após a medição o estado passa a ser</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle=|0\rangle.
+\]</div>
+</div>
+<p>Se o resultado observado for <span class="math notranslate nohighlight">\(1\)</span>, o estado passa a ser</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle=|1\rangle.
+\]</div>
+</div>
+<p>Em ambos os casos, a superposição original desaparece e toda a informação sobre a fase relativa entre <span class="math notranslate nohighlight">\(|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|1\rangle\)</span> é perdida.</p>
+</div>
+</section>
+<section id="postulado-4-sistemas-compostos">
+<h3>Postulado 4 — Sistemas Compostos<a class="headerlink" href="#postulado-4-sistemas-compostos" title="Link to this heading">¶</a></h3>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p><strong>Postulado 4 (Sistemas Compostos).</strong> O espaço de estados de um sistema físico composto é o produto tensorial dos espaços de estados de seus subsistemas. Em particular, se o subsistema <span class="math notranslate nohighlight">\(A\)</span> está no estado <span class="math notranslate nohighlight">\(|\psi_A\rangle\)</span> e o subsistema <span class="math notranslate nohighlight">\(B\)</span> está no estado <span class="math notranslate nohighlight">\(|\psi_B\rangle\)</span>, então o estado do sistema composto é</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle = |\psi_A\rangle \otimes |\psi_B\rangle.
+\]</div>
+</div>
+</div>
+<p>O quarto postulado explica como descrever sistemas formados por vários subsistemas, como um registrador contendo múltiplos qubits. Em vez de simplesmente reunir os vetores de cada qubit, a mecânica quântica estabelece que o espaço de estados do sistema completo é obtido por meio do <strong>produto tensorial</strong>.</p>
+<p>Como vimos no Capítulo 3, o produto tensorial permite combinar estados individuais em um único estado composto. Para um sistema de <span class="math notranslate nohighlight">\(n\)</span> qubits, isso significa que o espaço de estados possui dimensão <span class="math notranslate nohighlight">\(2^n\)</span>, de modo que um estado quântico é descrito por <span class="math notranslate nohighlight">\(2^n\)</span> amplitudes complexas.</p>
+<p>Esse crescimento exponencial do espaço de estados é uma das principais características da computação quântica e está na base do poder computacional de diversos algoritmos quânticos.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>O Postulado 4 afirma como construir o espaço de estados de um sistema composto e como combinar estados individuais por meio do produto tensorial. Entretanto, nem todo estado de um sistema composto pode ser escrito na forma</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi_A\rangle \otimes |\psi_B\rangle.
+\]</div>
+</div>
+<p>Estados que não admitem essa fatoração são chamados de <strong>estados emaranhados</strong>. O emaranhamento é uma das propriedades mais importantes da mecânica quântica e será estudado em detalhes no próximo capitulo.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo — Combinando dois qubits</p>
+<p>Considere dois qubits independentes. O primeiro está no estado</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+|\psi_A\rangle = |0\rangle =
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix},
+\end{split}\]</div>
+</div>
+<p>e o segundo está no estado</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+|\psi_B\rangle = |1\rangle =
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}.
+\end{split}\]</div>
+</div>
+<p>Pelo Postulado 4, o estado do sistema composto é obtido pelo produto tensorial:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|0\rangle \otimes |1\rangle.
+\]</div>
+</div>
+<p>Efetuando o produto tensorial, obtemos</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+|0\rangle \otimes |1\rangle =
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}
+\otimes
+\begin{bmatrix}
+0\\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+0\\
+1\\
+0\\
+0
+\end{bmatrix},
+\end{split}\]</div>
+</div>
+<p>que corresponde ao estado</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|01\rangle.
+\]</div>
+</div>
+<p>Observe que, embora cada qubit seja descrito por um vetor de dimensão 2, o sistema formado pelos dois qubits é descrito por um vetor de dimensão 4. Em geral, um sistema de <span class="math notranslate nohighlight">\(n\)</span> qubits possui <span class="math notranslate nohighlight">\(2^n\)</span> amplitudes complexas.</p>
+</div>
+</section>
+<section id="id1">
+<h3>Exercícios<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Qual dos quatro postulados afirma que o estado de um sistema quântico é representado por um vetor normalizado em um espaço de Hilbert? Explique por que a condição de normalização é necessária.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">O <strong>Postulado 1 (Estados)</strong>. A condição de normalização,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\|\,|\psi\rangle\,\|=1,
+\]</div>
+</div>
+<p class="sd-card-text">garante que as probabilidades obtidas durante uma medição somem exatamente a 1.</p>
+</div>
+</details><ol class="arabic simple" start="2">
+<li><p>Um estado <span class="math notranslate nohighlight">\(|\psi\rangle = \alpha|0\rangle+\beta|1\rangle\)</span> é medido na base computacional. Se <span class="math notranslate nohighlight">\(\alpha = \tfrac{\sqrt3}{2}\)</span> e <span class="math notranslate nohighlight">\(\beta = \tfrac12\)</span> (ambos reais), quais são as probabilidades <span class="math notranslate nohighlight">\(P(0)\)</span> e <span class="math notranslate nohighlight">\(P(1)\)</span>?</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(0) = |\alpha|^2 = \left(\frac{\sqrt3}{2}\right)^2 = \frac34, \qquad P(1) = |\beta|^2 = \left(\frac12\right)^2=\frac14.
+\]</div>
+</div>
+<p class="sd-card-text">E, de fato, <span class="math notranslate nohighlight">\(\tfrac34+\tfrac14=1\)</span>, como exige o Postulado 1 (normalização).</p>
+</div>
+</details><ol class="arabic simple" start="3">
+<li><p>Um qubit está no estado <span class="math notranslate nohighlight">\(|0\rangle\)</span> e é medido na base <span class="math notranslate nohighlight">\(\{|+\rangle,|-\rangle\}\)</span>. Use a Regra de Born (Postulado 3) para calcular as probabilidades de obter os resultados <span class="math notranslate nohighlight">\(|+\rangle\)</span> e <span class="math notranslate nohighlight">\(|-\rangle\)</span>.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Lembrando que</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|+\rangle=\frac{|0\rangle+|1\rangle}{\sqrt2},
+\qquad
+|-\rangle=\frac{|0\rangle-|1\rangle}{\sqrt2},
+\]</div>
+</div>
+<p class="sd-card-text">temos</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle +|
+=
+\frac{1}{\sqrt2}
+\begin{pmatrix}
+1 &amp; 1
+\end{pmatrix},
+\qquad
+\langle -|
+=
+\frac{1}{\sqrt2}
+\begin{pmatrix}
+1 &amp; -1
+\end{pmatrix}.
+\]</div>
+</div>
+<p class="sd-card-text">Como</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+|0\rangle=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix},
+\end{split}\]</div>
+</div>
+<p class="sd-card-text">as amplitudes de probabilidade são</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle +|0\rangle
+=
+\frac{1}{\sqrt2},
+\qquad
+\langle -|0\rangle
+=
+\frac{1}{\sqrt2}.
+\]</div>
+</div>
+<p class="sd-card-text">Pela Regra de Born,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(+)
+=
+|\langle +|0\rangle|^2
+=
+\left(\frac{1}{\sqrt2}\right)^2
+=
+\frac12,
+\]</div>
+</div>
+<p class="sd-card-text">e</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(-)
+=
+|\langle -|0\rangle|^2
+=
+\left(\frac{1}{\sqrt2}\right)^2
+=
+\frac12.
+\]</div>
+</div>
+<p class="sd-card-text">Portanto, os resultados <span class="math notranslate nohighlight">\(|+\rangle\)</span> e <span class="math notranslate nohighlight">\(|-\rangle\)</span> são igualmente prováveis.</p>
+</div>
+</details><ol class="arabic simple" start="4">
+<li><p>Dois qubits estão, respectivamente, nos estados <span class="math notranslate nohighlight">\(|+\rangle\)</span> e <span class="math notranslate nohighlight">\(|0\rangle\)</span>. Use o Postulado 4 para escrever o estado do sistema composto como combinação linear da base computacional de dois qubits.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Pelo <strong>Postulado 4</strong>, o estado de um sistema composto por dois qubits é descrito pelo <strong>produto tensorial</strong> dos estados individuais.</p>
+<p class="sd-card-text">Temos:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|+\rangle=\frac{|0\rangle+|1\rangle}{\sqrt2}
+\]</div>
+</div>
+<p class="sd-card-text">e o segundo qubit está no estado:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|0\rangle.
+\]</div>
+</div>
+<p class="sd-card-text">Portanto,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|+\rangle\otimes|0\rangle
+=
+\left(\frac{|0\rangle+|1\rangle}{\sqrt2}\right)\otimes|0\rangle .
+\]</div>
+</div>
+<p class="sd-card-text">Usando a linearidade do produto tensorial:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+=
+\frac{1}{\sqrt2}(|0\rangle\otimes|0\rangle)
++
+\frac{1}{\sqrt2}(|1\rangle\otimes|0\rangle).
+\]</div>
+</div>
+<p class="sd-card-text">Como:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|0\rangle\otimes|0\rangle=|00\rangle
+\]</div>
+</div>
+<p class="sd-card-text">e</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|1\rangle\otimes|0\rangle=|10\rangle,
+\]</div>
+</div>
+<p class="sd-card-text">obtemos:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\boxed{
+|+\rangle\otimes|0\rangle
+=
+\frac{1}{\sqrt2}|00\rangle
++
+\frac{1}{\sqrt2}|10\rangle
+}
+\]</div>
+</div>
+<p class="sd-card-text">Assim, o sistema composto é uma superposição dos estados da <strong>base computacional de dois qubits</strong>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\{|00\rangle,|01\rangle,|10\rangle,|11\rangle\},
+\]</div>
+</div>
+<p class="sd-card-text">com amplitudes não nulas apenas para os estados <span class="math notranslate nohighlight">\(|00\rangle\)</span> e <span class="math notranslate nohighlight">\(|10\rangle\)</span>.</p>
+</div>
+</details><ol class="arabic simple" start="5">
+<li><p>Explique, em suas próprias palavras, por que dois estados que diferem apenas por uma fase global são considerados fisicamente indistinguíveis.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Dois estados que diferem apenas por uma <strong>fase global</strong> possuem a forma:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi'\rangle=e^{i\gamma}|\psi\rangle,
+\]</div>
+</div>
+<p class="sd-card-text">onde <span class="math notranslate nohighlight">\(e^{i\gamma}\)</span> é um número complexo de módulo 1.</p>
+<p class="sd-card-text">Pelo <strong>Postulado 3</strong>, as probabilidades dos resultados de uma medição dependem do módulo quadrado das amplitudes:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(i)=|\langle e_i|\psi\rangle|^2.
+\]</div>
+</div>
+<p class="sd-card-text">Para o estado <span class="math notranslate nohighlight">\(|\psi'\rangle\)</span>, temos:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\langle e_i|\psi'\rangle
+=
+\langle e_i|e^{i\gamma}|\psi\rangle
+=
+e^{i\gamma}\langle e_i|\psi\rangle.
+\]</div>
+</div>
+<p class="sd-card-text">Portanto,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\langle e_i|\psi'\rangle|^2
+=
+|e^{i\gamma}\langle e_i|\psi\rangle|^2.
+\]</div>
+</div>
+<p class="sd-card-text">Como:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|e^{i\gamma}|=1,
+\]</div>
+</div>
+<p class="sd-card-text">segue que:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\langle e_i|\psi'\rangle|^2
+=
+|\langle e_i|\psi\rangle|^2.
+\]</div>
+</div>
+<p class="sd-card-text">Assim, todos os resultados possíveis de medição possuem exatamente as mesmas probabilidades nos dois estados. Como nenhuma observação experimental consegue diferenciá-los, eles representam o mesmo estado físico.</p>
+<p class="sd-card-text">A fase global altera apenas a descrição matemática do estado, mas não altera nenhuma informação observável.</p>
+</div>
+</details></section>
+</section>
+<section id="qubits">
+<h2>4.3 Qubits<a class="headerlink" href="#qubits" title="Link to this heading">¶</a></h2>
+<p>Com os quatro postulados em mãos, finalmente podemos definir formalmente o objeto central da computação quântica: o <strong>qubit</strong> (ou <em>quantum bit</em>).</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Um <strong>qubit</strong> é um sistema quântico cujo estado é descrito por um vetor unitário em um espaço vetorial complexo de duas dimensões (um espaço de Hilbert <span class="math notranslate nohighlight">\(\mathbb{C}^2\)</span>).</p>
+</div>
+<p>O espaço de Hilbert de um qubit possui dimensão 2. Isso significa que existe uma base ortonormal formada por dois vetores, que chamamos de <strong>base computacional</strong>,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\{|0\rangle,\;|1\rangle\}.
+\]</div>
+</div>
+<p>Pelo <strong>Postulado 1</strong>, qualquer estado de um qubit deve ser um vetor normalizado desse espaço. Portanto, o estado mais geral possível de um qubit pode ser escrito como uma combinação linear dos vetores da base:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle=\alpha|0\rangle+\beta|1\rangle,
+\]</div>
+</div>
+<p>onde <span class="math notranslate nohighlight">\(\alpha,\beta\in\mathbb{C}\)</span>.</p>
+<p>Como o vetor deve estar normalizado, os coeficientes precisam satisfazer</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\alpha|^2+|\beta|^2=1.
+\]</div>
+</div>
+<p>Os números complexos <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span> são chamados de <strong>amplitudes de probabilidade</strong>. Eles não representam probabilidades diretamente. Pelo <strong>Postulado 3 (Regra de Born)</strong>, ao medir o qubit na base computacional, obtemos</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(0)=|\alpha|^2,
+\qquad
+P(1)=|\beta|^2.
+\]</div>
+</div>
+<p>Assim, embora o estado seja descrito por amplitudes complexas, os resultados observados em uma medição são sempre probabilidades reais que somam 1.</p>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo</p>
+<p>Considere o estado</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle=
+\frac{\sqrt3}{2}|0\rangle+
+\frac12|1\rangle.
+\]</div>
+</div>
+<p>Como</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\left(\frac{\sqrt3}{2}\right)^2+
+\left(\frac12\right)^2
+=
+\frac34+\frac14
+=1,
+\]</div>
+</div>
+<p>esse é um estado válido de um qubit.</p>
+<p>Ao medi-lo na base computacional, as probabilidades são</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(0)=\frac34,
+\qquad
+P(1)=\frac14.
+\]</div>
+</div>
+<p>Se o resultado da medição for <span class="math notranslate nohighlight">\(0\)</span>, o estado colapsa para <span class="math notranslate nohighlight">\(|0\rangle\)</span>; se o resultado for <span class="math notranslate nohighlight">\(1\)</span>, ele colapsa para <span class="math notranslate nohighlight">\(|1\rangle\)</span>.</p>
+</div>
+<section id="comparando-um-bit-classico-e-um-qubit">
+<h3>Comparando um bit clássico e um qubit<a class="headerlink" href="#comparando-um-bit-classico-e-um-qubit" title="Link to this heading">¶</a></h3>
+<p>Embora ambos possuam dois estados de referência (<span class="math notranslate nohighlight">\(0\)</span> e <span class="math notranslate nohighlight">\(1\)</span>), um bit clássico e um qubit são objetos matemáticos bastante diferentes.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Propriedade</p></th>
+<th class="head text-left"><p>Bit clássico</p></th>
+<th class="head text-left"><p>Qubit</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Espaço de estados</p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\{0,1\}\)</span></p></td>
+<td class="text-left"><p>Vetores normalizados em <span class="math notranslate nohighlight">\(\mathbb{C}^2\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Estado possível</p></td>
+<td class="text-left"><p>Apenas <span class="math notranslate nohighlight">\(0\)</span> ou <span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td class="text-left"><p><span class="math notranslate nohighlight">\(\alpha|0\rangle+\beta|1\rangle\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Evolução</p></td>
+<td class="text-left"><p>Portas lógicas clássicas</p></td>
+<td class="text-left"><p>Operações unitárias (Postulado 2)</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Medição</p></td>
+<td class="text-left"><p>Sempre retorna o valor armazenado</p></td>
+<td class="text-left"><p>Resultado probabilístico (Postulado 3)</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Sistema com <span class="math notranslate nohighlight">\(n\)</span> unidades</p></td>
+<td class="text-left"><p>Um único entre <span class="math notranslate nohighlight">\(2^n\)</span> estados possíveis</p></td>
+<td class="text-left"><p>Combinação linear dos <span class="math notranslate nohighlight">\(2^n\)</span> estados da base</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A principal diferença não é que um qubit “guarda mais informação” do que um bit. Antes da medição, ele é descrito por amplitudes complexas que podem interferir umas com as outras durante a evolução do sistema. No entanto, uma única medição sempre produz apenas um resultado clássico: 0 ou 1. É justamente essa combinação entre <strong>superposição</strong>, <strong>interferência</strong> e <strong>evolução unitária</strong> que permite aos algoritmos quânticos resolver determinados problemas de forma mais eficiente do que algoritmos clássicos.</p>
+</div>
+</section>
+<section id="qubits-multiplos">
+<h3>Qubits Múltiplos<a class="headerlink" href="#qubits-multiplos" title="Link to this heading">¶</a></h3>
+<p>Até agora estudamos apenas um único qubit. Entretanto, algoritmos quânticos reais trabalham com <strong>registradores quânticos</strong>, isto é, sistemas formados por vários qubits.</p>
+<p>Pelo <strong>Postulado 4</strong>, o espaço de estados de um sistema composto é obtido pelo <strong>produto tensorial</strong> dos espaços de estados individuais. Assim, um sistema com <span class="math notranslate nohighlight">\(n\)</span> qubits possui espaço de estados</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+(\mathbb{C}^2)^{\otimes n}
+=
+\underbrace{\mathbb{C}^2\otimes\mathbb{C}^2\otimes\cdots\otimes\mathbb{C}^2}_{n\text{ vezes}},
+\]</div>
+</div>
+<p>cuja dimensão é <span class="math notranslate nohighlight">\(2^n\)</span>.</p>
+<p>Uma base para esse espaço é formada pelos <span class="math notranslate nohighlight">\(2^n\)</span> estados da <strong>base computacional</strong>,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|00\cdots0\rangle,\;
+|00\cdots1\rangle,\;
+\dots,\;
+|11\cdots1\rangle.
+\]</div>
+</div>
+<p>Portanto, o estado mais geral de um sistema com <span class="math notranslate nohighlight">\(n\)</span> qubits pode ser escrito como</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle
+=
+\sum_{i=0}^{2^n-1}
+\alpha_i|i\rangle,
+\]</div>
+</div>
+<p>onde os coeficientes complexos satisfazem</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\sum_{i=0}^{2^n-1}|\alpha_i|^2=1.
+\]</div>
+</div>
+<p>Assim como no caso de um único qubit, os coeficientes <span class="math notranslate nohighlight">\(\alpha_i\)</span> são as amplitudes de probabilidade associadas aos diferentes estados da base computacional.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Este livro dedica o Capítulo 5 inteiramente aos sistemas de múltiplos qubits — incluindo o produto tensorial revisitado, o emaranhamento e as portas controladas. Por ora, basta reconhecer que o mesmo produto tensorial do Capítulo 3 é o que permite combinar qubits individuais em um registrador maior.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo — Dois qubits</p>
+<p>Um sistema de dois qubits possui quatro estados na base computacional:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|00\rangle,\quad
+|01\rangle,\quad
+|10\rangle,\quad
+|11\rangle.
+\]</div>
+</div>
+<p>Seu estado mais geral é</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle
+=
+\alpha_{00}|00\rangle
++
+\alpha_{01}|01\rangle
++
+\alpha_{10}|10\rangle
++
+\alpha_{11}|11\rangle,
+\]</div>
+</div>
+<p>com</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\alpha_{00}|^2
++
+|\alpha_{01}|^2
++
+|\alpha_{10}|^2
++
+|\alpha_{11}|^2
+=
+1.
+\]</div>
+</div>
+<p>Ao medir o sistema na base computacional, o resultado será um dos quatro estados acima, com probabilidades dadas pelos módulos ao quadrado de suas respectivas amplitudes.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Observe como o número de amplitudes cresce exponencialmente com o número de qubits. Um único qubit é descrito por <strong>2 amplitudes</strong>, dois qubits por <strong>4 amplitudes</strong>, três qubits por <strong>8 amplitudes</strong> e, em geral, <span class="math notranslate nohighlight">\(n\)</span> qubits por <strong><span class="math notranslate nohighlight">\(2^n\)</span> amplitudes</strong>. Esse crescimento exponencial é uma das características fundamentais da computação quântica.</p>
+</div>
+</section>
+<section id="id2">
+<h3>Exercícios<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Verifique se <span class="math notranslate nohighlight">\(|\psi\rangle = \tfrac35|0\rangle + \tfrac45|1\rangle\)</span> é um estado de qubit válido.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\left(\frac35\right)^2+\left(\frac45\right)^2 = \frac{9}{25}+\frac{16}{25} = \frac{25}{25}=1.
+\]</div>
+</div>
+<p class="sd-card-text">Sim, é válido.</p>
+</div>
+</details><ol class="arabic simple" start="2">
+<li><p>Para o estado da questão anterior, medido na base computacional, quais são <span class="math notranslate nohighlight">\(P(0)\)</span> e <span class="math notranslate nohighlight">\(P(1)\)</span>?</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(0) = \left(\frac35\right)^2 = \frac{9}{25}=36\%, \qquad P(1) = \left(\frac45\right)^2=\frac{16}{25}=64\%.
+\]</div>
+</div>
+</div>
+</details><ol class="arabic simple" start="3">
+<li><p>Quantas amplitudes complexas são necessárias para descrever completamente o estado de 6 qubits? Compare com quantos valores clássicos seriam necessários para descrever 6 bits clássicos.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Para 6 qubits: <span class="math notranslate nohighlight">\(2^6=64\)</span> amplitudes complexas. Para 6 bits clássicos: apenas 6 valores binários, já que o sistema está em apenas uma das 64 configurações possíveis a cada instante.</p>
+</div>
+</details><ol class="arabic simple" start="4">
+<li><p>Um qubit está no estado <span class="math notranslate nohighlight">\(|1\rangle\)</span>. Antes de qualquer medição, qual é a probabilidade de obter o resultado 0 ao medi-lo na base computacional? O que isso nos diz sobre estados de base computacional em particular?</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+P(0) = |\langle 0|1\rangle|^2 = 0^2 = 0.
+\]</div>
+</div>
+<p class="sd-card-text">Estados da própria base computacional não têm incerteza quando medidos nessa mesma base — o resultado é sempre determinístico, exatamente como um bit clássico. A aleatoriedade do Postulado 3 só aparece quando o estado medido não coincide com um dos vetores de base.</p>
+</div>
+</details><ol class="arabic simple" start="5">
+<li><p>Dois qubits, cada um no estado <span class="math notranslate nohighlight">\(|-\rangle\)</span>, formam um sistema composto. Escreva o estado desse sistema como combinação linear da base computacional de dois qubits.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|-\rangle\otimes|-\rangle = \left(\frac{|0\rangle-|1\rangle}{\sqrt2}\right)\otimes\left(\frac{|0\rangle-|1\rangle}{\sqrt2}\right).
+\]</div>
+</div>
+<p class="sd-card-text">Expandindo com bilinearidade (Seção 5.5 do Capítulo 3):</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+= \frac12\big(|0\rangle\otimes|0\rangle - |0\rangle\otimes|1\rangle - |1\rangle\otimes|0\rangle + |1\rangle\otimes|1\rangle\big) = \frac12\big(|00\rangle-|01\rangle-|10\rangle+|11\rangle\big).
+\]</div>
+</div>
+<p class="sd-card-text">Como exercício de verificação, a soma dos módulos ao quadrado dos quatro coeficientes (<span class="math notranslate nohighlight">\(\tfrac14\)</span> cada) é <span class="math notranslate nohighlight">\(1\)</span>, confirmando a normalização.</p>
+</div>
+</details></section>
+</section>
+<section id="a-esfera-de-bloch">
+<h2>4.4 A Esfera de Bloch<a class="headerlink" href="#a-esfera-de-bloch" title="Link to this heading">¶</a></h2>
+<p>Até agora descrevemos o estado de um qubit por meio de um vetor de estado,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle=\alpha|0\rangle+\beta|1\rangle.
+\]</div>
+</div>
+<p>Essa representação é completa e será utilizada ao longo de todo o livro. No entanto, ela nem sempre é intuitiva para visualizar como um qubit evolui ou como uma porta quântica atua sobre ele.</p>
+<p>Para isso, utilizamos a <strong>Esfera de Bloch</strong>, uma representação geométrica na qual <strong>cada estado puro de um único qubit corresponde a um ponto na superfície de uma esfera</strong>.</p>
+<p>Essa representação permite visualizar estados quânticos, interpretar superposições e compreender portas quânticas como rotações no espaço.</p>
+<section id="por-que-uma-esfera">
+<h3>Por que uma esfera?<a class="headerlink" href="#por-que-uma-esfera" title="Link to this heading">¶</a></h3>
+<p>À primeira vista, pode parecer estranho que um estado descrito por dois números complexos possa ser representado por apenas um ponto em uma esfera.</p>
+<p>De fato, o estado</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle=\alpha|0\rangle+\beta|1\rangle
+\]</div>
+</div>
+<p>é determinado por dois números complexos, isto é, quatro números reais.</p>
+<p>Entretanto, dois fatos reduzem esse número de parâmetros independentes:</p>
+<ol class="arabic simple">
+<li><p>Pelo <strong>Postulado 1</strong>, o estado deve estar normalizado,</p></li>
+</ol>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\alpha|^2+|\beta|^2=1,
+\]</div>
+</div>
+<p>eliminando um grau de liberdade.</p>
+<ol class="arabic simple" start="2">
+<li><p>Pelo <strong>Postulado 3</strong>, estados que diferem apenas por uma fase global,</p></li>
+</ol>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle
+\quad\text{e}\quad
+e^{i\gamma}|\psi\rangle,
+\]</div>
+</div>
+<p>representam exatamente o mesmo estado físico, eliminando mais um grau de liberdade.</p>
+<p>Restam, portanto, apenas <strong>dois parâmetros reais independentes</strong>. Dois parâmetros são exatamente o necessário para identificar um ponto sobre a superfície de uma esfera, por exemplo por meio de uma latitude e uma longitude.</p>
+<p>Essa observação motiva a construção da <strong>Esfera de Bloch</strong>.</p>
+</section>
+<section id="parametrizando-um-qubit">
+<h3>Parametrizando um qubit<a class="headerlink" href="#parametrizando-um-qubit" title="Link to this heading">¶</a></h3>
+<p>Usando a liberdade de escolher a fase global, sempre podemos tornar o coeficiente <span class="math notranslate nohighlight">\(\alpha\)</span> real e não negativo. Dessa forma, qualquer estado de um qubit pode ser escrito como</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi\rangle=
+\cos\left(\frac{\theta}{2}\right)|0\rangle
++
+e^{i\varphi}
+\sin\left(\frac{\theta}{2}\right)|1\rangle,
+\]</div>
+</div>
+<p>onde</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\theta\in[0,\pi]\)</span> é o <strong>ângulo polar</strong>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\varphi\in[0,2\pi)\)</span> é o <strong>ângulo azimutal</strong>.</p></li>
+</ul>
+<p>A normalização é satisfeita automaticamente, pois</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\cos^2\left(\frac{\theta}{2}\right)
++
+\sin^2\left(\frac{\theta}{2}\right)
+=
+1.
+\]</div>
+</div>
+<p>Assim, cada par <span class="math notranslate nohighlight">\((\theta,\varphi)\)</span> identifica exatamente um ponto na superfície da Esfera de Bloch.</p>
+<figure class="align-center" id="ch4-fig4-1-bloch-sphere">
+<a class="reference internal image-reference" href="../../_images/ch4_fig4-1_bloch_sphere.png"><img alt="A Esfera de Bloch mostrando os ângulos theta e phi" src="../../_images/ch4_fig4-1_bloch_sphere.png" style="width: 45%;" />
+</a>
+<figcaption>
+<p><span class="caption-text">Cada estado puro de um único qubit corresponde a um ponto na superfície da Esfera de Bloch. O estado é completamente determinado pelos ângulos <span class="math notranslate nohighlight">\(\theta\)</span> e <span class="math notranslate nohighlight">\(\varphi\)</span>.</span><a class="headerlink" href="#ch4-fig4-1-bloch-sphere" title="Link to this image">¶</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="estados-importantes">
+<h3>Estados importantes<a class="headerlink" href="#estados-importantes" title="Link to this heading">¶</a></h3>
+<p>Alguns estados aparecem com tanta frequência que vale a pena localizá-los na esfera.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Estado</p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(\theta\)</span></p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(\varphi\)</span></p></th>
+<th class="head text-left"><p>Posição</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(|0\rangle\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td class="text-center"><p>qualquer</p></td>
+<td class="text-left"><p>Polo norte</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(|1\rangle\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\pi\)</span></p></td>
+<td class="text-center"><p>qualquer</p></td>
+<td class="text-left"><p>Polo sul</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(|+\rangle\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\pi/2\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(0\)</span></p></td>
+<td class="text-left"><p>Eixo <span class="math notranslate nohighlight">\(+x\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(|-\rangle\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\pi/2\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\pi\)</span></p></td>
+<td class="text-left"><p>Eixo <span class="math notranslate nohighlight">\(-x\)</span></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(|+i\rangle\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\pi/2\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\pi/2\)</span></p></td>
+<td class="text-left"><p>Eixo <span class="math notranslate nohighlight">\(+y\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(|-i\rangle\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(\pi/2\)</span></p></td>
+<td class="text-center"><p><span class="math notranslate nohighlight">\(3\pi/2\)</span></p></td>
+<td class="text-left"><p>Eixo <span class="math notranslate nohighlight">\(-y\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo — Localizando o estado <span class="math notranslate nohighlight">\(|+\rangle\)</span></p>
+<p>Considere</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|+\rangle
+=
+\frac{|0\rangle+|1\rangle}{\sqrt2}.
+\]</div>
+</div>
+<p>Comparando com a parametrização geral,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\cos\left(\frac{\theta}{2}\right)
+=
+\frac1{\sqrt2},
+\]</div>
+</div>
+<p>obtemos</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\theta=\frac{\pi}{2}.
+\]</div>
+</div>
+<p>Além disso, como o coeficiente de <span class="math notranslate nohighlight">\(|1\rangle\)</span> é real e positivo,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+e^{i\varphi}=1,
+\]</div>
+</div>
+<p>o que implica</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\varphi=0.
+\]</div>
+</div>
+<p>Portanto, o estado <span class="math notranslate nohighlight">\(|+\rangle\)</span> está localizado sobre o equador da esfera, na direção do eixo <span class="math notranslate nohighlight">\(x\)</span> positivo.</p>
+<p>Observe que o ângulo <span class="math notranslate nohighlight">\(\theta\)</span> determina o peso relativo entre os estados <span class="math notranslate nohighlight">\(|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|1\rangle\)</span>, enquanto <span class="math notranslate nohighlight">\(\varphi\)</span> determina a fase relativa entre eles.</p>
+</div>
+</section>
+<section id="evolucao-como-rotacao">
+<h3>Evolução como Rotação<a class="headerlink" href="#evolucao-como-rotacao" title="Link to this heading">¶</a></h3>
+<p>Pelo <strong>Postulado 2</strong>, a evolução de um sistema quântico é descrita por uma transformação unitária,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+|\psi'\rangle=U|\psi\rangle.
+\]</div>
+</div>
+<p>Na Esfera de Bloch, essa transformação possui uma interpretação geométrica extremamente elegante: <strong>aplicar uma porta quântica equivale a rotacionar o ponto que representa o estado sobre a superfície da esfera</strong>.</p>
+<p>Assim, em vez de acompanhar diretamente os coeficientes complexos <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>, podemos imaginar simplesmente um ponto se movendo sobre a esfera.</p>
+<p>Como matrizes unitárias preservam a norma do vetor de estado, o ponto permanece sempre sobre a superfície da esfera. Nenhuma porta quântica pode levá-lo para o interior ou para o exterior da esfera.</p>
+<p>Na próxima seção veremos que portas importantes, como as portas de Pauli, a porta Hadamard e as portas de rotação <span class="math notranslate nohighlight">\(R_x\)</span>, <span class="math notranslate nohighlight">\(R_y\)</span>, <span class="math notranslate nohighlight">\(R_z\)</span>, são exatamente rotações em torno de diferentes eixos da Esfera de Bloch — algumas fixas, de <span class="math notranslate nohighlight">\(180°\)</span>, e outras por um ângulo arbitrário.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A Esfera de Bloch descreve apenas <strong>um único qubit</strong>. Para sistemas com dois ou mais qubits, o espaço de estados possui muito mais graus de liberdade e não pode mais ser representado por uma única esfera. Essa é uma das primeiras manifestações do crescimento exponencial do espaço de estados na computação quântica.</p>
+</div>
+</section>
+<section id="id3">
+<h3>Exercícios<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Quantos números reais são necessários para especificar um estado de qubit, contando a normalização e a fase global? E quantos números reais brutos <span class="math notranslate nohighlight">\(\alpha,\beta\)</span> representariam sem essas reduções?</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Sem redução: 4 números reais (parte real e imaginária de <span class="math notranslate nohighlight">\(\alpha\)</span> e <span class="math notranslate nohighlight">\(\beta\)</span>). Com a normalização, restam 3. Removendo também a fase global (que não é fisicamente observável), restam 2 — exatamente <span class="math notranslate nohighlight">\(\theta\)</span> e <span class="math notranslate nohighlight">\(\varphi\)</span>.</p>
+</div>
+</details><ol class="arabic simple" start="2">
+<li><p>Localize o estado <span class="math notranslate nohighlight">\(|1\rangle\)</span> na Esfera de Bloch, indicando <span class="math notranslate nohighlight">\(\theta\)</span> e <span class="math notranslate nohighlight">\(\varphi\)</span>.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Para <span class="math notranslate nohighlight">\(|1\rangle\)</span>, o coeficiente de <span class="math notranslate nohighlight">\(|0\rangle\)</span> é zero, então <span class="math notranslate nohighlight">\(\cos(\theta/2)=0 \Rightarrow \theta=\pi\)</span>. O ângulo <span class="math notranslate nohighlight">\(\varphi\)</span> não é definido (o polo sul, assim como o polo norte, não tem uma longitude bem definida), consistente com a tabela apresentada.</p>
+</div>
+</details><ol class="arabic simple" start="3">
+<li><p>Encontre <span class="math notranslate nohighlight">\(\theta\)</span> e <span class="math notranslate nohighlight">\(\varphi\)</span> para o estado <span class="math notranslate nohighlight">\(|-\rangle = \frac{1}{\sqrt2}(|0\rangle-|1\rangle)\)</span>.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Como <span class="math notranslate nohighlight">\(\cos(\theta/2)=\tfrac{1}{\sqrt2}\)</span>, temos <span class="math notranslate nohighlight">\(\theta=\pi/2\)</span> (mesmo valor de <span class="math notranslate nohighlight">\(|+\rangle\)</span>, já que ambos estão no equador). O coeficiente de <span class="math notranslate nohighlight">\(|1\rangle\)</span> é <span class="math notranslate nohighlight">\(-\tfrac{1}{\sqrt2}\)</span>, que podemos escrever como <span class="math notranslate nohighlight">\(\tfrac{1}{\sqrt2}e^{i\pi}\)</span> (já que <span class="math notranslate nohighlight">\(e^{i\pi}=-1\)</span>), então <span class="math notranslate nohighlight">\(\varphi=\pi\)</span>.</p>
+</div>
+</details><ol class="arabic simple" start="4">
+<li><p>Explique, usando o Postulado 2 e a ideia de rotação, por que nenhuma porta quântica de um único qubit pode levar <span class="math notranslate nohighlight">\(|0\rangle\)</span> para fora da superfície da esfera (por exemplo, para o centro dela).</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Toda porta é representada por uma matriz unitária (Postulado 2), e matrizes unitárias preservam a norma do vetor de estado (Capítulo 3). Como todo ponto na superfície da Esfera de Bloch corresponde a um estado de norma exatamente 1, e o centro da esfera corresponderia a um vetor de norma diferente de 1 (ou nula), nenhuma transformação unitária pode levar um estado até lá.</p>
+</div>
+</details></section>
+</section>
+<section id="portas-quanticas-de-um-qubit">
+<h2>4.5 Portas Quânticas de Um Qubit<a class="headerlink" href="#portas-quanticas-de-um-qubit" title="Link to this heading">¶</a></h2>
+<p>Até agora vimos que o estado de um sistema quântico é descrito por um vetor de estado (Postulado 1) e que sua evolução é governada por transformações unitárias (Postulado 2).</p>
+<p>Na computação quântica, essas transformações unitárias recebem o nome de <strong>portas quânticas</strong> (<em>quantum gates</em>). Elas desempenham um papel semelhante ao das portas lógicas da computação clássica: são as operações elementares utilizadas para construir algoritmos quânticos.</p>
+<p>Existe, porém, uma diferença fundamental entre os dois casos. Enquanto portas clássicas como AND e OR descartam informação e, portanto, não são reversíveis, <strong>toda porta quântica é reversível</strong>, pois é representada por uma matriz unitária.</p>
+<p>Para um único qubit, essa evolução possui uma interpretação geométrica extremamente elegante: <strong>aplicar uma porta quântica equivale a rotacionar o ponto correspondente ao estado sobre a superfície da Esfera de Bloch</strong>.</p>
+<p>Vamos catalogar as portas de um único qubit em ordem crescente de generalidade: primeiro as portas de Pauli e a Hadamard, que têm ação fixa; depois as portas de fase; e, por fim, as <strong>portas de rotação</strong>, que generalizam todas as anteriores permitindo um ângulo contínuo.</p>
+<section id="as-portas-de-pauli">
+<h3>As Portas de Pauli<a class="headerlink" href="#as-portas-de-pauli" title="Link to this heading">¶</a></h3>
+<p>As operações mais básicas sobre um qubit são as <strong>matrizes de Pauli</strong>,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+X=
+\begin{pmatrix}
+0&amp;1\\
+1&amp;0
+\end{pmatrix},
+\qquad
+Y=
+\begin{pmatrix}
+0&amp;-i\\
+i&amp;0
+\end{pmatrix},
+\qquad
+Z=
+\begin{pmatrix}
+1&amp;0\\
+0&amp;-1
+\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p>Na Esfera de Bloch, essas portas correspondem a rotações de <span class="math notranslate nohighlight">\(180^\circ\)</span> (ou <span class="math notranslate nohighlight">\(\pi\)</span> radianos) em torno dos eixos <span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> e <span class="math notranslate nohighlight">\(z\)</span>.</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Porta</p></th>
+<th class="head text-left"><p>Rotação</p></th>
+<th class="head text-left"><p>O que faz</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(X\)</span></p></td>
+<td class="text-left"><p>Em torno do eixo <span class="math notranslate nohighlight">\(x\)</span></p></td>
+<td class="text-left"><p>Troca <span class="math notranslate nohighlight">\(|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|1\rangle\)</span></p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p><span class="math notranslate nohighlight">\(Y\)</span></p></td>
+<td class="text-left"><p>Em torno do eixo <span class="math notranslate nohighlight">\(y\)</span></p></td>
+<td class="text-left"><p>Troca os estados introduzindo uma fase relativa</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(Z\)</span></p></td>
+<td class="text-left"><p>Em torno do eixo <span class="math notranslate nohighlight">\(z\)</span></p></td>
+<td class="text-left"><p>Mantém <span class="math notranslate nohighlight">\(|0\rangle\)</span> e altera o sinal da componente <span class="math notranslate nohighlight">\(|1\rangle\)</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo — Aplicando a porta <span class="math notranslate nohighlight">\(X\)</span></p>
+<p>Considere o estado</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+|0\rangle=
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p>Aplicando a porta</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+X=
+\begin{pmatrix}
+0&amp;1\\
+1&amp;0
+\end{pmatrix},
+\end{split}\]</div>
+</div>
+<p>obtemos</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+X|0\rangle
+=
+\begin{pmatrix}
+0&amp;1\\
+1&amp;0
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=
+\begin{pmatrix}
+0\\
+1
+\end{pmatrix}
+=
+|1\rangle.
+\end{split}\]</div>
+</div>
+<p>Da mesma forma,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+X|1\rangle=|0\rangle.
+\]</div>
+</div>
+<p>Por esse motivo, a porta <span class="math notranslate nohighlight">\(X\)</span> costuma ser chamada de <strong>NOT quântico</strong>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As portas <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(Y\)</span> e <span class="math notranslate nohighlight">\(Z\)</span> não comutam entre si. Isso reflete um fato geométrico simples: rotações em torno de eixos diferentes geralmente dependem da ordem em que são realizadas.</p>
+</div>
+</section>
+<section id="a-porta-hadamard">
+<h3>A Porta Hadamard<a class="headerlink" href="#a-porta-hadamard" title="Link to this heading">¶</a></h3>
+<p>Entre todas as portas de um único qubit, a mais importante é a <strong>porta Hadamard</strong>,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+H=
+\frac1{\sqrt2}
+\begin{pmatrix}
+1&amp;1\\
+1&amp;-1
+\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p>Sua principal função é transformar estados da base computacional em <strong>superposições</strong>.</p>
+<p>Chamamos de <strong>superposição</strong> qualquer estado que seja uma combinação linear de dois ou mais estados da base. Em outras palavras, um qubit está em superposição sempre que possui amplitudes diferentes de zero para mais de um estado da base computacional.</p>
+<p>Por exemplo,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{|0\rangle+|1\rangle}{\sqrt2}
+\]</div>
+</div>
+<p>é uma superposição, pois possui componentes tanto em <span class="math notranslate nohighlight">\(|0\rangle\)</span> quanto em <span class="math notranslate nohighlight">\(|1\rangle\)</span>. Já os estados <span class="math notranslate nohighlight">\(|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|1\rangle\)</span> não são superposições nessa base, pois correspondem a apenas um dos vetores da base computacional.</p>
+<p>Aplicando a porta Hadamard aos estados da base, obtemos</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+H|0\rangle
+=
+|+\rangle,
+\qquad
+H|1\rangle
+=
+|-\rangle.
+\]</div>
+</div>
+<p>Em particular,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+H|0\rangle
+=
+\frac{|0\rangle+|1\rangle}{\sqrt2},
+\]</div>
+</div>
+<p>mostrando que a porta Hadamard transforma o estado definido <span class="math notranslate nohighlight">\(|0\rangle\)</span> em uma superposição equilibrada entre <span class="math notranslate nohighlight">\(|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|1\rangle\)</span>.</p>
+<p>Na Esfera de Bloch, isso corresponde a mover o estado do polo norte até o equador.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>A porta Hadamard aparece em praticamente todos os algoritmos quânticos. Em geral, ela é utilizada no início do algoritmo para criar superposições, permitindo que a computação explore simultaneamente as amplitudes associadas aos diferentes estados da base antes da medição.</p>
+</div>
+</section>
+<section id="portas-de-fase">
+<h3>Portas de Fase<a class="headerlink" href="#portas-de-fase" title="Link to this heading">¶</a></h3>
+<p>Enquanto a porta Hadamard altera as amplitudes do estado, as <strong>portas de fase</strong> modificam apenas a fase relativa entre seus componentes.</p>
+<p>A forma mais geral é</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R_\varphi=
+\begin{pmatrix}
+1&amp;0\\
+0&amp;e^{i\varphi}
+\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p>Aplicando essa porta,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+R_\varphi
+(\alpha|0\rangle+\beta|1\rangle)
+=
+\alpha|0\rangle
++
+e^{i\varphi}\beta|1\rangle.
+\]</div>
+</div>
+<p>Na Esfera de Bloch, essa operação corresponde a uma rotação de ângulo <span class="math notranslate nohighlight">\(\varphi\)</span> em torno do eixo <span class="math notranslate nohighlight">\(z\)</span>.</p>
+<p>Dois casos particulares aparecem frequentemente:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(S = R_{\pi/2}\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(T = R_{\pi/4}\)</span>.</p></li>
+</ul>
+<p>Além disso,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+Z=R_\pi,
+\]</div>
+</div>
+<p>ou seja, a porta <span class="math notranslate nohighlight">\(Z\)</span> é simplesmente um caso particular da porta de fase.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As portas de fase não alteram imediatamente as probabilidades de medir <span class="math notranslate nohighlight">\(|0\rangle\)</span> ou <span class="math notranslate nohighlight">\(|1\rangle\)</span>. Elas modificam apenas a fase relativa entre as amplitudes, que poderá produzir efeitos de interferência quando outras portas forem aplicadas posteriormente.</p>
+</div>
+</section>
+<section id="portas-de-rotacao-r-x-r-y-r-z">
+<h3>Portas de Rotação (<span class="math notranslate nohighlight">\(R_x\)</span>, <span class="math notranslate nohighlight">\(R_y\)</span>, <span class="math notranslate nohighlight">\(R_z\)</span>)<a class="headerlink" href="#portas-de-rotacao-r-x-r-y-r-z" title="Link to this heading">¶</a></h3>
+<p>As portas de Pauli giram o estado exatamente <span class="math notranslate nohighlight">\(180°\)</span> em torno de um eixo fixo, e a porta de fase gira exatamente <span class="math notranslate nohighlight">\(\varphi\)</span> graus, mas somente em torno do eixo <span class="math notranslate nohighlight">\(z\)</span>. A pergunta natural é: por que não permitir uma rotação de <strong>qualquer</strong> ângulo, em torno de <strong>qualquer</strong> um dos três eixos? É exatamente isso que fazem as <strong>portas de rotação</strong>, definidas por</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R_x(\theta)=
+\begin{pmatrix}
+\cos\left(\dfrac{\theta}{2}\right) &amp; -i\sin\left(\dfrac{\theta}{2}\right)\\[2mm]
+-i\sin\left(\dfrac{\theta}{2}\right) &amp; \cos\left(\dfrac{\theta}{2}\right)
+\end{pmatrix},
+\qquad
+R_y(\theta)=
+\begin{pmatrix}
+\cos\left(\dfrac{\theta}{2}\right) &amp; -\sin\left(\dfrac{\theta}{2}\right)\\[2mm]
+\sin\left(\dfrac{\theta}{2}\right) &amp; \cos\left(\dfrac{\theta}{2}\right)
+\end{pmatrix},
+\qquad
+R_z(\theta)=
+\begin{pmatrix}
+e^{-i\theta/2} &amp; 0\\
+0 &amp; e^{i\theta/2}
+\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p>Cada uma dessas matrizes é unitária — decorrência direta do Postulado 2 — e, na Esfera de Bloch, representa uma rotação de ângulo <span class="math notranslate nohighlight">\(\theta\)</span> em torno do eixo correspondente (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span> ou <span class="math notranslate nohighlight">\(z\)</span>, respectivamente). O parâmetro <span class="math notranslate nohighlight">\(\theta\)</span> é contínuo: pode assumir qualquer valor real, não apenas <span class="math notranslate nohighlight">\(\pi\)</span> como nas portas de Pauli.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>As portas de rotação <strong>generalizam</strong> as portas de Pauli. A menos de uma fase global — que, pelo Postulado 3, não é observável —, temos</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+X = i\,R_x(\pi), \qquad Y = i\,R_y(\pi), \qquad Z = i\,R_z(\pi).
+\]</div>
+</div>
+<p>Ou seja, cada porta de Pauli nada mais é do que uma rotação de <span class="math notranslate nohighlight">\(180°\)</span> em torno do respectivo eixo, escrita na convenção de fase das portas de rotação.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Vale a pena comparar <span class="math notranslate nohighlight">\(R_z(\varphi)\)</span> com a porta de fase <span class="math notranslate nohighlight">\(R_\varphi\)</span> da seção anterior. As duas realizam a mesma rotação em torno do eixo <span class="math notranslate nohighlight">\(z\)</span>, mas diferem por uma fase global:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+R_\varphi = e^{i\varphi/2}\,R_z(\varphi).
+\]</div>
+</div>
+<p>Como a fase global não altera as probabilidades de medição (Postulado 3), as duas convenções são fisicamente equivalentes. A escolha de <span class="math notranslate nohighlight">\(R_\varphi\)</span> (sem fase extra em <span class="math notranslate nohighlight">\(|0\rangle\)</span>) é mais comum na literatura de circuitos, enquanto <span class="math notranslate nohighlight">\(R_z(\theta)\)</span> é mais natural quando se pensa em termos de rotações na Esfera de Bloch.</p>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Exemplo — Aplicando <span class="math notranslate nohighlight">\(R_y(\pi/2)\)</span> ao estado <span class="math notranslate nohighlight">\(|0\rangle\)</span></p>
+<p>Considere a porta</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R_y\!\left(\frac{\pi}{2}\right)=
+\begin{pmatrix}
+\cos\left(\dfrac{\pi}{4}\right) &amp; -\sin\left(\dfrac{\pi}{4}\right)\\[2mm]
+\sin\left(\dfrac{\pi}{4}\right) &amp; \cos\left(\dfrac{\pi}{4}\right)
+\end{pmatrix}
+=
+\frac{1}{\sqrt2}
+\begin{pmatrix}
+1 &amp; -1\\
+1 &amp; 1
+\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p>Aplicando-a a <span class="math notranslate nohighlight">\(|0\rangle\)</span>,</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R_y\!\left(\frac{\pi}{2}\right)|0\rangle
+=
+\frac{1}{\sqrt2}
+\begin{pmatrix}
+1 &amp; -1\\
+1 &amp; 1
+\end{pmatrix}
+\begin{pmatrix}
+1\\
+0
+\end{pmatrix}
+=
+\frac{1}{\sqrt2}
+\begin{pmatrix}
+1\\
+1
+\end{pmatrix}
+=
+|+\rangle.
+\end{split}\]</div>
+</div>
+<p>Ou seja, uma rotação de <span class="math notranslate nohighlight">\(90°\)</span> em torno do eixo <span class="math notranslate nohighlight">\(y\)</span> leva o estado do polo norte da Esfera de Bloch até o equador — exatamente o mesmo ponto de destino que obtivemos ao aplicar a porta Hadamard em um exemplo anterior. A diferença é a trajetória: a Hadamard gira em torno de um eixo intermediário entre <span class="math notranslate nohighlight">\(x\)</span> e <span class="math notranslate nohighlight">\(z\)</span>, enquanto <span class="math notranslate nohighlight">\(R_y(\pi/2)\)</span> gira em torno do eixo <span class="math notranslate nohighlight">\(y\)</span> puro. Duas rotações diferentes podem, portanto, levar o mesmo ponto de partida ao mesmo ponto de chegada.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As portas de rotação são especialmente importantes na prática porque a maioria dos computadores quânticos reais implementa nativamente apenas um pequeno conjunto de portas — tipicamente <span class="math notranslate nohighlight">\(R_x\)</span>, <span class="math notranslate nohighlight">\(R_y\)</span>, <span class="math notranslate nohighlight">\(R_z\)</span> e alguma porta de dois qubits. Qualquer outra porta de um único qubit, incluindo <span class="math notranslate nohighlight">\(H\)</span>, <span class="math notranslate nohighlight">\(S\)</span> e <span class="math notranslate nohighlight">\(T\)</span>, pode ser escrita como uma combinação de rotações. Voltaremos a esse ponto no Capitulo 6, ao implementar portas parametrizadas em Python.</p>
+</div>
+</section>
+<section id="representacao-em-circuitos">
+<h3>Representação em Circuitos<a class="headerlink" href="#representacao-em-circuitos" title="Link to this heading">¶</a></h3>
+<p>Portas quânticas são normalmente representadas por diagramas chamados <strong>circuitos quânticos</strong>.</p>
+<p>Cada linha horizontal representa um qubit, enquanto o tempo flui da esquerda para a direita.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>|0⟩ ─── H ──── Z ────
+</pre></div>
+</div>
+<p>Esse circuito indica que o qubit inicia no estado <span class="math notranslate nohighlight">\(|0\rangle\)</span>, recebe primeiro a porta Hadamard e, em seguida, a porta <span class="math notranslate nohighlight">\(Z\)</span>. Portas de rotação aparecem da mesma forma, geralmente anotadas com o ângulo utilizado:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>|0⟩ ─── Ry(π/2) ──── Rz(π/4) ────
+</pre></div>
+</div>
+<p>Ao longo do livro utilizaremos essa representação para descrever algoritmos quânticos completos.</p>
+</section>
+<section id="id4">
+<h3>Exercícios<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Aplique a porta <span class="math notranslate nohighlight">\(H\)</span> ao estado <span class="math notranslate nohighlight">\(|+\rangle\)</span>. (Dica: escreva <span class="math notranslate nohighlight">\(|+\rangle\)</span> em termos de <span class="math notranslate nohighlight">\(|0\rangle\)</span> e <span class="math notranslate nohighlight">\(|1\rangle\)</span> e use a linearidade.)</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+H|+\rangle = H\left(\frac{|0\rangle+|1\rangle}{\sqrt2}\right) = \frac{H|0\rangle+H|1\rangle}{\sqrt2} = \frac{|+\rangle+|-\rangle}{\sqrt2}.
+\]</div>
+</div>
+<p class="sd-card-text">Usando as definições de <span class="math notranslate nohighlight">\(|+\rangle\)</span> e <span class="math notranslate nohighlight">\(|-\rangle\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{|+\rangle+|-\rangle}{\sqrt2} = \frac{1}{\sqrt2}\left(\frac{|0\rangle+|1\rangle}{\sqrt2}+\frac{|0\rangle-|1\rangle}{\sqrt2}\right) = \frac{1}{\sqrt2}\cdot\frac{2|0\rangle}{\sqrt2} = |0\rangle.
+\]</div>
+</div>
+<p class="sd-card-text">Ou seja, <span class="math notranslate nohighlight">\(H|+\rangle=|0\rangle\)</span>.</p>
+</div>
+</details><ol class="arabic simple" start="2">
+<li><p>Usando o resultado da questão anterior e o cálculo de <span class="math notranslate nohighlight">\(H|0\rangle\)</span> feito no texto, o que você conclui sobre aplicar <span class="math notranslate nohighlight">\(H\)</span> duas vezes seguidas a <span class="math notranslate nohighlight">\(|0\rangle\)</span>?</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+H(H|0\rangle) = H|+\rangle = |0\rangle.
+\]</div>
+</div>
+<p class="sd-card-text">Aplicar <span class="math notranslate nohighlight">\(H\)</span> duas vezes devolve o estado original — ou seja, <span class="math notranslate nohighlight">\(H^2=I\)</span>, e <span class="math notranslate nohighlight">\(H\)</span> é sua própria inversa.</p>
+</div>
+</details><ol class="arabic simple" start="3">
+<li><p>Verifique algebricamente que <span class="math notranslate nohighlight">\(H^2=I\)</span>, calculando o produto de matrizes diretamente.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+H^2 = \frac12\begin{pmatrix} 1&amp;1\\1&amp;-1\end{pmatrix}\begin{pmatrix} 1&amp;1\\1&amp;-1\end{pmatrix} = \frac12\begin{pmatrix} 1+1 &amp; 1-1 \\ 1-1 &amp; 1+1\end{pmatrix} = \frac12\begin{pmatrix} 2&amp;0\\0&amp;2\end{pmatrix} = \begin{pmatrix} 1&amp;0\\0&amp;1\end{pmatrix} = I.
+\end{split}\]</div>
+</div>
+</div>
+</details><ol class="arabic simple" start="4">
+<li><p>Um qubit em <span class="math notranslate nohighlight">\(|0\rangle\)</span> passa pelo circuito <span class="math notranslate nohighlight">\(|0\rangle \to [H] \to [Z] \to \,?\)</span>. Qual é o estado final? (Dica: você já calculou <span class="math notranslate nohighlight">\(H|0\rangle\)</span>; agora aplique <span class="math notranslate nohighlight">\(Z\)</span> ao resultado.)</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+H|0\rangle = |+\rangle = \frac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p class="sd-card-text">Aplicando <span class="math notranslate nohighlight">\(Z\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+Z|+\rangle = \begin{pmatrix}1&amp;0\\0&amp;-1\end{pmatrix}\frac{1}{\sqrt2}\begin{pmatrix}1\\1\end{pmatrix} = \frac{1}{\sqrt2}\begin{pmatrix}1\\-1\end{pmatrix} = |-\rangle.
+\end{split}\]</div>
+</div>
+<p class="sd-card-text">O estado final é <span class="math notranslate nohighlight">\(|-\rangle\)</span>.</p>
+</div>
+</details><ol class="arabic simple" start="5">
+<li><p>Encontre a matriz da porta <span class="math notranslate nohighlight">\(S\)</span> (isto é, <span class="math notranslate nohighlight">\(R_{\pi/2}\)</span>) explicitamente, usando <span class="math notranslate nohighlight">\(e^{i\pi/2}=i\)</span> (Seção 3.2 do Capítulo 3).</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+S = R_{\pi/2} = \begin{pmatrix} 1&amp;0\\0&amp;e^{i\pi/2}\end{pmatrix} = \begin{pmatrix} 1&amp;0\\0&amp;i\end{pmatrix}.
+\end{split}\]</div>
+</div>
+</div>
+</details><ol class="arabic simple" start="6">
+<li><p>Mostre que <span class="math notranslate nohighlight">\(R_z(\pi)\)</span> coincide com a porta <span class="math notranslate nohighlight">\(Z\)</span> a menos de uma fase global.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R_z(\pi) = \begin{pmatrix} e^{-i\pi/2} &amp; 0\\ 0 &amp; e^{i\pi/2}\end{pmatrix} = \begin{pmatrix} -i &amp; 0\\ 0 &amp; i\end{pmatrix} = -i\begin{pmatrix} 1 &amp; 0\\ 0 &amp; -1\end{pmatrix} = -i\,Z.
+\end{split}\]</div>
+</div>
+<p class="sd-card-text">Como <span class="math notranslate nohighlight">\(-i\)</span> é apenas uma fase global (módulo 1), <span class="math notranslate nohighlight">\(R_z(\pi)\)</span> e <span class="math notranslate nohighlight">\(Z\)</span> representam a mesma transformação física sobre qualquer estado, pelo Postulado 3.</p>
+</div>
+</details><ol class="arabic simple" start="7">
+<li><p>Calcule <span class="math notranslate nohighlight">\(R_x(\pi)|0\rangle\)</span> e compare o resultado com <span class="math notranslate nohighlight">\(X|0\rangle\)</span>.</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R_x(\pi) = \begin{pmatrix} \cos(\pi/2) &amp; -i\sin(\pi/2)\\ -i\sin(\pi/2) &amp; \cos(\pi/2)\end{pmatrix} = \begin{pmatrix} 0 &amp; -i\\ -i &amp; 0\end{pmatrix}.
+\end{split}\]</div>
+</div>
+<p class="sd-card-text">Aplicando a <span class="math notranslate nohighlight">\(|0\rangle=\begin{pmatrix}1\\0\end{pmatrix}\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+R_x(\pi)|0\rangle = \begin{pmatrix} 0\\-i\end{pmatrix} = -i\begin{pmatrix}0\\1\end{pmatrix} = -i\,|1\rangle.
+\end{split}\]</div>
+</div>
+<p class="sd-card-text">Já <span class="math notranslate nohighlight">\(X|0\rangle=|1\rangle\)</span>. Os dois resultados diferem apenas pela fase global <span class="math notranslate nohighlight">\(-i\)</span>, e portanto representam o mesmo estado físico — consistente com a relação <span class="math notranslate nohighlight">\(X=i\,R_x(\pi)\)</span> apresentada no texto.</p>
+</div>
+</details><ol class="arabic simple" start="8">
+<li><p>Um qubit em <span class="math notranslate nohighlight">\(|0\rangle\)</span> passa pelo circuito <span class="math notranslate nohighlight">\(|0\rangle \to [R_y(\pi/2)] \to [R_z(\pi/2)] \to\,?\)</span>. Descreva, em palavras, os dois movimentos sucessivos na Esfera de Bloch (não é necessário calcular o vetor final).</p></li>
+</ol>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Resolução</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">A primeira porta, <span class="math notranslate nohighlight">\(R_y(\pi/2)\)</span>, gira o ponto <span class="math notranslate nohighlight">\(90°\)</span> em torno do eixo <span class="math notranslate nohighlight">\(y\)</span>, levando-o do polo norte até o equador (como calculado no exemplo desta seção, o ponto de chegada é <span class="math notranslate nohighlight">\(|+\rangle\)</span>, no eixo <span class="math notranslate nohighlight">\(+x\)</span>). A segunda porta, <span class="math notranslate nohighlight">\(R_z(\pi/2)\)</span>, gira o ponto <span class="math notranslate nohighlight">\(90°\)</span> em torno do eixo <span class="math notranslate nohighlight">\(z\)</span> — como o ponto já está no equador, essa rotação apenas o desloca ao longo do equador, alterando a fase relativa <span class="math notranslate nohighlight">\(\varphi\)</span> sem mudar o ângulo polar <span class="math notranslate nohighlight">\(\theta\)</span>.</p>
+</div>
+</details></section>
+</section>
+<section id="juntando-tudo">
+<h2>4.6 Juntando Tudo<a class="headerlink" href="#juntando-tudo" title="Link to this heading">¶</a></h2>
+<p>Vamos revisar o caminho percorrido neste capítulo:</p>
+<ul class="simple">
+<li><p>Relembramos o <strong>bit clássico</strong> como ponto de partida, estabelecendo o contraste central entre um sistema que ocupa um único estado entre <span class="math notranslate nohighlight">\(2^n\)</span> possíveis e um sistema quântico que pode combinar todos eles.</p></li>
+<li><p>Enunciamos os <strong>quatro postulados da mecânica quântica</strong> — estados, evolução, medição e sistemas compostos —, cada um deles construído diretamente sobre uma ferramenta matemática do Capítulo 3.</p></li>
+<li><p>Definimos o <strong>qubit</strong> formalmente como um sistema quântico de dimensão 2, revisitando a equação <span class="math notranslate nohighlight">\(|\psi\rangle=\alpha|0\rangle+\beta|1\rangle\)</span> com seu significado físico completo.</p></li>
+<li><p>Construímos a <strong>Esfera de Bloch</strong>, mostrando que todo estado de um único qubit corresponde a um ponto em uma esfera, e que toda porta quântica corresponde a uma rotação dessa esfera.</p></li>
+<li><p>Catalogamos as <strong>portas quânticas de um qubit</strong> mais importantes — Pauli (<span class="math notranslate nohighlight">\(X,Y,Z\)</span>), Hadamard (<span class="math notranslate nohighlight">\(H\)</span>), fase (<span class="math notranslate nohighlight">\(R_\varphi\)</span>, incluindo <span class="math notranslate nohighlight">\(S\)</span> e <span class="math notranslate nohighlight">\(T\)</span>) e as <strong>portas de rotação</strong> (<span class="math notranslate nohighlight">\(R_x,R_y,R_z\)</span>), que generalizam as demais para um ângulo contínuo em torno de qualquer eixo.</p></li>
+</ul>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Bit Clássico        →  0 ou 1, determinístico
+Postulados da MQ    →  estados, evolução, medição, sistemas compostos
+Qubit               →  α|0⟩ + β|1⟩, |α|²+|β|² = 1
+Esfera de Bloch      →  θ, φ  →  ponto na esfera
+Portas Quânticas    →  X, Y, Z, H, R_φ, R_x, R_y, R_z  →  rotações e combinações
+</pre></div>
+</div>
+<p>Com o qubit, os postulados e as portas devidamente estabelecidos, estamos prontos para começar a montar <strong>circuitos quânticos</strong> completos — sequências de portas aplicadas a vários qubits — e, a partir deles, os primeiros algoritmos quânticos verdadeiros. É para lá que o próximo capítulo nos leva.</p>
+</section>
+<hr class="docutils" />
+<section id="referencias">
+<h2>Referências<a class="headerlink" href="#referencias" title="Link to this heading">¶</a></h2>
+<p>[1] Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</p>
+<p>[2] Dirac, P. A. M. (1930). <em>The Principles of Quantum Mechanics</em>. Oxford University Press.</p>
+<p>[3] Axler, S. (2015). <em>Linear Algebra Done Right</em> (3rd ed.). Springer.</p>
+<p>[4] Sakurai, J. J., &amp; Napolitano, J. (2017). <em>Modern Quantum Mechanics</em> (2nd ed.). Cambridge University Press.</p>
+<p>[5] Bloch, F. (1946). Nuclear Induction. <em>Physical Review</em>, 70(7-8), 460–474.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="chapter_5_multi_qubit_systems.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Capítulo 5 — Sistemas de Múltiplos Qubits</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="chapter_3_mathematics_for_quantum_computing.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Capítulo 3 — Matemática para Computação Quântica</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Leonardo Alves Santana
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Capítulo 4 — Qubits e os Postulados da Computação Quântica</a><ul>
+<li><a class="reference internal" href="#bits-classicos">4.1 Bits Clássicos</a><ul>
+<li><a class="reference internal" href="#exercicios">Exercícios</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#os-postulados-da-mecanica-quantica">4.2 Os Postulados da Mecânica Quântica</a><ul>
+<li><a class="reference internal" href="#postulado-1-estados">Postulado 1 — Estados</a></li>
+<li><a class="reference internal" href="#postulado-2-evolucao">Postulado 2 — Evolução</a></li>
+<li><a class="reference internal" href="#postulado-3-medicao">Postulado 3 — Medição</a></li>
+<li><a class="reference internal" href="#postulado-4-sistemas-compostos">Postulado 4 — Sistemas Compostos</a></li>
+<li><a class="reference internal" href="#id1">Exercícios</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#qubits">4.3 Qubits</a><ul>
+<li><a class="reference internal" href="#comparando-um-bit-classico-e-um-qubit">Comparando um bit clássico e um qubit</a></li>
+<li><a class="reference internal" href="#qubits-multiplos">Qubits Múltiplos</a></li>
+<li><a class="reference internal" href="#id2">Exercícios</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#a-esfera-de-bloch">4.4 A Esfera de Bloch</a><ul>
+<li><a class="reference internal" href="#por-que-uma-esfera">Por que uma esfera?</a></li>
+<li><a class="reference internal" href="#parametrizando-um-qubit">Parametrizando um qubit</a></li>
+<li><a class="reference internal" href="#estados-importantes">Estados importantes</a></li>
+<li><a class="reference internal" href="#evolucao-como-rotacao">Evolução como Rotação</a></li>
+<li><a class="reference internal" href="#id3">Exercícios</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#portas-quanticas-de-um-qubit">4.5 Portas Quânticas de Um Qubit</a><ul>
+<li><a class="reference internal" href="#as-portas-de-pauli">As Portas de Pauli</a></li>
+<li><a class="reference internal" href="#a-porta-hadamard">A Porta Hadamard</a></li>
+<li><a class="reference internal" href="#portas-de-fase">Portas de Fase</a></li>
+<li><a class="reference internal" href="#portas-de-rotacao-r-x-r-y-r-z">Portas de Rotação (<span class="math notranslate nohighlight">\(R_x\)</span>, <span class="math notranslate nohighlight">\(R_y\)</span>, <span class="math notranslate nohighlight">\(R_z\)</span>)</a></li>
+<li><a class="reference internal" href="#representacao-em-circuitos">Representação em Circuitos</a></li>
+<li><a class="reference internal" href="#id4">Exercícios</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#juntando-tudo">4.6 Juntando Tudo</a></li>
+<li><a class="reference internal" href="#referencias">Referências</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    </body>
+</html>

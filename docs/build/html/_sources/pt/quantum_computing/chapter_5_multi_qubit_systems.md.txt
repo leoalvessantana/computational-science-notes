@@ -1,0 +1,742 @@
+# Capítulo 5 — Sistemas de Múltiplos Qubits
+
+No Capítulo 4, definimos formalmente o qubit, enunciamos os quatro postulados da mecânica quântica e construímos as ferramentas para manipular e visualizar **um único qubit**: a Esfera de Bloch e as portas de um qubit. Mas nenhuma computação interessante acontece com um único qubit isolado — o poder da computação quântica emerge quando **múltiplos qubits** são combinados, manipulados conjuntamente e medidos.
+
+Este capítulo retoma o Postulado 4 (Sistemas Compostos), que já havíamos enunciado no capítulo anterior, e o explora em profundidade. Vamos formalizar o espaço de estados de $n$ qubits, introduzir as portas controladas — o mecanismo pelo qual qubits interagem entre si —, estudar o emaranhamento em detalhe, generalizar a Regra de Born para medições parciais, estabelecer a notação de circuitos quânticos que usaremos no restante do livro, e terminar com um dos resultados mais surpreendentes da teoria: o **Teorema da Não-Clonagem**.
+
+> **Nota**
+>
+> Se você sentir que já viu o produto tensorial antes, é porque viu: o Capítulo 3 o introduziu como ferramenta matemática, e o Capítulo 4 o usou para enunciar o Postulado 4. Aqui, vamos usá-lo ativamente para construir e manipular sistemas de vários qubits.
+
+---
+
+## 5.1 Produto Tensorial Revisitado
+
+Relembrando o Capítulo 3, o produto tensorial $\otimes$ é a operação que combina dois espaços vetoriais menores em um espaço maior. Dados um vetor $v$ com $n$ entradas e um vetor $w$ com $m$ entradas, o produto $v \otimes w$ é um vetor com $n \times m$ entradas, obtido multiplicando cada entrada de $v$ por todo o vetor $w$.
+
+Pelo **Postulado 4**, se o subsistema $A$ está no estado $|\psi_A\rangle$ e o subsistema $B$ está no estado $|\psi_B\rangle$, o estado do sistema composto é
+
+$$
+|\psi\rangle = |\psi_A\rangle \otimes |\psi_B\rangle.
+$$
+
+Como o espaço de um único qubit tem dimensão 2, o espaço de $n$ qubits tem dimensão
+
+$$
+\underbrace{2 \times 2 \times \cdots \times 2}_{n \text{ vezes}} = 2^n.
+$$
+
+Esse crescimento **exponencial** é o fato mais importante deste capítulo, e vai reaparecer o tempo todo: cada qubit adicionado *dobra* o tamanho do espaço de estados.
+
+Para simplificar a notação, adotamos as mesmas convenções já estabelecidas no Capítulo 3:
+
+$$
+|\psi_A\rangle \otimes |\psi_B\rangle \;\equiv\; |\psi_A\rangle|\psi_B\rangle \;\equiv\; |\psi_A \, \psi_B\rangle,
+$$
+
+e, para vetores da base computacional, escrevemos simplesmente os bits lado a lado dentro de um único ket: $|0\rangle\otimes|1\rangle \equiv |01\rangle$.
+
+> **Nota**
+>
+> A ordem dos qubits importa e é fixada pela ordem em que eles aparecem no ket. O primeiro rótulo corresponde ao primeiro qubit, o segundo rótulo ao segundo qubit, e assim por diante. Essa convenção — já usada no Capítulo 3 — é a mesma que Qiskit e a maioria das referências usam para *rotular* estados, embora a convenção de *indexação de fios em circuitos* (qubit 0 no topo ou na base do diagrama) varie entre ferramentas.
+
+> **💡 Exemplo — Produto tensorial de dois qubits**
+>
+> Considere o primeiro qubit no estado $|1\rangle$ e o segundo no estado $|0\rangle$. Pelo Postulado 4,
+>
+> $$
+> |1\rangle \otimes |0\rangle =
+> \begin{pmatrix}0\\1\end{pmatrix}
+> \otimes
+> \begin{pmatrix}1\\0\end{pmatrix}
+> =
+> \begin{pmatrix}0\cdot 1\\ 0\cdot 0\\ 1\cdot 1\\ 1\cdot 0\end{pmatrix}
+> =
+> \begin{pmatrix}0\\0\\1\\0\end{pmatrix}
+> = |10\rangle.
+> $$
+>
+> Note que o vetor resultante tem exatamente uma entrada igual a 1, na posição correspondente à representação binária de "10" (ou seja, o índice decimal 2, contando a partir de 0): $|10\rangle$ é o terceiro vetor da base computacional de dois qubits.
+
+<details>
+<summary><strong>Exercícios 5.1</strong></summary>
+
+1. Calcule $|1\rangle \otimes |1\rangle$ explicitamente como vetor de 4 entradas.
+
+   <details>
+   <summary>Resolução</summary>
+
+   $$
+   |1\rangle\otimes|1\rangle = \begin{pmatrix}0\\1\end{pmatrix}\otimes\begin{pmatrix}0\\1\end{pmatrix} = \begin{pmatrix}0\\0\\0\\1\end{pmatrix} = |11\rangle.
+   $$
+   </details>
+
+2. Qual é a dimensão do espaço de estados de um sistema de 4 qubits? E de 8 qubits?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Para $n=4$: $2^4 = 16$. Para $n=8$: $2^8 = 256$.
+   </details>
+
+3. Verdadeiro ou falso: o produto tensorial é comutativo, isto é, $|0\rangle\otimes|1\rangle = |1\rangle\otimes|0\rangle$. Justifique usando os vetores explícitos.
+
+   <details>
+   <summary>Resolução</summary>
+
+   Falso. $|0\rangle\otimes|1\rangle = |01\rangle = (0,1,0,0)^T$, enquanto $|1\rangle\otimes|0\rangle = |10\rangle = (0,0,1,0)^T$. São vetores diferentes — o produto tensorial preserva a ordem dos fatores.
+   </details>
+
+</details>
+
+---
+
+## 5.2 Estados de Dois Qubits
+
+O caso de dois qubits é o bloco de construção mais importante para tudo o que segue, então vale a pena examiná-lo com cuidado antes de generalizar para $n$ qubits.
+
+Um sistema de dois qubits vive no espaço $\mathbb{C}^4$, com base computacional
+
+$$
+\{|00\rangle, |01\rangle, |10\rangle, |11\rangle\}.
+$$
+
+Pelo **Postulado 1**, o estado mais geral de dois qubits é uma combinação linear (superposição) desses quatro vetores de base:
+
+$$
+|\psi\rangle = c_{00}|00\rangle + c_{01}|01\rangle + c_{10}|10\rangle + c_{11}|11\rangle, \qquad c_{ij}\in\mathbb{C},
+$$
+
+sujeita à condição de normalização
+
+$$
+|c_{00}|^2 + |c_{01}|^2 + |c_{10}|^2 + |c_{11}|^2 = 1.
+$$
+
+Pela **Regra de Born** (Postulado 3), medindo os dois qubits na base computacional, o resultado $ij$ ocorre com probabilidade $P(ij) = |c_{ij}|^2$.
+
+> **Importante**
+>
+> Um ponto crucial — que será o coração da Seção 5.5 — é que **nem todo** estado de dois qubits pode ser escrito como um produto $|\psi_A\rangle\otimes|\psi_B\rangle$ de estados individuais. Quando um estado de dois (ou mais) qubits **pode** ser fatorado dessa forma, dizemos que é um **estado produto** (ou separável). Quando não pode, dizemos que é **emaranhado**.
+
+> **💡 Exemplo — Um estado produto vs. um estado geral**
+>
+> O estado $|+\rangle\otimes|0\rangle$ é um estado produto por construção. Escrevendo-o na base computacional de dois qubits:
+>
+> $$
+> |+\rangle\otimes|0\rangle = \frac{1}{\sqrt2}(|0\rangle+|1\rangle)\otimes|0\rangle = \frac{1}{\sqrt2}(|00\rangle + |10\rangle) = \frac{1}{\sqrt2}\begin{pmatrix}1\\0\\1\\0\end{pmatrix}.
+> $$
+>
+> Medindo esse estado na base computacional, obtemos $00$ ou $10$, cada um com probabilidade $\tfrac12$ — mas em ambos os casos o **segundo qubit** é encontrado em $|0\rangle$ com certeza, exatamente como esperaríamos, já que ele nunca interagiu com o primeiro.
+
+<details>
+<summary><strong>Exercícios 5.2</strong></summary>
+
+1. Verifique se o estado $|\psi\rangle = \tfrac12|00\rangle + \tfrac12|01\rangle + \tfrac12|10\rangle + \tfrac12|11\rangle$ é normalizado.
+
+   <details>
+   <summary>Resolução</summary>
+
+   $$
+   4\times\left(\frac12\right)^2 = 4\times\frac14 = 1.
+   $$
+
+   Sim, é normalizado.
+   </details>
+
+2. Para o estado do item anterior, calcule a probabilidade de obter o resultado $11$ ao medir na base computacional.
+
+   <details>
+   <summary>Resolução</summary>
+
+   $$
+   P(11) = \left|\frac12\right|^2 = \frac14.
+   $$
+   </details>
+
+3. Mostre que o estado $\tfrac12|00\rangle + \tfrac12|01\rangle + \tfrac12|10\rangle + \tfrac12|11\rangle$ do item 1 é, na verdade, um estado produto, encontrando $|\psi_A\rangle$ e $|\psi_B\rangle$ tais que $|\psi\rangle = |\psi_A\rangle\otimes|\psi_B\rangle$. (Dica: compare com $|+\rangle\otimes|+\rangle$.)
+
+   <details>
+   <summary>Resolução</summary>
+
+   $$
+   |+\rangle\otimes|+\rangle = \frac{1}{\sqrt2}(|0\rangle+|1\rangle)\otimes\frac{1}{\sqrt2}(|0\rangle+|1\rangle) = \frac12(|00\rangle+|01\rangle+|10\rangle+|11\rangle).
+   $$
+
+   Esse é exatamente o estado dado. Logo $|\psi_A\rangle = |\psi_B\rangle = |+\rangle$, e o estado é separável.
+   </details>
+
+</details>
+
+---
+
+## 5.3 Espaço de Estados de Múltiplos Qubits
+
+Generalizando a Seção 5.2, um sistema de $n$ qubits tem $2^n$ vetores de base computacional, rotulados por strings binárias de comprimento $n$:
+
+$$
+|x_1 x_2 \cdots x_n\rangle, \qquad x_i \in \{0,1\}.
+$$
+
+O estado mais geral desse sistema é
+
+$$
+|\psi\rangle = \sum_{x \in \{0,1\}^n} c_x |x\rangle, \qquad \sum_{x} |c_x|^2 = 1,
+$$
+
+onde a soma percorre todas as $2^n$ strings binárias possíveis. Cada string binária $x$ também pode ser lida como um número inteiro em base decimal — por exemplo, para $n=3$, $|011\rangle$ corresponde ao índice decimal 3, e é o quarto vetor da base (contando a partir do índice 0), exatamente na mesma ordem que a construção iterada do produto tensorial produz.
+
+> **Importante**
+>
+> Descrever completamente o estado de $n$ qubits exige $2^n$ números complexos. Esse é exatamente o contraste que anunciamos na Seção 4.1: um registrador de $n$ **bits clássicos** ocupa um único estado entre $2^n$ possíveis e é descrito por apenas $n$ bits; um registrador de $n$ **qubits** pode existir em uma superposição de todos os $2^n$ estados e exige $2^n$ amplitudes complexas para ser descrito.
+
+A tabela abaixo mostra como esse crescimento se torna, muito rapidamente, inviável para simulação clássica:
+
+```
+ n (qubits)     2^n (amplitudes complexas)
+ ----------     ---------------------------
+     1                      2
+     2                      4
+    10                   1 024
+    20               1 048 576
+    50    1 125 899 906 842 624
+```
+
+Com apenas 50 qubits, armazenar o estado completo (em números complexos de precisão dupla) exigiria mais memória do que existe em qualquer supercomputador atual — e é justamente essa explosão de complexidade que a computação quântica se propõe a explorar.
+
+> **Nota**
+>
+> Esse contraste não significa que um computador quântico "testa todas as possibilidades ao mesmo tempo" no sentido ingênuo de paralelismo clássico. As amplitudes $c_x$ interferem entre si — construtiva e destrutivamente — e é justamente o desenho cuidadoso dessa interferência, em algoritmos como os do Capítulo 7, que produz vantagem computacional. Simplesmente ter um estado com $2^n$ amplitudes não garante, por si só, nenhuma vantagem.
+
+> **💡 Exemplo — Base computacional de 3 qubits**
+>
+> Para $n=3$, existem $2^3=8$ vetores de base:
+>
+> $$
+> |000\rangle,\ |001\rangle,\ |010\rangle,\ |011\rangle,\ |100\rangle,\ |101\rangle,\ |110\rangle,\ |111\rangle.
+> $$
+>
+> O vetor $|101\rangle$, por exemplo, é o vetor de $\mathbb{C}^8$ com um 1 na posição de índice decimal 5 (contando de 0) e zero em todas as outras posições.
+
+<details>
+<summary><strong>Exercícios 5.3</strong></summary>
+
+1. Quantos vetores de base computacional existem para um sistema de 6 qubits? Liste os quatro primeiros, em ordem crescente do índice decimal correspondente.
+
+   <details>
+   <summary>Resolução</summary>
+
+   Existem $2^6=64$ vetores. Os quatro primeiros são $|000000\rangle, |000001\rangle, |000010\rangle, |000011\rangle$, correspondendo aos índices decimais 0, 1, 2 e 3.
+   </details>
+
+2. Quantos números complexos são necessários para especificar completamente o estado de um sistema de 15 qubits?
+
+   <details>
+   <summary>Resolução</summary>
+
+   $2^{15} = 32\,768$ amplitudes complexas.
+   </details>
+
+3. A que índice decimal corresponde o vetor de base $|1010\rangle$ (sistema de 4 qubits)? Em qual posição do vetor de $\mathbb{C}^{16}$ está o único valor não nulo?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Lendo $1010$ em binário: $1\cdot 2^3 + 0\cdot2^2+1\cdot2^1+0\cdot2^0 = 8+2=10$. O valor 1 está na posição de índice 10 (contando de 0) do vetor de 16 entradas.
+   </details>
+
+</details>
+
+---
+
+## 5.4 Portas Controladas
+
+Até agora, todas as portas que estudamos (Capítulo 4, Seção 4.5) atuam sobre **um único qubit** de cada vez. Para que qubits interajam entre si — o que é essencial para gerar emaranhamento e para a maioria dos algoritmos quânticos — precisamos de portas que atuam sobre **dois ou mais qubits simultaneamente**. A família mais importante dessas portas são as **portas controladas**.
+
+**Definição.** Dada uma porta de um qubit $U$, a porta **controlada-$U$** (notação $CU$) atua sobre dois qubits — um qubit de **controle** e um qubit **alvo** — da seguinte forma: se o qubit de controle está em $|0\rangle$, o alvo permanece inalterado; se o controle está em $|1\rangle$, $U$ é aplicada ao alvo. Em símbolos, sobre os vetores da base computacional (controle primeiro, alvo segundo):
+
+$$
+CU|0\rangle|\phi\rangle = |0\rangle|\phi\rangle, \qquad CU|1\rangle|\phi\rangle = |1\rangle\big(U|\phi\rangle\big).
+$$
+
+Em forma de matriz em blocos $2\times2$, isso se escreve de maneira compacta como
+
+$$
+CU = \begin{pmatrix} I & 0 \\ 0 & U \end{pmatrix},
+$$
+
+onde cada bloco é uma matriz $2\times2$ (logo $CU$ é uma matriz $4\times4$): o bloco superior esquerdo $I$ atua quando o controle é $|0\rangle$, e o bloco inferior direito $U$ atua quando o controle é $|1\rangle$.
+
+> **Nota**
+>
+> Como $I$ e $U$ são ambas unitárias, $CU$ também é unitária — consistente com o Postulado 2, que exige que toda evolução (incluindo portas de múltiplos qubits) seja representada por uma matriz unitária.
+
+### A porta CNOT (Controlled-X)
+
+O caso $U=X$ é chamado de **CNOT** (*controlled-NOT*, também escrita $CX$), a porta de dois qubits mais usada em toda a computação quântica. Explicitamente,
+
+$$
+\text{CNOT} =
+\begin{pmatrix}
+1&0&0&0\\
+0&1&0&0\\
+0&0&0&1\\
+0&0&1&0
+\end{pmatrix}.
+$$
+
+Sua ação sobre a base computacional é:
+
+$$
+|00\rangle\to|00\rangle,\quad |01\rangle\to|01\rangle,\quad |10\rangle\to|11\rangle,\quad |11\rangle\to|10\rangle.
+$$
+
+Em palavras: o segundo qubit (alvo) é invertido **se e somente se** o primeiro qubit (controle) for $|1\rangle$.
+
+> **Nota**
+>
+> A CNOT generaliza a porta clássica XOR de forma reversível: o resultado $(\text{controle}, \text{controle}\oplus\text{alvo})$ preserva o valor do controle exatamente para que a operação possa ser desfeita (basta aplicar CNOT de novo). Essa reversibilidade é obrigatória, como já discutimos na Seção 4.1 — toda porta quântica é unitária, e toda matriz unitária é invertível.
+
+### Outras portas controladas úteis
+
+- **CZ (controlled-$Z$):** aplica $Z$ ao alvo quando o controle é $|1\rangle$. Diferente da CNOT, a CZ é **simétrica**: não importa qual dos dois qubits chamamos de "controle", o resultado é o mesmo, já que $Z$ atua apenas com uma fase $-1$ sobre $|1\rangle$.
+- **Toffoli (CCX, controlled-controlled-$X$):** generaliza a CNOT para **dois** qubits de controle — o alvo é invertido apenas se **ambos** os controles estiverem em $|1\rangle$. É uma porta de três qubits, unitária de dimensão $8\times8$, e é a base para construir portas multi-controladas mais gerais (retomaremos isso no Capítulo 6).
+
+> **💡 Exemplo — Aplicando CNOT a $|10\rangle$**
+>
+> Vamos verificar diretamente pela matriz que $\text{CNOT}|10\rangle = |11\rangle$.
+>
+> $$
+> \text{CNOT}\begin{pmatrix}0\\0\\1\\0\end{pmatrix} =
+> \begin{pmatrix}
+> 1&0&0&0\\
+> 0&1&0&0\\
+> 0&0&0&1\\
+> 0&0&1&0
+> \end{pmatrix}
+> \begin{pmatrix}0\\0\\1\\0\end{pmatrix}
+> =
+> \begin{pmatrix}0\\0\\0\\1\end{pmatrix} = |11\rangle.
+> $$
+>
+> O resultado confirma a regra: como o controle estava em $|1\rangle$, o alvo (que estava em $|0\rangle$) foi invertido para $|1\rangle$.
+
+<details>
+<summary><strong>Exercícios 5.4</strong></summary>
+
+1. Calcule $\text{CNOT}|01\rangle$ diretamente pela matriz, e confirme que o resultado coincide com a regra "inverte o alvo se o controle é 1".
+
+   <details>
+   <summary>Resolução</summary>
+
+   $$
+   \text{CNOT}\begin{pmatrix}0\\1\\0\\0\end{pmatrix} = \begin{pmatrix}0\\1\\0\\0\end{pmatrix} = |01\rangle.
+   $$
+
+   O controle é $|0\rangle$, então o alvo permanece inalterado — coincide com a regra.
+   </details>
+
+2. Escreva explicitamente a matriz $4\times4$ da porta $CZ$ (controlada-$Z$), usando a definição em blocos $CZ = \begin{pmatrix}I&0\\0&Z\end{pmatrix}$.
+
+   <details>
+   <summary>Resolução</summary>
+
+   $$
+   CZ = \begin{pmatrix}
+   1&0&0&0\\
+   0&1&0&0\\
+   0&0&1&0\\
+   0&0&0&-1
+   \end{pmatrix}.
+   $$
+   </details>
+
+3. Mostre que $\text{CNOT}^2 = I$ (isto é, aplicar CNOT duas vezes seguidas devolve o estado original), calculando $\text{CNOT}\cdot\text{CNOT}$.
+
+   <details>
+   <summary>Resolução</summary>
+
+   Multiplicando a matriz de CNOT por ela mesma, cada linha "troca de volta" com a linha com a qual havia trocado, resultando na matriz identidade $4\times4$. Isso confirma que CNOT é sua própria inversa — assim como $X$, $Z$ e $H$ no caso de um qubit.
+   </details>
+
+</details>
+
+---
+
+## 5.5 Emaranhamento
+
+Já anunciamos, na Nota da Seção 4.2 e novamente na Seção 5.2, que alguns estados de múltiplos qubits **não podem** ser escritos como um produto $|\psi_A\rangle\otimes|\psi_B\rangle$. Chegou a hora de formalizar essa ideia.
+
+**Definição.** Um estado $|\psi\rangle$ de dois (ou mais) qubits é **separável** (ou um estado produto) se existem estados de um qubit $|\psi_A\rangle$ e $|\psi_B\rangle$ tais que $|\psi\rangle = |\psi_A\rangle\otimes|\psi_B\rangle$. Caso contrário, $|\psi\rangle$ é chamado de **emaranhado**.
+
+O exemplo mais famoso — e mais importante — de estado emaranhado é o **estado de Bell**:
+
+$$
+|\Phi^+\rangle = \frac{|00\rangle + |11\rangle}{\sqrt2}.
+$$
+
+> **Importante**
+>
+> Não existem $|\psi_A\rangle,|\psi_B\rangle$ tais que $|\psi_A\rangle\otimes|\psi_B\rangle = \tfrac{1}{\sqrt2}(|00\rangle+|11\rangle)$. Escrevendo $|\psi_A\rangle=a_0|0\rangle+a_1|1\rangle$ e $|\psi_B\rangle=b_0|0\rangle+b_1|1\rangle$ genéricos, o produto tensorial produz
+>
+> $$
+> |\psi_A\rangle\otimes|\psi_B\rangle = a_0b_0|00\rangle + a_0b_1|01\rangle + a_1b_0|10\rangle + a_1b_1|11\rangle.
+> $$
+>
+> Para igualar isso a $|\Phi^+\rangle$, precisaríamos de $a_0b_1=0$ e $a_1b_0=0$ (os coeficientes de $|01\rangle$ e $|10\rangle$ são nulos), mas também $a_0b_0=a_1b_1=\tfrac{1}{\sqrt2}\neq0$. Da primeira condição, $a_0=0$ ou $b_1=0$; em qualquer um dos dois casos, um dos produtos $a_0b_0$ ou $a_1b_1$ seria forçado a zero — contradizendo a segunda condição. Logo, nenhuma fatoração é possível.
+
+Existem exatamente quatro estados de Bell, formando uma base ortonormal alternativa para o espaço de dois qubits (a **base de Bell**):
+
+$$
+|\Phi^+\rangle = \frac{|00\rangle+|11\rangle}{\sqrt2}, \qquad
+|\Phi^-\rangle = \frac{|00\rangle-|11\rangle}{\sqrt2},
+$$
+
+$$
+|\Psi^+\rangle = \frac{|01\rangle+|10\rangle}{\sqrt2}, \qquad
+|\Psi^-\rangle = \frac{|01\rangle-|10\rangle}{\sqrt2}.
+$$
+
+### Construindo um estado de Bell com um circuito
+
+Os estados de Bell não surgem "do nada" — eles são produzidos combinando exatamente as ferramentas das Seções 5.1 e 5.4: uma porta Hadamard seguida de uma CNOT.
+
+```
+|0⟩ ──[H]──●──   (qubit de controle)
+           │
+|0⟩ ───────X──   (qubit alvo)
+```
+
+> **💡 Exemplo — Derivando $|\Phi^+\rangle$**
+>
+> Partindo de $|00\rangle$, aplicamos $H$ ao primeiro qubit (e a identidade ao segundo):
+>
+> $$
+> (H\otimes I)|00\rangle = H|0\rangle \otimes I|0\rangle = |+\rangle\otimes|0\rangle = \frac{1}{\sqrt2}(|00\rangle+|10\rangle).
+> $$
+>
+> Agora aplicamos CNOT (controle = primeiro qubit, alvo = segundo qubit) a esse resultado. Usando a linearidade (o Postulado 2 garante que $U$ é linear) e a tabela de ação da CNOT da Seção 5.4:
+>
+> $$
+> \text{CNOT}\cdot\frac{1}{\sqrt2}(|00\rangle+|10\rangle) = \frac{1}{\sqrt2}\big(\text{CNOT}|00\rangle+\text{CNOT}|10\rangle\big) = \frac{1}{\sqrt2}(|00\rangle+|11\rangle) = |\Phi^+\rangle.
+> $$
+>
+> Esse pequeno circuito de duas portas — $H$ seguida de CNOT — é, sem exagero, o circuito mais importante de toda a computação quântica: é o ponto de partida para o teletransporte quântico, a codificação superdensa e inúmeros protocolos que veremos no Capítulo 6.
+
+> **Nota**
+>
+> O emaranhamento produz **correlações** entre os resultados de medição dos dois qubits que não podem ser explicadas por nenhuma variável clássica compartilhada de antemão — um fato demonstrado experimentalmente através da violação das desigualdades de Bell [2]. Vamos quantificar exatamente essas correlações na próxima seção, quando estudarmos a medição de sistemas de múltiplos qubits.
+
+<details>
+<summary><strong>Exercícios 5.5</strong></summary>
+
+1. O estado $|01\rangle$ é separável ou emaranhado? Justifique exibindo a fatoração, se existir.
+
+   <details>
+   <summary>Resolução</summary>
+
+   É separável: $|01\rangle = |0\rangle\otimes|1\rangle$, trivialmente. Todo vetor de base computacional é, por construção, um estado produto.
+   </details>
+
+2. Verifique se o estado $\tfrac12(|00\rangle+|01\rangle-|10\rangle-|11\rangle)$ é separável, tentando encontrar $|\psi_A\rangle,|\psi_B\rangle$ explícitos. (Dica: agrupe os termos por qubit.)
+
+   <details>
+   <summary>Resolução</summary>
+
+   Agrupando: $\tfrac12\big[(|0\rangle-|1\rangle)\otimes|0\rangle + (|0\rangle-|1\rangle)\otimes|1\rangle\big] = \tfrac12(|0\rangle-|1\rangle)\otimes(|0\rangle+|1\rangle) = |-\rangle\otimes|+\rangle$ (a menos do fator de normalização $\tfrac1{\sqrt2}\cdot\tfrac1{\sqrt2}=\tfrac12$, que já está correto). É separável.
+   </details>
+
+3. Construa, passo a passo (como no exemplo desta seção), o estado resultante do circuito $H$ no primeiro qubit seguido de CNOT, partindo de $|10\rangle$ em vez de $|00\rangle$. A que estado de Bell isso corresponde?
+
+   <details>
+   <summary>Resolução</summary>
+
+   $$
+   (H\otimes I)|10\rangle = |-\rangle\otimes|0\rangle = \frac{1}{\sqrt2}(|00\rangle-|10\rangle).
+   $$
+
+   Aplicando CNOT:
+
+   $$
+   \frac{1}{\sqrt2}(\text{CNOT}|00\rangle - \text{CNOT}|10\rangle) = \frac{1}{\sqrt2}(|00\rangle-|11\rangle) = |\Phi^-\rangle.
+   $$
+   </details>
+
+</details>
+
+---
+
+## 5.6 Medição de Sistemas de Múltiplos Qubits
+
+O **Postulado 3** (Regra de Born), enunciado no Capítulo 4 para um único qubit, se generaliza diretamente para $n$ qubits: medindo todos os $n$ qubits na base computacional, o resultado $x\in\{0,1\}^n$ ocorre com probabilidade
+
+$$
+P(x) = |\langle x|\psi\rangle|^2 = |c_x|^2,
+$$
+
+e, imediatamente após a medição, o estado colapsa para $|x\rangle$.
+
+### Medição parcial
+
+Uma situação nova, que não existe para um único qubit, é a **medição parcial**: medir apenas um subconjunto dos qubits, deixando os demais intactos (ainda quânticos). Isso é extremamente comum na prática — por exemplo, medir um qubit "ancilla" no meio de um circuito, sem perturbar o restante do registrador.
+
+Para medir apenas o primeiro qubit de um estado de dois qubits $|\psi\rangle = \sum_{ij} c_{ij}|ij\rangle$, a probabilidade de obter o resultado $i\in\{0,1\}$ é obtida somando as probabilidades de **todas** as configurações do segundo qubit compatíveis com esse resultado:
+
+$$
+P(i) = \sum_{j\in\{0,1\}} |c_{ij}|^2.
+$$
+
+Se o resultado $i$ é observado, o estado dos qubits restantes colapsa para a superposição normalizada dos termos compatíveis com $i$:
+
+$$
+|\psi\rangle \;\longrightarrow\; \frac{1}{\sqrt{P(i)}}\sum_{j} c_{ij}|j\rangle.
+$$
+
+> **Nota**
+>
+> A divisão por $\sqrt{P(i)}$ é exatamente a mesma **renormalização** que já vimos em outros contextos: depois do colapso, o vetor resultante precisa voltar a ter norma 1 para continuar sendo um estado quântico válido (Postulado 1).
+
+> **💡 Exemplo — Medindo o primeiro qubit de $|\Phi^+\rangle$**
+>
+> Considere $|\Phi^+\rangle = \tfrac{1}{\sqrt2}(|00\rangle+|11\rangle)$, e suponha que medimos apenas o **primeiro** qubit.
+>
+> A probabilidade de obter $0$ é $P(0) = |c_{00}|^2 = \tfrac12$ (o termo $|01\rangle$ não aparece, então não contribui). Da mesma forma, $P(1)=|c_{11}|^2=\tfrac12$.
+>
+> Se o resultado observado for $0$, o estado colapsa para
+>
+> $$
+> \frac{1}{\sqrt{1/2}}\cdot\frac{1}{\sqrt2}|0\rangle = |0\rangle,
+> $$
+>
+> ou seja, o **segundo** qubit — que não foi medido diretamente — fica determinado com certeza como $|0\rangle$. Da mesma forma, se o resultado for $1$, o segundo qubit colapsa para $|1\rangle$.
+>
+> Essa é precisamente a correlação perfeita que caracteriza o emaranhamento: os dois qubits sempre "combinam" no resultado, mesmo que cada medição individual, isoladamente, seja completamente aleatória ($50\%/50\%$).
+
+> **Importante**
+>
+> Note o contraste com um estado produto (Seção 5.2, exemplo de $|+\rangle\otimes|0\rangle$): lá, o resultado da medição do segundo qubit já era certo ($|0\rangle$) **antes mesmo** de qualquer medição, pois os qubits nunca haviam interagido. No estado de Bell, o resultado do segundo qubit só fica determinado **depois** que o primeiro é medido — e o valor específico (0 ou 1) é imprevisível até esse momento. É essa distinção que torna o emaranhamento genuinamente diferente de qualquer correlação clássica pré-combinada.
+
+<details>
+<summary><strong>Exercícios 5.6</strong></summary>
+
+1. Para o estado produto $|+\rangle\otimes|0\rangle = \tfrac{1}{\sqrt2}(|00\rangle+|10\rangle)$, calcule a probabilidade de medir o primeiro qubit e obter $0$, e descreva o estado colapsado do segundo qubit nesse caso.
+
+   <details>
+   <summary>Resolução</summary>
+
+   $P(0) = |c_{00}|^2 = \tfrac12$. O estado colapsado do segundo qubit é $\frac{1}{\sqrt{1/2}}\cdot\frac{1}{\sqrt2}|0\rangle = |0\rangle$ — como esperado, já que o segundo qubit sempre estava em $|0\rangle$, independente do resultado do primeiro.
+   </details>
+
+2. Repita o Exemplo desta seção, mas medindo o **segundo** qubit de $|\Phi^+\rangle$ em vez do primeiro. O resultado é diferente?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Por simetria da expressão $\tfrac{1}{\sqrt2}(|00\rangle+|11\rangle)$ em relação à troca dos dois qubits, o resultado é idêntico: $P(0)=P(1)=\tfrac12$, e o primeiro qubit colapsa para o mesmo valor observado no segundo.
+   </details>
+
+3. Considere o estado $|\Psi^-\rangle = \tfrac{1}{\sqrt2}(|01\rangle-|10\rangle)$. Se o primeiro qubit é medido e o resultado é $1$, para qual estado o segundo qubit colapsa?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Isolando os termos com o primeiro qubit igual a 1: apenas $-\tfrac{1}{\sqrt2}|10\rangle$. A probabilidade é $P(1)=\tfrac12$, e o estado renormalizado do segundo qubit é $\frac{1}{\sqrt{1/2}}\cdot\left(-\frac1{\sqrt2}\right)|0\rangle = -|0\rangle$, que — a menos de uma fase global irrelevante (Postulado 1) — é o mesmo estado físico que $|0\rangle$.
+   </details>
+
+</details>
+
+---
+
+## 5.7 Circuitos Quânticos
+
+Já usamos diagramas informais nas seções anteriores; nesta seção, formalizamos a notação de **circuitos quânticos**, que usaremos extensivamente a partir do Capítulo 6.
+
+Em um circuito quântico:
+
+- Cada **fio horizontal** representa um qubit, e o tempo flui da **esquerda para a direita**.
+- Uma **caixa** sobre um fio representa uma porta de um qubit (ex.: `[H]`, `[X]`).
+- Uma **linha vertical** conectando um **ponto preto** (●, controle) a um símbolo de porta (⊕ para CNOT, ou uma caixa `[Z]` para CZ) representa uma porta controlada, exatamente como nos diagramas das Seções 5.4 e 5.5.
+- Um símbolo de **medidor** (▭ com um mostrador, aqui representado por `[M]`) indica uma medição na base computacional, encerrando a evolução quântica daquele fio.
+
+```
+q0: ──[H]──●──────
+           │
+q1: ───────⊕──[M]──
+```
+
+Esse é exatamente o circuito de preparação de um estado de Bell (Seção 5.5), seguido de uma medição no segundo qubit.
+
+### Regras de composição
+
+Dois princípios governam como calcular o efeito de um circuito inteiro:
+
+1. **Portas em sequência** (mesma fila de qubits, uma depois da outra) correspondem a **multiplicação de matrizes**, na ordem *inversa* à leitura visual: se o circuito aplica primeiro $U_1$ e depois $U_2$, o efeito total é $U_2 U_1$ (a matriz mais à direita no produto age primeiro sobre o estado).
+2. **Portas em paralelo** (em fios diferentes, na mesma "coluna" temporal) correspondem ao **produto tensorial** das portas envolvidas: aplicar $U$ ao qubit 0 e $V$ ao qubit 1 simultaneamente é representado por $U\otimes V$.
+
+> **Nota**
+>
+> Essas duas regras são exatamente o que já usamos, de forma implícita, no Exemplo da Seção 5.5: a "coluna" com $H$ no primeiro qubit e nada (identidade) no segundo foi escrita como $H\otimes I$ (regra 2), e a CNOT que veio depois foi aplicada multiplicando à esquerda (regra 1).
+
+> **💡 Exemplo — Matriz de um circuito com portas em paralelo seguidas de CNOT**
+>
+> Considere o circuito
+>
+> ```
+> q0: ──[H]──●──
+>            │
+> q1: ──[X]──⊕──
+> ```
+>
+> A matriz total é $U = \text{CNOT}\cdot(H\otimes X)$ (primeiro a coluna paralela, depois a CNOT — lembrando que a ordem de multiplicação é invertida em relação à leitura visual). Partindo de $|00\rangle$:
+>
+> $$
+> (H\otimes X)|00\rangle = H|0\rangle\otimes X|0\rangle = |+\rangle\otimes|1\rangle = \frac{1}{\sqrt2}(|01\rangle+|11\rangle).
+> $$
+>
+> Aplicando CNOT:
+>
+> $$
+> \text{CNOT}\cdot\frac{1}{\sqrt2}(|01\rangle+|11\rangle) = \frac{1}{\sqrt2}(|01\rangle+|10\rangle) = |\Psi^+\rangle.
+> $$
+>
+> Esse é outro dos quatro estados de Bell, produzido por uma pequena variação do circuito da Seção 5.5.
+
+<details>
+<summary><strong>Exercícios 5.7</strong></summary>
+
+1. Escreva, em termos de produto tensorial e produto de matrizes, a matriz total do circuito que aplica $Z$ ao qubit 0 e $H$ ao qubit 1 em paralelo, seguido de uma CZ.
+
+   <details>
+   <summary>Resolução</summary>
+
+   $U = CZ\cdot(Z\otimes H)$.
+   </details>
+
+2. No circuito do Exemplo desta seção, qual seria o estado final se, em vez de $X$, aplicássemos $I$ (nada) ao segundo qubit antes da CNOT? A que estado de Bell isso corresponde? (Dica: compare com a Seção 5.5.)
+
+   <details>
+   <summary>Resolução</summary>
+
+   Seria exatamente o circuito da Seção 5.5, produzindo $|\Phi^+\rangle$.
+   </details>
+
+3. Quantos "andares" (colunas temporais) tem o circuito do Exemplo desta seção? Esse número é chamado de **profundidade** do circuito — por que essa métrica é relevante na prática (pense em como qubits reais se comportam ao longo do tempo)?
+
+   <details>
+   <summary>Resolução</summary>
+
+   Duas colunas: a coluna paralela ($H$ e $X$) e a coluna da CNOT — profundidade 2. Na prática, qubits físicos perdem coerência ao longo do tempo (um fenômeno chamado *decoerência*), então circuitos com menor profundidade tendem a sofrer menos erros ao serem executados em hardware real — um tema que retomaremos no Capítulo 6.
+   </details>
+
+</details>
+
+---
+
+## 5.8 Teorema da Não-Clonagem
+
+Encerramos o capítulo com um resultado que é, ao mesmo tempo, surpreendente e uma consequência direta e simples de tudo o que construímos até aqui: é **impossível** criar uma cópia perfeita de um estado quântico arbitrário e desconhecido.
+
+> **Importante**
+>
+> **Teorema da Não-Clonagem.** Não existe uma transformação unitária $U$ que, para **todo** estado $|\psi\rangle$ de um qubit, satisfaça
+>
+> $$
+> U\big(|\psi\rangle\otimes|0\rangle\big) = |\psi\rangle\otimes|\psi\rangle.
+> $$
+
+**Ideia da demonstração.** Suponha, por absurdo, que tal $U$ exista, e que ela funcione para dois estados específicos $|\psi\rangle$ e $|\phi\rangle$:
+
+$$
+U(|\psi\rangle\otimes|0\rangle) = |\psi\rangle\otimes|\psi\rangle, \qquad U(|\phi\rangle\otimes|0\rangle) = |\phi\rangle\otimes|\phi\rangle.
+$$
+
+Considere agora o estado de entrada $\tfrac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle)\otimes|0\rangle$. Pelo **Postulado 2**, $U$ é uma transformação unitária, e toda transformação unitária é **linear**. Logo,
+
+$$
+U\left[\frac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle)\otimes|0\rangle\right] = \frac{1}{\sqrt2}\Big(U(|\psi\rangle\otimes|0\rangle)+U(|\phi\rangle\otimes|0\rangle)\Big) = \frac{1}{\sqrt2}\big(|\psi\rangle|\psi\rangle+|\phi\rangle|\phi\rangle\big).
+$$
+
+Mas se $U$ realmente clonasse **qualquer** estado — em particular, a superposição $\tfrac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle)$ em si —, o resultado deveria ser
+
+$$
+\frac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle)\otimes\frac{1}{\sqrt2}(|\psi\rangle+|\phi\rangle) = \frac12\big(|\psi\rangle|\psi\rangle + |\psi\rangle|\phi\rangle + |\phi\rangle|\psi\rangle + |\phi\rangle|\phi\rangle\big).
+$$
+
+Essas duas expressões são, em geral, diferentes (a primeira não tem os termos cruzados $|\psi\rangle|\phi\rangle$ e $|\phi\rangle|\psi\rangle$, exceto no caso trivial em que $|\psi\rangle=|\phi\rangle$). A contradição mostra que nenhuma $U$ unitária pode clonar dois estados diferentes e quaisquer superposições deles simultaneamente — logo, não pode clonar um estado **arbitrário** e desconhecido.
+
+> **Nota**
+>
+> A demonstração usa apenas a **linearidade**, que vem diretamente do Postulado 2. Por isso o Teorema da Não-Clonagem não é uma limitação tecnológica — que poderia, em princípio, ser superada por engenharia melhor —, mas uma consequência estrutural da própria mecânica quântica.
+
+> **Importante**
+>
+> É perfeitamente possível copiar os vetores de base computacional $|0\rangle$ e $|1\rangle$ isoladamente — basta usar CNOT com o qubit a copiar como controle e um qubit auxiliar em $|0\rangle$ como alvo: $\text{CNOT}(|0\rangle\otimes|0\rangle) = |00\rangle$ e $\text{CNOT}(|1\rangle\otimes|0\rangle)=|11\rangle$. O que o teorema proíbe é fazer isso para **superposições arbitrárias e desconhecidas** com a **mesma** transformação fixa — como o próprio cálculo acima demonstra ao aplicar essa mesma CNOT a $|+\rangle\otimes|0\rangle$.
+
+O Teorema da Não-Clonagem tem consequências profundas: ele é o que torna a criptografia quântica segura contra espionagem (um espião não pode simplesmente copiar os qubits transmitidos sem ser detectado), e é uma das razões pelas quais a **correção de erros quânticos** — necessária para computadores quânticos em grande escala — exige técnicas fundamentalmente diferentes das usadas na correção de erros clássica, onde copiar bits é trivial.
+
+<details>
+<summary><strong>Exercícios 5.8</strong></summary>
+
+1. Verifique diretamente, usando a matriz da CNOT (Seção 5.4), que $\text{CNOT}(|0\rangle\otimes|0\rangle)=|00\rangle$ e $\text{CNOT}(|1\rangle\otimes|0\rangle)=|11\rangle$ — isto é, que a CNOT "copia" corretamente os dois vetores de base.
+
+   <details>
+   <summary>Resolução</summary>
+
+   $\text{CNOT}|00\rangle = |00\rangle$ (controle 0, alvo inalterado) e $\text{CNOT}|10\rangle=|11\rangle$ (controle 1, alvo invertido de 0 para 1) — ambos diretamente da tabela de ação da CNOT. Em ambos os casos, o segundo qubit termina igual ao primeiro, "copiando" o valor.
+   </details>
+
+2. Usando a CNOT como o "clonador" $U$ da demonstração, com $|\psi\rangle=|0\rangle$ e $|\phi\rangle=|1\rangle$, calcule explicitamente $\text{CNOT}\big(|+\rangle\otimes|0\rangle\big)$ e compare com $|+\rangle\otimes|+\rangle$, mostrando que são estados diferentes (esse é exatamente o estado de Bell que já calculamos na Seção 5.5!).
+
+   <details>
+   <summary>Resolução</summary>
+
+   Já calculamos, na Seção 5.5, que $\text{CNOT}(|+\rangle\otimes|0\rangle) = |\Phi^+\rangle = \tfrac1{\sqrt2}(|00\rangle+|11\rangle)$ — um estado **emaranhado**. Por outro lado, $|+\rangle\otimes|+\rangle = \tfrac12(|00\rangle+|01\rangle+|10\rangle+|11\rangle)$ — um estado **produto**, com os quatro termos igualmente presentes. Os dois resultados têm coeficientes completamente diferentes ($|01\rangle$ e $|10\rangle$ têm coeficiente zero em um caso e $\tfrac12$ no outro), confirmando que a CNOT falha em clonar a superposição $|+\rangle$, exatamente como previsto pelo teorema.
+   </details>
+
+3. O Teorema da Não-Clonagem impede copiar um estado *desconhecido*. Isso contradiz o fato de que, em um laboratório, é possível preparar quantos qubits quisermos no mesmo estado $|+\rangle$ (por exemplo, aplicando $H$ a vários qubits em $|0\rangle$)? Explique a diferença.
+
+   <details>
+   <summary>Resolução</summary>
+
+   Não há contradição. Preparar vários qubits em $|+\rangle$ aplicando $H$ a cada um deles não é "clonar" no sentido do teorema: em cada caso, sabemos exatamente qual estado estamos preparando e usamos o procedimento de preparação (não uma cópia de um estado físico já existente e desconhecido). O teorema proíbe especificamente pegar um qubit já existente, em um estado que **não conhecemos**, e produzir uma segunda cópia física idêntica a partir dele — sem saber de antemão qual é esse estado.
+   </details>
+
+</details>
+
+---
+
+## 5.9 Juntando Tudo
+
+Vamos revisar o caminho percorrido neste capítulo:
+
+- Revisitamos o **produto tensorial** (Postulado 4) como a ferramenta que combina qubits individuais em sistemas maiores, com dimensão do espaço crescendo como $2^n$.
+- Descrevemos os **estados de dois qubits** e, em seguida, o caso geral de **$n$ qubits**, destacando o crescimento exponencial do número de amplitudes complexas necessárias.
+- Introduzimos as **portas controladas** — CNOT, CZ e Toffoli — como o mecanismo pelo qual qubits interagem, generalizando a lógica reversível clássica.
+- Formalizamos o **emaranhamento**: estados que não podem ser fatorados em subsistemas independentes, com os quatro **estados de Bell** como exemplo central, produzidos pelo circuito $H$+CNOT.
+- Generalizamos a **Regra de Born** para **medição parcial** de sistemas de múltiplos qubits, revelando as correlações características do emaranhamento.
+- Formalizamos a notação de **circuitos quânticos**, com suas duas regras de composição: produto de matrizes (sequência) e produto tensorial (paralelismo).
+- Demonstramos o **Teorema da Não-Clonagem**, uma consequência direta da linearidade das transformações unitárias (Postulado 2).
+
+```
+Produto Tensorial      →  combina n qubits, espaço de dimensão 2^n
+Estados de n qubits    →  Σ c_x |x⟩, Σ|c_x|² = 1, x ∈ {0,1}^n
+Portas Controladas     →  CNOT, CZ, Toffoli  →  qubits interagem
+Emaranhamento          →  estados não fatoráveis; Estados de Bell
+Medição Parcial        →  Born generalizada + colapso + renormalização
+Circuitos Quânticos    →  sequência = produto de matrizes; paralelo = ⊗
+Não-Clonagem           →  nenhuma U unitária copia um |ψ⟩ desconhecido
+```
+
+Com o espaço de múltiplos qubits, as portas controladas, o emaranhamento e a notação de circuitos devidamente estabelecidos, temos agora toda a base teórica necessária para sair da matemática pura e começar a **programar** — construindo um simulador de qubits, implementando portas e medições, e finalmente executando protocolos quânticos completos, como o teletransporte quântico. É para lá que o próximo capítulo nos leva.
+
+---
+
+## Referências
+
+[1] Nielsen, M. A., & Chuang, I. L. (2010). *Quantum Computation and Quantum Information* (10th Anniversary ed.). Cambridge University Press.
+
+[2] Bell, J. S. (1964). On the Einstein Podolsky Rosen Paradox. *Physics Physique Fizika*, 1(3), 195–200.
+
+[3] Wootters, W. K., & Zurek, W. H. (1982). A Single Quantum Cannot be Cloned. *Nature*, 299, 802–803.
+
+[4] Sakurai, J. J., & Napolitano, J. (2017). *Modern Quantum Mechanics* (2nd ed.). Cambridge University Press.

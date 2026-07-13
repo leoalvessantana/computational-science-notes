@@ -408,8 +408,8 @@ To keep this progression easy to navigate, the book is organized into six parts.
 | Part | Guiding Question | Topics Covered |
 |------|-------------------|-----------------|
 | **I. Motivation** | Why does quantum computing matter? | Why Quantum Computing? |
-| **II. Mathematical Foundations** | What language do we need to describe quantum states? | Linear Algebra · Complex Numbers · Vector Spaces · Dirac Notation |
-| **III. Quantum Information** | What is a qubit, and how does it differ from a bit? | Classical Bits · Qubits · Bloch Sphere · Quantum Gates |
+| **II. Mathematical Foundations** | What language do we need to describe quantum states? |  Complex Numbers · Vector Spaces · Linear Algebra · Dirac Notation|
+| **III. Quantum Information** | What is a qubit, and how does it differ from a bit? |  Classical Bits · The Postulates of Quantum Mechanics · Qubits · Bloch Sphere · Quantum Gates|
 | **IV. Multi-Qubit Systems** | What happens when qubits interact? | Multiple Qubits · Tensor Products · Entanglement · Measurement · Quantum Circuits · No-Cloning Theorem |
 | **V. Quantum Algorithms** | How do quantum computers gain an advantage? | Computational Theory · Algorithm Analysis · Grover's Algorithm · Deutsch–Jozsa · Quantum Fourier Transform · Shor's Algorithm |
 | **VI. Quantum Applications** | Where is this heading? | Quantum Optimization · Variational Quantum Algorithms · Quantum Machine Learning · Quantum Neural Networks |
@@ -425,7 +425,6 @@ Each part builds strictly on the ones before it: the mathematics introduced in P
 ```{note}
 This structure is a **map**, not a strict contract — some chapters may be reordered or expanded as the book evolves, but the overall logic (concept before formalism, formalism before algorithm) will remain the guiding principle throughout.
 ```
-
 
 
 

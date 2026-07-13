@@ -1,0 +1,569 @@
+# Chapter 3 — Mathematics for Quantum Computing
+
+<!-- ```{contents}
+:local:
+:depth: 2
+``` -->
+
+
+## 1. Why This Chapter Comes Before Qubits
+
+In Chapter 1, we compared a classical bit to a coin lying flat on a table, and a qubit to that same coin spinning in the air. This is a useful first picture, but it is, ultimately, just a picture. To go beyond intuition and actually *compute* with qubits — to predict what a quantum circuit does, or why a particular algorithm works — we need a precise mathematical language.
+
+That language is **linear algebra**, extended to **complex numbers**.
+
+This might sound intimidating, but the goal of this chapter is the opposite of intimidation. We will build this language piece by piece, always starting from a simple, motivated question, and only then introducing the formal tool that answers it. By the end of the chapter, you will be comfortable with the four ingredients listed in the table of contents of Chapter 1: complex numbers, vector spaces, and Dirac notation. Everything else in this book — every qubit, every gate, every algorithm — is built directly on top of these ideas.
+
+```{note}
+This chapter is self-contained. You do not need prior exposure to linear algebra or complex numbers. If you already know this material, feel free to skim it and use it as a reference for notation.
+```
+
+<!-- ```{figure} /_static/figures/ch3_fig1-1.png
+:name: fig-ch3-1-1
+:alt: The mathematical scaffolding of quantum computing
+
+The mathematical scaffolding of quantum computing: complex numbers support vector spaces, which support Dirac notation, which supports qubits.
+``` -->
+
+
+
+## 2. Complex Numbers
+
+
+### 2.1 Why Real Numbers Are Not Enough
+
+Quantum mechanics describes physical systems using **probability amplitudes**. As we saw in Chapter 1, these amplitudes behave like waves and can interfere constructively or destructively.
+
+At first, it might seem like ordinary real numbers should be enough to capture this. After all, real numbers can be positive or negative, and a negative sign already allows two quantities to cancel each other out when added. But interference in quantum mechanics is richer than a simple sign flip. A real number only ever offers two "directions" — positive or negative, equivalent to a rotation of either $0°$ or $180°$. Quantum interference, however, requires amplitudes that can combine at *any* relative angle, not just fully aligned or fully opposed. To describe a continuum of possible rotations rather than a single flip, we need a number that carries both a magnitude and an angle at once. This is exactly what a complex number provides, and it is what makes complex numbers, rather than real numbers, the natural alphabet of quantum mechanics.
+
+At this point, it is fair to ask: where does this requirement actually come from? The honest answer is that this is an experimentally motivated postulate of quantum mechanics — one of a small set of postulates we will state precisely in Chapter 4, once vectors and inner products are in hand. For now, it is enough to accept complex numbers as the natural "alphabet" in which quantum states are written, and to become fluent in using them.
+
+Before we can talk about angles and rotations, though, we need a number system that actually has room for them — and real numbers, as we are about to see, run out of room almost immediately.
+
+
+
+### 2.2 The Imaginary Unit
+
+Suppose we want to solve the quadratic equation
+
+$$
+x^2 + 1 = 0
+$$
+
+Rearranging the equation gives
+
+$$
+x^2 = -1
+$$
+
+which implies
+
+$$
+x = \pm\sqrt{-1}
+$$
+
+At this point, we encounter a problem. No **real number** satisfies this equation because the square of every real number—whether positive or negative—is always non-negative. In other words, the square root of a negative number does not exist within the real number system.
+
+Rather than declaring the equation impossible, mathematicians extended the real numbers by introducing a new number called the **imaginary unit**, denoted by \(i\), and **defined** it to satisfy
+
+$$
+i^2 = -1
+$$
+
+Equivalently, we often write
+
+$$
+i = \sqrt{-1}
+$$
+
+
+This definition extends the real number system in the same spirit that negative numbers and irrational numbers once extended it. It is not a trick or a contradiction; it is the starting point of a larger and remarkably consistent number system.
+
+Using the imaginary unit, we can construct a **complex number**, which is any number of the form
+
+$$
+z = a + bi
+$$
+
+
+
+where \(a\) and \(b\) are ordinary real numbers. The value \(a\) is called the **real part** of \(z\), written $\operatorname{Re}(z)$, while \(b\) is called the **imaginary part**, written $\operatorname{Im}(z)$.
+
+```text
+z = a + bi
+    │   │
+    │   └── Imaginary part (b)
+    └─────── Real part (a)
+```
+
+Notice that every real number is also a complex number with \(b = 0\). In other words, complex numbers do not replace the real numbers—they extend them, just as the real numbers extend the rational numbers.
+
+
+
+### 2.3 The Complex Plane
+
+Because a complex number $z = a + bi$ is defined by two independent real numbers, we cannot place it on a standard one-dimensional number line. Instead, we visualize it as a point in a two-dimensional space called the **complex plane**.In this plane, the horizontal axis represents the real part ($a$), and the vertical axis represents the imaginary part ($b$).
+
+
+
+```{figure} /_static/figures/ch3_fig2-3_adaptive.png
+:name: ch3_fig2-3_adaptive
+:alt: The complex plane, showing the modulus r and the phase angle theta
+:width: 40%
+:align: center
+
+The complex plane. A complex number $z = a + bi$ plotted as a vector from the origin. The horizontal projection is the real part $a$, the vertical projection is the imaginary part $b$, the length of the vector is the modulus $r$, and the angle it makes with the positive real axis is the phase $\theta$. We will define $r$ and $\theta$ formally in the next two sections — keep this picture in mind as we do.
+```
+
+This geometric interpretation is immensely powerful. It allows us to stop thinking of complex numbers merely as abstract algebraic expressions and start treating them as physical locations or vectors in a 2D space. It also reveals that we can describe the exact same point in two equivalent ways:
+- **Rectangular form**: $z = a + bi$, using horizontal and vertical coordinates (as shown in the figure above).
+- **Polar form**: describing the same point by its straight-line distance from the origin ($r$) and its angle of rotation ($\theta$), which we develop next.
+
+
+
+### 2.4 Modulus and Complex Conjugate
+
+When we view a complex number as a vector in the complex plane, two geometric properties naturally stand out: its length and its reflection.
+
+The **modulus** (or magnitude) of a complex number $z = a + bi$ is its straight-line distance from the origin — the same $r$ labeled in the figure above. By applying the Pythagorean theorem to the coordinates, this is defined as
+
+
+$$
+|z| = \sqrt{a^2 + b^2}
+$$
+
+The **complex conjugate** of $z$, written $z^{*}$ (or sometimes $\bar{z}$), is obtained by flipping the sign of the imaginary part
+
+
+$$
+z^{*} = a - bi
+$$
+
+Geometrically, this corresponds to reflecting the point across the real axis.
+
+
+```{figure} /_static/figures/ch3_fig2-4_conjugate.png
+:name: ch3_fig2-4_conjugate
+:alt: A complex number and its conjugate, reflected across the real axis
+:width: 40%
+:align: center
+
+$z = a + bi$ and its conjugate $z^{*} = a - bi$. Both points sit at the same distance $r$ from the origin, but $z^{*}$ is the mirror image of $z$ across the real axis.
+```
+
+The conjugate is not just a bookkeeping trick — it is one of the most important operations in quantum mechanics, because multiplying a complex number by its own conjugate always produces a non-negative real number
+
+
+$$
+z \cdot z^{*} = (a+bi)(a-bi) = a^2 + b^2 = |z|^2
+$$
+
+```{important}
+This single identity, $z z^{*} = |z|^2$, is the mathematical bridge between complex probability amplitudes and the real, non-negative probabilities we actually observe when measuring a quantum system. We will use it constantly starting in Chapter 4.
+```
+
+
+### 2.5 Polar Form and Euler's Formula
+
+
+In the rectangular form ($z = a + bi$), we described our complex point using horizontal and vertical coordinates. However, if we think of the complex number as an arrow pointing from the origin, there is another, often more natural way to describe it: by its length (the modulus $r$) and the angle it makes with the positive real axis (the **phase** $\theta$) — the same two quantities highlighted in the Section 2.3 figure.
+
+Using basic trigonometry on the complex plane, we know that the coordinates are $a = r \cos\theta$ and $b = r \sin\theta$. Substituting these into our standard complex number yields
+
+
+$$
+z = r(\cos\theta + i\sin\theta)
+$$
+
+Remarkably, this expression can be compressed using one of the most celebrated results in all of mathematics, **Euler's formula**
+
+
+$$
+e^{i\theta} = \cos\theta + i\sin\theta
+$$
+
+
+This beautiful identity allows us to write any complex number compactly as
+
+$$
+z = r e^{i\theta}
+$$
+
+- **Rectangular form**: $z = a + bi$
+- **Polar form**: $z = r e^{i\theta}$, where $r = |z|$
+
+
+
+
+```{figure} /_static/figures/ch3_fig2-5_unit_circle.png
+:name: ch3_fig2-5_unit_circle
+:alt: The unit circle showing e^{i theta} at 0, 90, 180 and 270 degrees
+:width: 40%
+:align: center
+
+The unit circle ($r=1$). As $\theta$ sweeps around the circle, $e^{i\theta}$ visits familiar landmarks: $\theta=0° \Rightarrow 1$, $\theta=90° \Rightarrow i$, $\theta=180° \Rightarrow -1$, $\theta=270° \Rightarrow -i$. Every complex number of modulus 1 lies somewhere on this circle.
+```
+
+
+**Worked example.** Let's convert $z = 3 + 4i$ to polar form. The modulus is
+
+$$
+r = \sqrt{3^2 + 4^2} = \sqrt{25} = 5
+$$
+
+and the phase is
+
+$$
+\theta = \arctan\!\left(\frac{4}{3}\right) \approx 53.13°
+$$
+
+so $z \approx 5\,e^{i \cdot 53.13°}$. Going back the other way, $a = r\cos\theta = 5\cos(53.13°) \approx 3$ and $b = r\sin\theta = 5\sin(53.13°) \approx 4$, recovering our original number — a useful sanity check whenever you convert between forms.
+
+
+
+While this polar form might feel like a cosmetic change for now, it becomes absolutely essential once we start describing qubit **phases** in Chapter 4. Intuitively, $r$ tells us "how much" of an amplitude there is, while $\theta$ tells us "in what rotational direction" it points.
+
+Quantum interference — the constructive and destructive combination of amplitudes mentioned in Chapter 1 — is, mathematically, just the addition of complex numbers whose phases ($\theta$) either align to amplify each other or oppose each other to cancel out.
+
+
+```{figure} /_static/figures/ch3_fig2-2_interference.png
+:name: ch3_fig2-2_interference
+:alt: Constructive and destructive interference of complex amplitudes
+:width: 70%
+:align: center
+
+Left: two amplitudes with aligned phases add constructively, producing a vector with a larger modulus. Right: two amplitudes with opposite phases add destructively, nearly canceling each other out. In both cases the arrows share the same starting point, so the resulting sum can be compared directly against the two original amplitudes.
+```
+
+
+
+
+### 2.6 Practice Questions
+
+```{admonition} Conceptual
+:class: tip
+
+1. True or false: every real number is also a complex number. Justify your answer using the definition $z = a+bi$.
+2. Geometrically, what does multiplying a complex number by its conjugate correspond to, and why does the result always land on the real axis?
+3. Two complex numbers have the same modulus but phases that differ by $180°$. What can you say about their sum?
+```
+
+```{admonition} Computational
+:class: note
+
+4. Find the modulus and complex conjugate of $z = 5 - 12i$.
+5. Convert $z = 1 + i$ to polar form. What are $r$ and $\theta$?
+6. Convert $z = 4\,e^{i\cdot 120°}$ back to rectangular form $a + bi$.
+7. Compute $z \cdot z^{*}$ for $z = 2 - 3i$ and confirm it equals $|z|^2$.
+```
+
+```{admonition} Connecting to physics
+:class: warning
+
+8. Two probability amplitudes are given by $z_1 = 2\,e^{i\cdot 0°}$ and $z_2 = 2\,e^{i\cdot 30°}$. Is their sum closer to constructive or destructive interference? Sketch both vectors before computing.
+9. Now suppose $z_2 = 2\,e^{i\cdot 170°}$ instead. How does the picture change, and what happens to $|z_1 + z_2|$ compared to question 8?
+10. Based on questions 8–9, propose a general rule (in words, no formula needed) for when two equal-modulus amplitudes interfere mostly constructively versus mostly destructively.
+```
+
+
+
+
+
+## 3. Vectors and Vector Spaces
+
+### 3.1 From Numbers to Lists of Numbers
+
+A single complex number is already a useful object, but quantum states involve more than one amplitude at a time. To describe a system with several possible outcomes, we group multiple numbers together into a single object called a **vector**.
+
+A vector is simply an ordered list of numbers, written as a column:
+
+$$
+v = \begin{pmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{pmatrix}
+$$
+
+In quantum computing, the entries $v_1, v_2, \dots, v_n$ will almost always be complex numbers.
+
+### 3.2 Vector Spaces
+
+A **vector space** is a collection of vectors that can be combined in two basic ways, following a small set of consistent rules:
+
+- **Vector addition**: adding two vectors of the same size, entry by entry.
+- **Scalar multiplication**: multiplying every entry of a vector by a number (in our case, a complex number).
+
+```text
+      ┌       ┐       ┌       ┐       ┌            ┐
+      │  v_1  │       │  w_1  │       │ v_1 + w_1  │
+  v + w =  │  v_2  │  +   │  w_2  │  =    │ v_2 + w_2  │
+      │  ...  │       │  ...  │       │    ...     │
+      └       ┘       └       ┘       └            ┘
+```
+
+The vector spaces relevant to quantum computing are built using complex numbers as scalars. These are called **complex vector spaces**, and they are the natural home for quantum states.
+
+### 3.3 Linear Combinations, Basis, and Dimension
+
+A **linear combination** of vectors is simply a weighted sum of them, using scalars as weights:
+
+$$
+w = c_1 v_1 + c_2 v_2 + \dots + c_k v_k
+$$
+
+A set of vectors forms a **basis** for a vector space if every vector in that space can be written as a unique linear combination of them, and none of the basis vectors is redundant (i.e., none can be written as a combination of the others). The number of vectors needed to form a basis is called the **dimension** of the vector space.
+
+For a single qubit, the relevant vector space has dimension 2. The most natural basis for it consists of two vectors representing "definitely 0" and "definitely 1" — we will meet them formally as $|0\rangle$ and $|1\rangle$ later in this chapter.
+
+```{note}
+This is precisely why the classical bit's two possibilities (0 and 1) reappear inside the qubit's mathematics: they correspond to the two basis vectors of a 2-dimensional complex vector space. What changes is that a qubit is also allowed to be any linear combination of these two vectors — this is exactly the mathematical meaning of **superposition**.
+```
+
+### 3.4 Inner Product and Norm
+
+To measure the "length" of a vector, or the "overlap" between two vectors, we need one more tool: the **inner product**.
+
+For two vectors $v$ and $w$ with complex entries, the inner product is defined as:
+
+$$
+\langle v, w \rangle = \sum_{i=1}^{n} v_i^{*} w_i
+$$
+
+Notice the complex conjugate on the entries of $v$. This is not an arbitrary choice — it is exactly what guarantees that the inner product of a vector with itself is always a non-negative real number:
+
+$$
+\langle v, v \rangle = \sum_{i=1}^{n} v_i^{*} v_i = \sum_{i=1}^{n} |v_i|^2 \; \geq 0
+$$
+
+This quantity is used to define the **norm** (length) of a vector:
+
+$$
+\|v\| = \sqrt{\langle v, v \rangle}
+$$
+
+```{important}
+A quantum state vector is always required to have norm equal to 1. This is called the **normalization condition**, and it is what guarantees that the probabilities extracted from a quantum state (via $|v_i|^2$) add up to exactly 100%. We will return to this the moment we formally introduce qubits in Chapter 4.
+```
+
+Two vectors are called **orthogonal** if their inner product is zero — intuitively, they point in "completely independent" directions, with no overlap at all. A basis whose vectors are all mutually orthogonal *and* individually normalized (norm 1) is called an **orthonormal basis**. Quantum computing relies almost exclusively on orthonormal bases, because they correspond to sets of perfectly distinguishable measurement outcomes.
+
+
+
+
+
+
+## 4. Dirac Notation
+
+### 4.1 Why a New Notation at All?
+
+At this point we already have everything we need mathematically: complex numbers, vectors, and inner products. So why does quantum mechanics use yet another notation on top of this?
+
+The answer is convenience and clarity. **Dirac notation** (also called **bra-ket notation**), introduced by Paul Dirac in the 1930s, was designed specifically to make quantum mechanical expressions compact, unambiguous, and easy to manipulate. Once you get used to it, it becomes hard to imagine quantum computing written any other way — and every quantum computing paper, textbook, and programming framework you will encounter uses it.
+
+### 4.2 Kets
+
+A **ket**, written $|\psi\rangle$, is simply a column vector:
+
+$$
+|\psi\rangle = \begin{pmatrix} \psi_1 \\ \psi_2 \\ \vdots \\ \psi_n \end{pmatrix}
+$$
+
+The symbol inside the "half-bracket" (here, $\psi$) is just a label chosen by whoever is describing the state — it could be a letter, a word, or even a digit. For a single qubit, the two basis states are conventionally labeled $|0\rangle$ and $|1\rangle$:
+
+$$
+|0\rangle = \begin{pmatrix} 1 \\ 0 \end{pmatrix}, \qquad
+|1\rangle = \begin{pmatrix} 0 \\ 1 \end{pmatrix}
+$$
+
+This pair is called the **computational basis**, and it is the default basis used throughout quantum computing.
+
+### 4.3 Bras
+
+A **bra**, written $\langle\psi|$, is the **conjugate transpose** of the corresponding ket — that is, we turn the column into a row, and take the complex conjugate of every entry:
+
+$$
+\langle\psi| = \begin{pmatrix} \psi_1^{*} & \psi_2^{*} & \dots & \psi_n^{*} \end{pmatrix}
+$$
+
+```text
+Ket  |ψ⟩  →  column vector
+Bra  ⟨ψ|  →  row vector, entries conjugated
+```
+
+Every ket has a corresponding bra, and vice versa. Together, they give the notation its name: bra + ket = **bra-ket**.
+
+### 4.4 Putting Them Together: The Inner Product
+
+The real elegance of Dirac notation appears when a bra and a ket are placed side by side. The expression $\langle\phi|\psi\rangle$ is exactly the inner product we defined in Section 3.4:
+
+$$
+\langle\phi|\psi\rangle = \sum_{i=1}^{n} \phi_i^{*}\psi_i
+$$
+
+```text
+⟨ϕ|   ×   |ψ⟩   =   ⟨ϕ|ψ⟩
+(bra)    (ket)     (a single number)
+```
+
+This is precisely why the notation was designed this way: the "bracket" $\langle \cdot | \cdot \rangle$ literally spells out the operation being performed. Using the computational basis as an example:
+
+$$
+\langle 0|0\rangle = 1, \qquad \langle 1|1\rangle = 1, \qquad \langle 0|1\rangle = 0
+$$
+
+These three results simply confirm, in the new notation, that $|0\rangle$ and $|1\rangle$ are each normalized (norm 1) and mutually orthogonal — in other words, that they form an orthonormal basis.
+
+### 4.5 General Quantum States in Dirac Notation
+
+Using the idea of a linear combination from Section 3.3, a general single-qubit state can now be written as:
+
+$$
+|\psi\rangle = \alpha|0\rangle + \beta|1\rangle
+$$
+
+where $\alpha$ and $\beta$ are complex numbers called **probability amplitudes**, subject to the normalization condition:
+
+$$
+|\alpha|^2 + |\beta|^2 = 1
+$$
+
+This single equation is the precise mathematical version of the "spinning coin" analogy from Chapter 1: the qubit is not simply $|0\rangle$ or $|1\rangle$, but a combination of both, weighted by complex amplitudes whose squared magnitudes behave like probabilities.
+
+```{note}
+We are only previewing this here. Chapter 4 will define the qubit formally, explain exactly why $|\alpha|^2$ and $|\beta|^2$ are interpreted as probabilities (the **Born rule**), and connect this equation to the Bloch Sphere introduced in Chapter 1.
+```
+
+
+
+
+
+
+## 5. Matrices and Linear Operators
+
+### 5.1 Matrices as Transformations
+
+If a vector describes the *state* of a quantum system, then something else must describe how that state *changes*. That something is a **matrix**.
+
+A matrix is a rectangular array of numbers, and — crucially — it can be multiplied by a vector to produce a new vector:
+
+$$
+M|\psi\rangle = |\psi'\rangle
+$$
+
+In quantum computing, matrices play the role of **quantum gates**: every operation applied to a qubit, as introduced conceptually in Chapter 1, corresponds mathematically to multiplying its state vector by a matrix.
+
+```text
+   State           Gate            New State
+   |ψ⟩       ×       M       =        |ψ'⟩
+(before)      (transformation)      (after)
+```
+
+### 5.2 The Identity Matrix
+
+The simplest possible matrix is the **identity matrix**, denoted $I$, which leaves every vector unchanged:
+
+$$
+I = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}, \qquad I|\psi\rangle = |\psi\rangle
+$$
+
+While trivial on its own, the identity matrix is a useful reference point: every quantum gate can be understood, in part, by comparing what it does differently from doing nothing at all.
+
+### 5.3 The Adjoint (Conjugate Transpose) of a Matrix
+
+Just as a ket has a corresponding bra, every matrix $M$ has a corresponding **adjoint**, written $M^{\dagger}$ (read "M dagger"), obtained by transposing the matrix and taking the complex conjugate of every entry:
+
+$$
+M^{\dagger} = (M^{T})^{*}
+$$
+
+The adjoint will reappear constantly throughout this book, most importantly in the next definition.
+
+### 5.4 Unitary Matrices
+
+Not every matrix corresponds to something physically allowed inside a quantum computer. Recall from Section 3.4 that a quantum state vector must always have norm 1 — this represents the requirement that probabilities add up to 100%. It follows that any transformation applied to a quantum state must preserve this norm; otherwise, the resulting "probabilities" would no longer make sense.
+
+Matrices with this norm-preserving property are called **unitary matrices**, and they satisfy the defining condition:
+
+$$
+U^{\dagger}U = UU^{\dagger} = I
+$$
+
+```{important}
+Every quantum gate is mathematically represented by a unitary matrix. This is not an arbitrary design choice — it is a direct mathematical consequence of the requirement that quantum states remain properly normalized after every operation. We will use this fact repeatedly once quantum gates are introduced formally.
+```
+
+An intuitive way to think about unitary matrices is that they *rotate* vectors without stretching or shrinking them — much like rotating an arrow around the origin changes its direction but never its length.
+
+### 5.5 Eigenvalues and Eigenvectors, Briefly
+
+One more concept will be useful in later chapters, particularly when we discuss measurement: **eigenvectors** and **eigenvalues**.
+
+For a given matrix $M$, a vector $|v\rangle$ is called an eigenvector of $M$ if applying $M$ to it only rescales it, without changing its direction:
+
+$$
+M|v\rangle = \lambda|v\rangle
+$$
+
+where $\lambda$ is a (possibly complex) number called the corresponding **eigenvalue**.
+
+```text
+M |v⟩  =  λ |v⟩
+           │
+           └── same direction as |v⟩, just scaled by λ
+```
+
+We will not need the full theory of eigenvalues and eigenvectors yet. For now, it is enough to know that they exist and that, later in this book, they will provide the precise mathematical description of what happens when a qubit is measured.
+
+### 5.6 A First Glimpse of the Tensor Product
+
+Everything discussed so far describes a *single* qubit. But interesting computation requires *many* qubits working together, and combining multiple quantum systems into one requires an additional operation called the **tensor product**, written $\otimes$.
+
+We will not define the tensor product rigorously here — it deserves its own careful treatment once multi-qubit systems are introduced in Part IV of this book. For now, it is enough to know that it exists, and that it is the mathematical tool responsible for one of the most famous and counterintuitive phenomena in quantum computing: **entanglement**.
+
+```{note}
+If linear combinations (Section 3.3) describe how a *single* qubit can be a blend of $|0\rangle$ and $|1\rangle$, the tensor product describes how *multiple* qubits combine into a single, larger quantum state — one that, remarkably, cannot always be split back apart into independent pieces.
+```
+
+
+
+
+
+
+## 6. Putting It All Together
+
+Let's briefly review the path this chapter has taken:
+
+- We introduced **complex numbers** because quantum amplitudes need both a magnitude and a phase to properly describe interference.
+- We introduced **vectors** and **vector spaces** because a quantum state is described by more than one amplitude at once.
+- We introduced the **inner product** and **normalization** because probabilities must be real, non-negative, and must add up to 100%.
+- We introduced **Dirac notation** as a compact and standard way to write all of the above.
+- We introduced **matrices**, and in particular **unitary matrices**, because every operation on a quantum state must preserve normalization.
+
+```text
+Complex Numbers  →  amplitudes with magnitude and phase
+Vector Spaces    →  states as combinations of basis vectors
+Inner Product    →  normalization and orthogonality
+Dirac Notation   →  |ψ⟩, ⟨ψ|, ⟨ϕ|ψ⟩
+Matrices (Unitary) → transformations of quantum states
+```
+
+With this toolkit in hand, we are finally ready to give a fully precise definition of the qubit — connecting the "spinning coin" and the Bloch Sphere from Chapter 1 to the equation $|\psi\rangle = \alpha|0\rangle + \beta|1\rangle$ introduced in this chapter. That is exactly where the next chapter begins.
+
+<!-- ```{figure} /_static/figures/ch3_fig6-1.png
+:name: fig-ch3-6-1
+:alt: From mathematics to qubits
+
+From mathematics to qubits: complex numbers, vector spaces, and Dirac notation combine to precisely describe a quantum state.
+``` -->
+
+
+---
+
+## References
+
+[1] Nielsen, M. A., & Chuang, I. L. (2010). *Quantum Computation and Quantum Information* (10th Anniversary ed.). Cambridge University Press.
+
+[2] Dirac, P. A. M. (1930). *The Principles of Quantum Mechanics*. Oxford University Press.
+
+[3] Axler, S. (2015). *Linear Algebra Done Right* (3rd ed.). Springer.
+
+[4] Sakurai, J. J., & Napolitano, J. (2017). *Modern Quantum Mechanics* (2nd ed.). Cambridge University Press.
+
+[5] Euler, L. (1748). *Introductio in analysin infinitorum*. Lausanne.

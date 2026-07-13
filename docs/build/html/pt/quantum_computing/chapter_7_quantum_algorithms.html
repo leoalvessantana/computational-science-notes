@@ -1,0 +1,967 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Sumário" href="../../en/index.html"><link rel="prev" title="Capítulo 6 — Programação em Python para Computação Quântica" href="chapter_6_python_quantum_computing.html">
+
+    <!-- Generated with Sphinx 9.0.4 and Furo 2025.12.19 -->
+        <title>Capítulo 7 — Algoritmos Quânticos - Computational Science Notes 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=dff35b1a" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #272822;
+  --color-code-foreground: #f8f8f2;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Computational Science Notes 0.1 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">Computational Science Notes 0.1 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">Português 🇧🇷</a><input aria-label="Toggle navigation of Português 🇧🇷" checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="chapter_1_introduction.html">Capítulo 1 — Introdução</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_2_why_quantum_computing.html">Capítulo 2 — Por Que Computação Quântica?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_3_mathematics_for_quantum_computing.html">Capítulo 3 — Matemática para Computação Quântica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_4_qubits_postulados.html">Capítulo 4 — Qubits e os Postulados da Computação Quântica</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_5_multi_qubit_systems.html">Capítulo 5 — Sistemas de Múltiplos Qubits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chapter_6_python_quantum_computing.html">Capítulo 6 — Programação em Python para Computação Quântica</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Capítulo 7 — Algoritmos Quânticos</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../en/index.html">English 🇺🇸</a><input aria-label="Toggle navigation of English 🇺🇸" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_1_introduction.html">Chapter 1 — Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_2_why_quantum_computing.html">Chapter 2 — Why Quantum Computing?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../en/quantum_computing/chapter_3_mathematics_for_quantum_computing.html">Chapter 3 — Mathematics for Quantum Computing</a></li>
+</ul>
+</li>
+</ul>
+
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/pt/quantum_computing/chapter_7_quantum_algorithms.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section class="tex2jax_ignore mathjax_ignore" id="capitulo-7-algoritmos-quanticos">
+<h1>Capítulo 7 — Algoritmos Quânticos<a class="headerlink" href="#capitulo-7-algoritmos-quanticos" title="Link to this heading">¶</a></h1>
+<p>Nos Capítulos 4 e 5, construímos a teoria: postulados, qubits, portas, emaranhamento. No Capítulo 6, construímos as ferramentas: um simulador em <code class="docutils literal notranslate"><span class="pre">numpy</span></code> e o Qiskit. Chegou a hora de usar tudo isso para o que realmente importa — <strong>algoritmos</strong> que resolvem problemas mais rápido do que qualquer computador clássico consegue.</p>
+<p>Este capítulo segue uma progressão histórica e pedagógica natural. Começamos com um pouco de teoria da computação e análise de algoritmos — o vocabulário necessário para dizer, com precisão, o que significa “mais rápido”. Em seguida, estudamos quatro algoritmos, em ordem crescente de sofisticação: <strong>Deutsch–Jozsa</strong> (o primeiro algoritmo a demonstrar vantagem quântica, ainda que para um problema artificial), o <strong>algoritmo de Grover</strong> (busca não estruturada, com vantagem quadrática), a <strong>Transformada Quântica de Fourier</strong> (uma sub-rotina que, por si só, não resolve nenhum problema, mas é o motor por trás do próximo algoritmo), e o <strong>algoritmo de Shor</strong> (fatoração de inteiros, com vantagem exponencial — o resultado que tornou a computação quântica famosa).</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Todo o código deste capítulo reaproveita as funções <code class="docutils literal notranslate"><span class="pre">numpy</span></code> construídas no Capítulo 6 (<code class="docutils literal notranslate"><span class="pre">kron_n</span></code>, <code class="docutils literal notranslate"><span class="pre">embed</span></code>, <code class="docutils literal notranslate"><span class="pre">gate_on_qubit</span></code>, <code class="docutils literal notranslate"><span class="pre">controlled_gate</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">X</span></code>, <code class="docutils literal notranslate"><span class="pre">Z</span></code>, <code class="docutils literal notranslate"><span class="pre">normalize</span></code>, etc.). Assumimos que elas já estão definidas.</p>
+</div></blockquote>
+<hr class="docutils" />
+<section id="teoria-da-computacao">
+<h2>7.1 Teoria da Computação<a class="headerlink" href="#teoria-da-computacao" title="Link to this heading">¶</a></h2>
+<p>Antes de falar de algoritmos <em>quânticos</em>, vale a pena fixar um pouco de vocabulário sobre algoritmos em geral — a chamada <strong>teoria da computação</strong>.</p>
+<section id="problemas-de-decisao-e-classes-de-complexidade">
+<h3>Problemas de decisão e classes de complexidade<a class="headerlink" href="#problemas-de-decisao-e-classes-de-complexidade" title="Link to this heading">¶</a></h3>
+<p>Um <strong>problema de decisão</strong> é uma pergunta com resposta sim/não sobre uma entrada (por exemplo: “este número é primo?”). A <strong>classe de complexidade</strong> de um problema descreve quanto recurso computacional (tempo, memória) é necessário para resolvê-lo, em função do tamanho <span class="math notranslate nohighlight">\(n\)</span> da entrada.</p>
+<p>Duas classes clássicas serão relevantes neste capítulo:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\textbf{P}\)</span>: problemas resolvíveis em tempo <strong>polinomial</strong> em <span class="math notranslate nohighlight">\(n\)</span> por um computador clássico (determinístico). Considerados “eficientes”.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\textbf{NP}\)</span>: problemas cuja resposta, uma vez encontrada, pode ser <strong>verificada</strong> em tempo polinomial — mesmo que encontrá-la pareça exigir tempo exponencial. A fatoração de inteiros, tema da Seção 7.6, está em <span class="math notranslate nohighlight">\(\textbf{NP}\)</span> (e acredita-se, mas não está demonstrado, que não está em <span class="math notranslate nohighlight">\(\textbf{P}\)</span> classicamente).</p></li>
+</ul>
+<p>A computação quântica define sua própria classe:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\textbf{BQP}\)</span> (<em>Bounded-error Quantum Polynomial time</em>): problemas resolvíveis em tempo polinomial por um computador <strong>quântico</strong>, com probabilidade de erro limitada (por exemplo, no máximo <span class="math notranslate nohighlight">\(1/3\)</span>, que pode ser reduzida repetindo o algoritmo).</p></li>
+</ul>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p>Sabe-se que <span class="math notranslate nohighlight">\(\textbf{P}\subseteq\textbf{BQP}\)</span> (qualquer coisa que um computador clássico resolve eficientemente, um computador quântico também resolve). O algoritmo de Shor (Seção 7.6) resolve a fatoração de inteiros em <span class="math notranslate nohighlight">\(\textbf{BQP}\)</span>; não se sabe se a fatoração está em <span class="math notranslate nohighlight">\(\textbf{P}\)</span>. Por isso, o algoritmo de Shor não prova que <span class="math notranslate nohighlight">\(\textbf{P}\neq\textbf{BQP}\)</span> — mas é a evidência mais famosa de que os dois conjuntos provavelmente <strong>não coincidem</strong>.</p>
+</div></blockquote>
+</section>
+<section id="o-modelo-de-oraculo">
+<h3>O modelo de oráculo<a class="headerlink" href="#o-modelo-de-oraculo" title="Link to this heading">¶</a></h3>
+<p>Muitos algoritmos quânticos — incluindo os quatro deste capítulo — não recebem a entrada como uma lista de números, mas como uma <strong>função caixa-preta</strong> (ou <em>oráculo</em>) <span class="math notranslate nohighlight">\(f\)</span>, que o algoritmo só pode acessar chamando-a com um argumento e observando o resultado. A pergunta relevante passa a ser: <strong>quantas chamadas ao oráculo</strong> (não quantos passos de computação) são necessárias para resolver o problema?</p>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Para que um oráculo clássico <span class="math notranslate nohighlight">\(f:\{0,1\}^n\to\{0,1\}\)</span> possa ser usado dentro de um circuito quântico, ele precisa ser implementado como uma porta <strong>unitária</strong> (Postulado 2, Capítulo 4) — o que exige que seja <strong>reversível</strong>. A construção padrão usa um qubit auxiliar:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+&gt; U_f|x\rangle|y\rangle = |x\rangle|y\oplus f(x)\rangle,
+&gt; \]</div>
+</div>
+<p>exatamente o mesmo tipo de construção que já apareceu, implicitamente, na porta CNOT do Capítulo 5 (que é o caso <span class="math notranslate nohighlight">\(f(x)=x\)</span>). Essa é a forma de oráculo usada tanto no algoritmo de Deutsch–Jozsa (Seção 7.3) quanto, de forma disfarçada, no de Grover (Seção 7.4).</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 7.1</strong></summary>
+<ol class="arabic">
+<li><p>A que classe de complexidade pertence o problema “dado um circuito quântico com <span class="math notranslate nohighlight">\(n\)</span> qubits e <span class="math notranslate nohighlight">\(m\)</span> portas, e um observável <span class="math notranslate nohighlight">\(O\)</span>, o valor esperado de <span class="math notranslate nohighlight">\(O\)</span> é maior que <span class="math notranslate nohighlight">\(0.5\)</span>?” (não é necessário resolver formalmente — apenas identifique qual das classes definidas nesta seção é a mais natural para descrevê-lo, e por quê).</p>
+<details>
+<summary>Resolução</summary>
+<p><span class="math notranslate nohighlight">\(\textbf{BQP}\)</span>: o problema é resolvido de forma natural simulando o próprio circuito quântico (Capítulo 6) e usando um <code class="docutils literal notranslate"><span class="pre">Estimator</span></code> (Seção 6.7) para estimar o valor esperado, com probabilidade de erro controlável repetindo a medição.</p>
+</details>
+</li>
+<li><p>Por que a construção <span class="math notranslate nohighlight">\(U_f|x\rangle|y\rangle = |x\rangle|y\oplus f(x)\rangle\)</span> é sempre reversível, para <strong>qualquer</strong> função clássica <span class="math notranslate nohighlight">\(f\)</span> (mesmo que <span class="math notranslate nohighlight">\(f\)</span> em si não seja injetora)?</p>
+<details>
+<summary>Resolução</summary>
+<p>Porque <span class="math notranslate nohighlight">\(U_f\)</span> é sua própria inversa: aplicando <span class="math notranslate nohighlight">\(U_f\)</span> duas vezes seguidas, <span class="math notranslate nohighlight">\(y\oplus f(x)\oplus f(x) = y\)</span> (já que <span class="math notranslate nohighlight">\(f(x)\oplus f(x)=0\)</span> para qualquer bit), então o segundo qubit retorna ao valor original. Isso vale independentemente de <span class="math notranslate nohighlight">\(f\)</span> ser ou não injetora, porque a reversibilidade está na estrutura do XOR com o qubit auxiliar, não na função <span class="math notranslate nohighlight">\(f\)</span> em si.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="analise-de-algoritmos">
+<h2>7.2 Análise de Algoritmos<a class="headerlink" href="#analise-de-algoritmos" title="Link to this heading">¶</a></h2>
+<p>Para comparar algoritmos clássicos e quânticos de forma justa, precisamos de uma métrica comum. Neste capítulo, usaremos principalmente a <strong>complexidade de consulta</strong> (<em>query complexity</em>): o número de chamadas ao oráculo necessárias no <strong>pior caso</strong>, como função de <span class="math notranslate nohighlight">\(n\)</span> (para Deutsch–Jozsa e Grover) ou como função do tamanho do número a fatorar (para Shor, onde a métrica relevante passa a ser tempo de execução, não consultas a um oráculo).</p>
+<p>Usamos a notação usual de análise de algoritmos:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(O(g(n))\)</span>: limitado superiormente, a menos de uma constante, por <span class="math notranslate nohighlight">\(g(n)\)</span> para <span class="math notranslate nohighlight">\(n\)</span> suficientemente grande.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\Omega(g(n))\)</span>: limitado inferiormente pela mesma noção — usado para provar que <strong>nenhum</strong> algoritmo (clássico, nesse caso) pode fazer melhor que <span class="math notranslate nohighlight">\(g(n)\)</span>.</p></li>
+</ul>
+<p>A tabela abaixo resume as vantagens que vamos demonstrar (e, em alguns casos, provar formalmente) neste capítulo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Algoritmo         Problema                    Clássico (pior caso)    Quântico       Tipo de vantagem
+-----------------------------------------------------------------------------------------------------
+Deutsch-Jozsa     f constante ou balanceada   O(2^(n-1) + 1)          O(1)           Exponencial
+Grover            busca em N itens            O(N)                    O(√N)          Quadrática
+Shor              fatorar inteiro de n bits   sub-exponencial         O(n^3) (~)     Exponencial (conjecturada)
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>“Vantagem exponencial” para Deutsch–Jozsa é um resultado <em>no modelo de oráculo determinístico</em> — um algoritmo clássico <strong>probabilístico</strong> resolve o mesmo problema com alta confiança em apenas algumas consultas. Por isso, Deutsch–Jozsa é historicamente importante (foi o primeiro exemplo de separação quântico-clássica), mas não representa uma vantagem prática de verdade. Grover e Shor, em contraste, mantêm sua vantagem mesmo contra os melhores algoritmos clássicos probabilísticos conhecidos.</p>
+</div></blockquote>
+<p>Duas ideias vão aparecer repetidamente nas próximas seções e merecem ser destacadas desde já:</p>
+<ul class="simple">
+<li><p><strong>Interferência</strong>: aplicar Hadamard a uma superposição pode fazer amplitudes se cancelarem (interferência destrutiva) ou se reforçarem (interferência construtiva). Deutsch–Jozsa e Grover são, no fundo, formas cuidadosamente projetadas de produzir interferência construtiva exatamente sobre a resposta certa.</p></li>
+<li><p><strong>Amplificação de amplitude</strong>: em vez de tentar “adivinhar” a resposta de uma vez, Grover aumenta gradualmente a probabilidade de medir a resposta certa, repetindo uma mesma operação várias vezes — uma ideia sem análogo clássico direto.</p></li>
+</ul>
+<details>
+<summary><strong>Exercícios 7.2</strong></summary>
+<ol class="arabic">
+<li><p>Para <span class="math notranslate nohighlight">\(n=10\)</span> qubits (portanto <span class="math notranslate nohighlight">\(N=2^{10}=1024\)</span> itens), quantas consultas ao oráculo Grover precisa, aproximadamente, comparado com uma busca clássica exaustiva?</p>
+<details>
+<summary>Resolução</summary>
+<p>Clássico: até <span class="math notranslate nohighlight">\(1024\)</span> consultas no pior caso. Grover: aproximadamente <span class="math notranslate nohighlight">\(\frac{\pi}{4}\sqrt{1024}=\frac{\pi}{4}\times32\approx 25\)</span> consultas — uma redução de mais de <span class="math notranslate nohighlight">\(40\times\)</span>.</p>
+</details>
+</li>
+<li><p>Explique, em uma frase, por que uma vantagem “quadrática” (<span class="math notranslate nohighlight">\(O(\sqrt N)\)</span> vs. <span class="math notranslate nohighlight">\(O(N)\)</span>) é qualitativamente diferente de uma vantagem “exponencial” (<span class="math notranslate nohighlight">\(O(n^3)\)</span> vs. <span class="math notranslate nohighlight">\(O(2^n)\)</span>) ao considerar problemas cada vez maiores.</p>
+<details>
+<summary>Resolução</summary>
+<p>Uma vantagem quadrática cresce, mas a razão entre os tempos clássico e quântico cresce apenas como <span class="math notranslate nohighlight">\(\sqrt N\)</span>; uma vantagem exponencial faz a razão entre os tempos crescer exponencialmente com o tamanho da entrada, de modo que, para entradas grandes, o algoritmo clássico se torna computacionalmente inviável enquanto o quântico permanece tratável.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+<hr class="docutils" />
+<section id="deutschjozsa">
+<h2>7.3 Deutsch–Jozsa<a class="headerlink" href="#deutschjozsa" title="Link to this heading">¶</a></h2>
+<section id="o-problema">
+<h3>O problema<a class="headerlink" href="#o-problema" title="Link to this heading">¶</a></h3>
+<p>Recebemos acesso a um oráculo para uma função <span class="math notranslate nohighlight">\(f:\{0,1\}^n\to\{0,1\}\)</span>, com a <strong>promessa</strong> de que <span class="math notranslate nohighlight">\(f\)</span> é de um dos dois tipos:</p>
+<ul class="simple">
+<li><p><strong>Constante</strong>: <span class="math notranslate nohighlight">\(f(x)\)</span> é o mesmo valor para todo <span class="math notranslate nohighlight">\(x\)</span> (ou sempre 0, ou sempre 1).</p></li>
+<li><p><strong>Balanceada</strong>: <span class="math notranslate nohighlight">\(f(x)\)</span> vale <span class="math notranslate nohighlight">\(0\)</span> para exatamente metade das entradas e <span class="math notranslate nohighlight">\(1\)</span> para a outra metade.</p></li>
+</ul>
+<p><strong>Objetivo</strong>: decidir qual dos dois casos ocorre, com o menor número possível de chamadas a <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<p><strong>Clássico</strong>: no pior caso, um algoritmo determinístico pode precisar de <span class="math notranslate nohighlight">\(2^{n-1}+1\)</span> consultas (imagine consultar exatamente metade das entradas e obter sempre o mesmo valor: ainda não se sabe se as restantes serão iguais — constante — ou diferentes — balanceada; a consulta seguinte decide).</p>
+<p><strong>Quântico</strong>: o algoritmo de Deutsch–Jozsa resolve isso com <strong>uma única consulta</strong> ao oráculo.</p>
+</section>
+<section id="o-circuito">
+<h3>O circuito<a class="headerlink" href="#o-circuito" title="Link to this heading">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>|0⟩^n ──[H^n]──●────────[H^n]──[medir]
+               │  U_f
+|1⟩   ──[H]────●────────
+</pre></div>
+</div>
+<p>Onde <span class="math notranslate nohighlight">\(U_f|x\rangle|y\rangle=|x\rangle|y\oplus f(x)\rangle\)</span> (Seção 7.1) atua sobre os <span class="math notranslate nohighlight">\(n\)</span> qubits de entrada e o qubit auxiliar.</p>
+</section>
+<section id="por-que-funciona">
+<h3>Por que funciona<a class="headerlink" href="#por-que-funciona" title="Link to this heading">¶</a></h3>
+<p>Partindo de <span class="math notranslate nohighlight">\(|0\rangle^{\otimes n}|1\rangle\)</span> e aplicando <span class="math notranslate nohighlight">\(H\)</span> a todos os <span class="math notranslate nohighlight">\(n+1\)</span> qubits, obtemos uma superposição uniforme sobre <span class="math notranslate nohighlight">\(x\)</span>, com o qubit auxiliar em <span class="math notranslate nohighlight">\(|-\rangle\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{\sqrt{2^n}}\sum_{x}|x\rangle \otimes |-\rangle.
+\]</div>
+</div>
+<p>Um fato notável sobre <span class="math notranslate nohighlight">\(U_f\)</span> é que, quando o qubit auxiliar está em <span class="math notranslate nohighlight">\(|-\rangle\)</span>, aplicar <span class="math notranslate nohighlight">\(U_f\)</span> produz exatamente uma <strong>fase</strong> <span class="math notranslate nohighlight">\((-1)^{f(x)}\)</span> no registrador <span class="math notranslate nohighlight">\(x\)</span>, sem alterar o auxiliar — um truque conhecido como <em>phase kickback</em>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+U_f\Big(|x\rangle\otimes|-\rangle\Big) = (-1)^{f(x)}|x\rangle\otimes|-\rangle.
+\]</div>
+</div>
+<p>Depois do oráculo, o estado dos <span class="math notranslate nohighlight">\(n\)</span> primeiros qubits é</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{\sqrt{2^n}}\sum_{x}(-1)^{f(x)}|x\rangle.
+\]</div>
+</div>
+<p>Aplicando <span class="math notranslate nohighlight">\(H^{\otimes n}\)</span> novamente, a amplitude do estado <span class="math notranslate nohighlight">\(|0\rangle^{\otimes n}\)</span> se torna</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{2^n}\sum_x (-1)^{f(x)}.
+\]</div>
+</div>
+<ul class="simple">
+<li><p>Se <span class="math notranslate nohighlight">\(f\)</span> é <strong>constante</strong>, todos os termos têm o mesmo sinal, e essa soma vale <span class="math notranslate nohighlight">\(\pm1\)</span> — a probabilidade de medir <span class="math notranslate nohighlight">\(|0\rangle^{\otimes n}\)</span> é exatamente <span class="math notranslate nohighlight">\(1\)</span>.</p></li>
+<li><p>Se <span class="math notranslate nohighlight">\(f\)</span> é <strong>balanceada</strong>, exatamente metade dos termos é <span class="math notranslate nohighlight">\(+1\)</span> e metade <span class="math notranslate nohighlight">\(-1\)</span>, e a soma é <strong>exatamente zero</strong> — interferência destrutiva total, e a probabilidade de medir <span class="math notranslate nohighlight">\(|0\rangle^{\otimes n}\)</span> é exatamente <span class="math notranslate nohighlight">\(0\)</span>.</p></li>
+</ul>
+<p>Medindo os <span class="math notranslate nohighlight">\(n\)</span> primeiros qubits, portanto, o resultado <span class="math notranslate nohighlight">\(|0\rangle^{\otimes n}\)</span> (todos zero) identifica <span class="math notranslate nohighlight">\(f\)</span> constante com certeza; qualquer outro resultado identifica <span class="math notranslate nohighlight">\(f\)</span> balanceada com certeza.</p>
+</section>
+<section id="implementacao">
+<h3>Implementação<a class="headerlink" href="#implementacao" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dj_oracle_matrix</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constrói U_f em n+1 qubits: |x&gt;|y&gt; -&gt; |x&gt;|y xor f(x)&gt;.&quot;&quot;&quot;</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">idx</span> <span class="o">&amp;</span> <span class="mi">1</span>
+        <span class="n">new_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y</span> <span class="o">^</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">U</span><span class="p">[</span><span class="n">new_idx</span><span class="p">,</span> <span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">U</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">deutsch_jozsa</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>                                  <span class="c1"># |0...0&gt;|1&gt;</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">H</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span> <span class="o">@</span> <span class="n">state</span>           <span class="c1"># H em todos os n+1 qubits</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">dj_oracle_matrix</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>           <span class="c1"># oráculo</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="o">*</span><span class="p">([</span><span class="n">H</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="o">+</span> <span class="p">[</span><span class="n">I</span><span class="p">]))</span> <span class="o">@</span> <span class="n">state</span>         <span class="c1"># H apenas nos n primeiros</span>
+
+    <span class="n">prob_all_zero</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+        <span class="nb">abs</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">idx</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">prob_all_zero</span>  <span class="c1"># 1.0 -&gt; constante ; 0.0 -&gt; balanceada</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Confirmando o algoritmo</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">f_const</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">0</span>
+<span class="n">f_balanced</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">bin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>   <span class="c1"># paridade dos bits de x</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">deutsch_jozsa</span><span class="p">(</span><span class="n">f_const</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>     <span class="c1"># 1.0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deutsch_jozsa</span><span class="p">(</span><span class="n">f_balanced</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>  <span class="c1"># 0.0</span>
+</pre></div>
+</div>
+<p>Os resultados confirmam exatamente a previsão teórica: probabilidade <span class="math notranslate nohighlight">\(1\)</span> de medir todos-zero para a função constante, e probabilidade <span class="math notranslate nohighlight">\(0\)</span> para a balanceada — decidido com uma única consulta ao oráculo, embutida em <code class="docutils literal notranslate"><span class="pre">dj_oracle_matrix</span></code>.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 7.3</strong></summary>
+<ol class="arabic">
+<li><p>Verifique que <code class="docutils literal notranslate"><span class="pre">f_balanced</span></code> definida no exemplo é, de fato, balanceada para <span class="math notranslate nohighlight">\(n=3\)</span> (dica: calcule <code class="docutils literal notranslate"><span class="pre">f_balanced(x)</span></code> para todo <span class="math notranslate nohighlight">\(x\)</span> de <span class="math notranslate nohighlight">\(0\)</span> a <span class="math notranslate nohighlight">\(7\)</span> e conte quantos resultados são <span class="math notranslate nohighlight">\(0\)</span> e quantos são <span class="math notranslate nohighlight">\(1\)</span>).</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">valores</span> <span class="o">=</span> <span class="p">[</span><span class="nb">bin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">valores</span><span class="p">)</span>  <span class="c1"># [0,1,1,0,1,0,0,1]</span>
+</pre></div>
+</div>
+<p>Quatro zeros e quatro uns — exatamente balanceada.</p>
+</details>
+</li>
+<li><p>O que aconteceria se, por engano, aplicássemos <span class="math notranslate nohighlight">\(H^{\otimes(n+1)}\)</span> (incluindo o qubit auxiliar) na segunda rodada de Hadamards, em vez de <span class="math notranslate nohighlight">\(H^{\otimes n}\otimes I\)</span>? O resultado da medição dos primeiros <span class="math notranslate nohighlight">\(n\)</span> qubits ainda seria confiável?</p>
+<details>
+<summary>Resolução</summary>
+<p>Aplicar <span class="math notranslate nohighlight">\(H\)</span> novamente ao qubit auxiliar apenas transforma <span class="math notranslate nohighlight">\(|-\rangle\)</span> de volta para <span class="math notranslate nohighlight">\(|1\rangle\)</span> (já que <span class="math notranslate nohighlight">\(H^2=I\)</span>), sem afetar os outros <span class="math notranslate nohighlight">\(n\)</span> qubits — a probabilidade de medir todos-zero nos primeiros <span class="math notranslate nohighlight">\(n\)</span> qubits permanece exatamente a mesma. O algoritmo continuaria funcionando; a diferença é puramente estética (o qubit auxiliar terminaria em <span class="math notranslate nohighlight">\(|1\rangle\)</span> em vez de <span class="math notranslate nohighlight">\(|-\rangle\)</span>).</p>
+</details>
+</li>
+<li><p>Modifique <code class="docutils literal notranslate"><span class="pre">f_const</span></code> para retornar sempre <span class="math notranslate nohighlight">\(1\)</span> em vez de sempre <span class="math notranslate nohighlight">\(0\)</span>. O resultado de <code class="docutils literal notranslate"><span class="pre">deutsch_jozsa</span></code> deveria mudar?</p>
+<details>
+<summary>Resolução</summary>
+<p>Não — para <span class="math notranslate nohighlight">\(f(x)=1\)</span> (constante), a soma <span class="math notranslate nohighlight">\(\sum_x(-1)^{f(x)}\)</span> vale <span class="math notranslate nohighlight">\(-2^n\)</span> em vez de <span class="math notranslate nohighlight">\(+2^n\)</span>, mas o módulo ao quadrado da amplitude (que é o que a probabilidade mede) é o mesmo. <code class="docutils literal notranslate"><span class="pre">deutsch_jozsa</span></code> ainda retorna <span class="math notranslate nohighlight">\(1.0\)</span>.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="algoritmo-de-grover">
+<h2>7.4 Algoritmo de Grover<a class="headerlink" href="#algoritmo-de-grover" title="Link to this heading">¶</a></h2>
+<section id="id1">
+<h3>O problema<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p>Temos um oráculo para uma função <span class="math notranslate nohighlight">\(f:\{0,1\}^n\to\{0,1\}\)</span> que vale <span class="math notranslate nohighlight">\(1\)</span> em exatamente <strong>um</strong> item “marcado” <span class="math notranslate nohighlight">\(w\)</span> (dentre <span class="math notranslate nohighlight">\(N=2^n\)</span> itens) e <span class="math notranslate nohighlight">\(0\)</span> em todos os demais. <strong>Objetivo</strong>: encontrar <span class="math notranslate nohighlight">\(w\)</span>.</p>
+<p><strong>Clássico</strong>: no pior caso, é preciso testar até <span class="math notranslate nohighlight">\(N\)</span> itens — <span class="math notranslate nohighlight">\(O(N)\)</span>.</p>
+<p><strong>Quântico</strong>: o algoritmo de Grover encontra <span class="math notranslate nohighlight">\(w\)</span> com alta probabilidade usando apenas <span class="math notranslate nohighlight">\(O(\sqrt N)\)</span> consultas ao oráculo — especificamente, cerca de <span class="math notranslate nohighlight">\(\frac{\pi}{4}\sqrt N\)</span> repetições de duas operações.</p>
+</section>
+<section id="as-duas-operacoes">
+<h3>As duas operações<a class="headerlink" href="#as-duas-operacoes" title="Link to this heading">¶</a></h3>
+<p><strong>Oráculo de fase.</strong> Em vez de marcar <span class="math notranslate nohighlight">\(w\)</span> escrevendo em um qubit auxiliar (como em Deutsch–Jozsa), Grover usa uma versão que aplica uma fase <span class="math notranslate nohighlight">\(-1\)</span> diretamente ao item marcado:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[\begin{split}
+U_f|x\rangle = \begin{cases}-|x\rangle &amp; x=w\\ |x\rangle &amp; x\neq w\end{cases}.
+\end{split}\]</div>
+</div>
+<p><strong>Operador de difusão.</strong> Reflete o estado em torno da superposição uniforme <span class="math notranslate nohighlight">\(|s\rangle=\tfrac{1}{\sqrt N}\sum_x|x\rangle\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+U_s = H^{\otimes n}\big(2|0\rangle\langle0|-I\big)H^{\otimes n}.
+\]</div>
+</div>
+</section>
+<section id="interpretacao-geometrica">
+<h3>Interpretação geométrica<a class="headerlink" href="#interpretacao-geometrica" title="Link to this heading">¶</a></h3>
+<p>A combinação <span class="math notranslate nohighlight">\(U_s U_f\)</span> tem uma interpretação elegante: dentro do plano 2D gerado por <span class="math notranslate nohighlight">\(|w\rangle\)</span> e pela superposição uniforme dos itens não marcados, cada aplicação de <span class="math notranslate nohighlight">\(U_sU_f\)</span> é uma <strong>rotação</strong> por um ângulo fixo <span class="math notranslate nohighlight">\(\theta\approx\frac{2}{\sqrt N}\)</span> (para <span class="math notranslate nohighlight">\(N\)</span> grande), aproximando o estado cada vez mais de <span class="math notranslate nohighlight">\(|w\rangle\)</span>. Após aproximadamente <span class="math notranslate nohighlight">\(\frac{\pi}{4}\sqrt N\)</span> rotações, o estado está o mais próximo possível de <span class="math notranslate nohighlight">\(|w\rangle\)</span> — e medir nesse ponto retorna <span class="math notranslate nohighlight">\(w\)</span> com alta probabilidade. Continuar iterando além desse ponto “passa direto” e começa a se afastar de <span class="math notranslate nohighlight">\(|w\rangle\)</span> novamente — por isso o número de iterações precisa ser escolhido com cuidado.</p>
+</section>
+<section id="id2">
+<h3>Implementação<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">grover_oracle</span><span class="p">(</span><span class="n">marked_index</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">U</span><span class="p">[</span><span class="n">marked_index</span><span class="p">,</span> <span class="n">marked_index</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">U</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">diffusion_operator</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n</span>
+    <span class="n">Hn</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">H</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">proj0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">proj0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">inversion_about_zero</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">proj0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Hn</span> <span class="o">@</span> <span class="n">inversion_about_zero</span> <span class="o">@</span> <span class="n">Hn</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">grover</span><span class="p">(</span><span class="n">marked_index</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">iterations</span><span class="p">):</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">kron_n</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">H</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>          <span class="c1"># superposição uniforme</span>
+
+    <span class="n">Uf</span><span class="p">,</span> <span class="n">Us</span> <span class="o">=</span> <span class="n">grover_oracle</span><span class="p">(</span><span class="n">marked_index</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">diffusion_operator</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">Uf</span> <span class="o">@</span> <span class="n">state</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">Us</span> <span class="o">@</span> <span class="n">state</span>
+    <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Buscando o item 5 entre 8 itens</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n</span><span class="p">,</span> <span class="n">marked</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n</span>
+<span class="n">optimal_iters</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>   <span class="c1"># 2 iterações para N=8</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">grover</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">optimal_iters</span><span class="p">)</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">probs</span><span class="p">[</span><span class="n">marked</span><span class="p">])</span>   <span class="c1"># 0.9453... -&gt; quase certeza</span>
+</pre></div>
+</div>
+<p>Com apenas <strong>duas</strong> consultas ao oráculo (contra até 8 consultas no pior caso clássico), a probabilidade de medir o item correto (<span class="math notranslate nohighlight">\(5\)</span>) sobe para aproximadamente <span class="math notranslate nohighlight">\(94.5\%\)</span> — o restante da probabilidade se distribui igualmente entre os outros sete itens.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>A probabilidade de sucesso de Grover <strong>não</strong> cresce monotonicamente até 1 e depois fica lá — ela oscila. Se continuássemos aplicando <span class="math notranslate nohighlight">\(U_sU_f\)</span> além do número ótimo de iterações, a probabilidade de encontrar <span class="math notranslate nohighlight">\(w\)</span> começaria a <strong>diminuir</strong> novamente. Escolher o número certo de iterações — aproximadamente <span class="math notranslate nohighlight">\(\frac{\pi}{4}\sqrt N\)</span>, arredondado para o inteiro mais próximo — é parte essencial do algoritmo.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 7.4</strong></summary>
+<ol class="arabic">
+<li><p>Repita o Exemplo desta seção, mas com <code class="docutils literal notranslate"><span class="pre">iterations=1</span></code> (uma iteração a menos que o ótimo) e depois com <code class="docutils literal notranslate"><span class="pre">iterations=4</span></code> (mais iterações que o ótimo). A probabilidade de encontrar o item marcado aumenta ou diminui em cada caso, comparada ao resultado ótimo?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+    <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">grover</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">it</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">probs</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>A probabilidade sobe até <code class="docutils literal notranslate"><span class="pre">iterations=2</span></code> (o ótimo) e depois <strong>cai</strong> para <code class="docutils literal notranslate"><span class="pre">iterations=3</span></code> e <code class="docutils literal notranslate"><span class="pre">4</span></code>, confirmando o comportamento oscilatório descrito na Nota desta seção.</p>
+</details>
+</li>
+<li><p>Para <span class="math notranslate nohighlight">\(N=64\)</span> itens (<span class="math notranslate nohighlight">\(n=6\)</span>), calcule o número ótimo de iterações. Quantas vezes mais rápido é Grover, comparado a uma busca clássica exaustiva no pior caso?</p>
+<details>
+<summary>Resolução</summary>
+<p><span class="math notranslate nohighlight">\(\frac{\pi}{4}\sqrt{64} = \frac{\pi}{4}\times8\approx6.3\to6\)</span> iterações, contra até <span class="math notranslate nohighlight">\(64\)</span> consultas clássicas — aproximadamente <span class="math notranslate nohighlight">\(10\times\)</span> mais rápido, consistente com a vantagem quadrática (<span class="math notranslate nohighlight">\(\sqrt{64}=8\)</span>, na ordem de grandeza certa).</p>
+</details>
+</li>
+<li><p>O operador de difusão foi escrito como <span class="math notranslate nohighlight">\(H^{\otimes n}(2|0\rangle\langle0|-I)H^{\otimes n}\)</span>. Explique por que <span class="math notranslate nohighlight">\(2|0\rangle\langle0|-I\)</span> é, de fato, uma matriz unitária (dica: pense em seus autovalores, sabendo que <span class="math notranslate nohighlight">\(|0\rangle\langle0|\)</span> é um projetor).</p>
+<details>
+<summary>Resolução</summary>
+<p><span class="math notranslate nohighlight">\(|0\rangle\langle0|\)</span> tem autovalor <span class="math notranslate nohighlight">\(1\)</span> no subespaço gerado por <span class="math notranslate nohighlight">\(|0\rangle\)</span> e autovalor <span class="math notranslate nohighlight">\(0\)</span> em todo o subespaço ortogonal a <span class="math notranslate nohighlight">\(|0\rangle\)</span>. Logo <span class="math notranslate nohighlight">\(2|0\rangle\langle0|-I\)</span> tem autovalor <span class="math notranslate nohighlight">\(2\times1-1=1\)</span> na direção <span class="math notranslate nohighlight">\(|0\rangle\)</span> e autovalor <span class="math notranslate nohighlight">\(2\times0-1=-1\)</span> em todo o resto — todos os autovalores têm módulo <span class="math notranslate nohighlight">\(1\)</span>, e a matriz é hermitiana, portanto é unitária (consistente com o Postulado 2).</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="transformada-quantica-de-fourier">
+<h2>7.5 Transformada Quântica de Fourier<a class="headerlink" href="#transformada-quantica-de-fourier" title="Link to this heading">¶</a></h2>
+<p>A <strong>Transformada Quântica de Fourier</strong> (QFT) não resolve, por si só, nenhum problema — é uma sub-rotina, o análogo quântico da Transformada Discreta de Fourier (DFT) clássica, e é o ingrediente central do algoritmo de Shor (próxima seção) e de toda a família de algoritmos de <strong>estimativa de fase</strong>.</p>
+<section id="definicao">
+<h3>Definição<a class="headerlink" href="#definicao" title="Link to this heading">¶</a></h3>
+<p>Dado um vetor de <span class="math notranslate nohighlight">\(N=2^n\)</span> amplitudes <span class="math notranslate nohighlight">\(x_0,\ldots,x_{N-1}\)</span>, a DFT clássica produz <span class="math notranslate nohighlight">\(y_0,\ldots,y_{N-1}\)</span> com</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+y_k = \frac{1}{\sqrt N}\sum_{j=0}^{N-1} x_j\, e^{2\pi i jk/N}.
+\]</div>
+</div>
+<p>A QFT é exatamente essa mesma transformação linear, mas aplicada <strong>às amplitudes de um estado quântico</strong> de <span class="math notranslate nohighlight">\(n\)</span> qubits:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\text{QFT}|j\rangle = \frac{1}{\sqrt N}\sum_{k=0}^{N-1} e^{2\pi ijk/N}|k\rangle.
+\]</div>
+</div>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>A diferença crucial entre a DFT clássica e a QFT não está na fórmula — é a mesma —, mas em <strong>como ela é executada</strong>. A DFT clássica, mesmo pelo algoritmo FFT (<em>Fast Fourier Transform</em>), exige <span class="math notranslate nohighlight">\(O(N\log N)\)</span> operações. A QFT, como veremos a seguir, é implementada por um circuito com apenas <span class="math notranslate nohighlight">\(O(n^2)=O((\log N)^2)\)</span> portas — exponencialmente mais rápida, desde que a entrada e a saída permaneçam como amplitudes quânticas (não podemos “ler” os <span class="math notranslate nohighlight">\(y_k\)</span> diretamente sem medir, o que destrói a maior parte da informação — mais um eco do Teorema da Não-Clonagem, Capítulo 5).</p>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3>O circuito<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<p>A QFT sobre <span class="math notranslate nohighlight">\(n\)</span> qubits é construída com portas <span class="math notranslate nohighlight">\(H\)</span> e portas de fase controlada <span class="math notranslate nohighlight">\(R_\varphi\)</span> (Capítulo 4, Seção 4.5), seguidas de trocas (<em>swaps</em>) para reverter a ordem dos qubits:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>q0: ──[H]──●───────●──────────────×──
+           │φ=π/2  │              │
+q1: ───────●───────┼──[H]──●──────┼──×
+                    │φ=π/4  │φ=π/2 │  │
+q2: ────────────────●───────●──[H]×──×
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>Implementação<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">controlled_phase</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="n">U_phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi</span><span class="p">)])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">controlled_gate</span><span class="p">(</span><span class="n">U_phase</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">qft_circuit_matrix</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">dim</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">gate_on_qubit</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">@</span> <span class="n">M</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">q</span><span class="p">))</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">controlled_phase</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">@</span> <span class="n">M</span>
+    <span class="c1"># reverter a ordem dos qubits com swaps</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">//</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">i</span>
+        <span class="n">SWAP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim</span><span class="p">):</span>
+            <span class="n">bits</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">b</span><span class="p">))</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+            <span class="n">bits</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">bits</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">bits</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">bits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bits</span><span class="p">))</span>
+            <span class="n">SWAP</span><span class="p">[:,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">SWAP</span><span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">SWAP</span> <span class="o">@</span> <span class="n">M</span>
+    <span class="k">return</span> <span class="n">M</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Confirmando a QFT contra sua definição direta</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">qft_matrix_by_definition</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">F</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">omega</span> <span class="o">**</span> <span class="p">(</span><span class="n">j</span> <span class="o">*</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">F</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">qft_matrix_by_definition</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">qft_circuit_matrix</span><span class="p">(</span><span class="n">n</span><span class="p">)))</span>  <span class="c1"># True</span>
+</pre></div>
+</div>
+<p>O circuito de <span class="math notranslate nohighlight">\(O(n^2)\)</span> portas reproduz exatamente a matriz de <span class="math notranslate nohighlight">\(N\times N=2^n\times2^n\)</span> entradas definida diretamente pela fórmula — construída, nesse caso, com <span class="math notranslate nohighlight">\(O(N^2)\)</span> operações. Para <span class="math notranslate nohighlight">\(n=20\)</span> (<span class="math notranslate nohighlight">\(N\approx10^6\)</span>), essa diferença já é a diferença entre segundos e uma eternidade.</p>
+</div></blockquote>
+<details>
+<summary><strong>Exercícios 7.5</strong></summary>
+<ol class="arabic">
+<li><p>Calcule <code class="docutils literal notranslate"><span class="pre">qft_circuit_matrix(1)</span></code> (QFT de um único qubit) e compare com uma porta que você já conhece do Capítulo 4.</p>
+<details>
+<summary>Resolução</summary>
+<p>Para <span class="math notranslate nohighlight">\(n=1\)</span>, a QFT se reduz exatamente à porta Hadamard <span class="math notranslate nohighlight">\(H\)</span> — não há portas de fase controlada (não há outro qubit para controlar) nem swaps a fazer.</p>
+</details>
+</li>
+<li><p>Aplique <code class="docutils literal notranslate"><span class="pre">qft_circuit_matrix(3)</span></code> ao estado <span class="math notranslate nohighlight">\(|0\rangle^{\otimes3}\)</span>. Que estado você espera obter, sabendo que <span class="math notranslate nohighlight">\(j=0\)</span> na fórmula da QFT torna todas as fases <span class="math notranslate nohighlight">\(e^{2\pi i\cdot0\cdot k/N}\)</span> iguais a 1?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">);</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">qft_circuit_matrix</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>O resultado é a superposição uniforme <span class="math notranslate nohighlight">\(\tfrac{1}{\sqrt8}\sum_k|k\rangle\)</span> — exatamente o mesmo estado que <span class="math notranslate nohighlight">\(H^{\otimes3}|000\rangle\)</span> produziria, já usado repetidamente nas seções anteriores.</p>
+</details>
+</li>
+<li><p>Por que a QFT termina com uma etapa de <em>swaps</em>, revertendo a ordem dos qubits? (Dica: pense em como o circuito, sem os swaps, naturalmente calcula os bits de <span class="math notranslate nohighlight">\(k\)</span> na ordem inversa à convencional.)</p>
+<details>
+<summary>Resolução</summary>
+<p>O circuito, construído dessa forma padrão, produz os bits do índice <span class="math notranslate nohighlight">\(k\)</span> resultante na ordem invertida (o bit mais significativo de <span class="math notranslate nohighlight">\(k\)</span> termina no último qubit do circuito, e vice-versa) — os swaps finais apenas reorganizam os qubits para que a saída siga a mesma convenção de ordenação usada em todo o resto do livro (Capítulo 5, Nota da Seção 5.1).</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="algoritmo-de-shor">
+<h2>7.6 Algoritmo de Shor<a class="headerlink" href="#algoritmo-de-shor" title="Link to this heading">¶</a></h2>
+<p>Chegamos ao algoritmo que, em 1994, mudou a percepção pública sobre o que a computação quântica poderia fazer: o <strong>algoritmo de Shor</strong>, capaz de <strong>fatorar um número inteiro</strong> em tempo polinomial — uma tarefa para a qual não se conhece nenhum algoritmo clássico eficiente, e sobre a qual boa parte da criptografia atual (RSA) depende justamente dessa dificuldade.</p>
+<section id="reducao-de-fatoracao-a-busca-de-periodo">
+<h3>Redução: de fatoração a busca de período<a class="headerlink" href="#reducao-de-fatoracao-a-busca-de-periodo" title="Link to this heading">¶</a></h3>
+<p>A ideia central de Shor não ataca a fatoração diretamente — ela a <strong>reduz</strong> a um problema diferente: encontrar a <strong>ordem</strong> (ou período) <span class="math notranslate nohighlight">\(r\)</span> de um número <span class="math notranslate nohighlight">\(a\)</span> módulo <span class="math notranslate nohighlight">\(N\)</span>, isto é, o menor <span class="math notranslate nohighlight">\(r&gt;0\)</span> tal que</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+a^r \equiv 1 \pmod N.
+\]</div>
+</div>
+<p>Uma vez encontrado <span class="math notranslate nohighlight">\(r\)</span> (par, e com <span class="math notranslate nohighlight">\(a^{r/2}\not\equiv-1\pmod N\)</span> — condições satisfeitas com alta probabilidade para <span class="math notranslate nohighlight">\(a\)</span> escolhido aleatoriamente), os fatores de <span class="math notranslate nohighlight">\(N\)</span> são obtidos <strong>classicamente</strong>, por um simples cálculo de máximo divisor comum:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\gcd\!\left(a^{r/2}-1,\,N\right) \quad \text{e} \quad \gcd\!\left(a^{r/2}+1,\,N\right).
+\]</div>
+</div>
+<blockquote>
+<div><p><strong>Nota</strong></p>
+<p>Encontrar a ordem <span class="math notranslate nohighlight">\(r\)</span> é, ele mesmo, um problema classicamente difícil (não se conhece algoritmo clássico eficiente para isso). É exatamente aqui — e apenas aqui — que a computação quântica entra: encontrar <span class="math notranslate nohighlight">\(r\)</span> <strong>rapidamente</strong>, usando a QFT.</p>
+</div></blockquote>
+</section>
+<section id="a-parte-quantica-estimativa-de-fase">
+<h3>A parte quântica: estimativa de fase<a class="headerlink" href="#a-parte-quantica-estimativa-de-fase" title="Link to this heading">¶</a></h3>
+<p>O algoritmo prepara uma superposição uniforme sobre um registrador <span class="math notranslate nohighlight">\(x\)</span> de <span class="math notranslate nohighlight">\(n\)</span> qubits (com <span class="math notranslate nohighlight">\(2^n\geq N^2\)</span>, tipicamente) e usa um oráculo de <strong>exponenciação modular</strong> para calcular <span class="math notranslate nohighlight">\(a^x\bmod N\)</span> em um segundo registrador:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{\sqrt{2^n}}\sum_x |x\rangle|a^x\bmod N\rangle.
+\]</div>
+</div>
+<p>Essa função <span class="math notranslate nohighlight">\(x\mapsto a^x\bmod N\)</span> é <strong>periódica</strong>, com período exatamente <span class="math notranslate nohighlight">\(r\)</span>. “Medir” o segundo registrador (mesmo sem olhar o resultado explicitamente) colapsa o primeiro registrador em uma superposição uniforme apenas sobre os valores de <span class="math notranslate nohighlight">\(x\)</span> compatíveis com o resultado observado — que formam, por construção, um <strong>pente periódico</strong> de período <span class="math notranslate nohighlight">\(r\)</span>:</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[
+\frac{1}{\sqrt{2^n/r}}\sum_{k} |x_0 + kr\rangle.
+\]</div>
+</div>
+<p>Aplicando a <strong>QFT</strong> (Seção 7.5) a esse pente, a interferência entre os termos concentra quase toda a probabilidade em múltiplos inteiros de <span class="math notranslate nohighlight">\(2^n/r\)</span> — e medir o resultado revela <span class="math notranslate nohighlight">\(r\)</span> (via fração continuada, um algoritmo puramente clássico que converte a fração medida <span class="math notranslate nohighlight">\(k/2^n\)</span> em uma aproximação racional com denominador pequeno, que é exatamente <span class="math notranslate nohighlight">\(r\)</span>).</p>
+<blockquote>
+<div><p><strong>Importante</strong></p>
+<p>A QFT é, literalmente, o motor por trás dessa etapa: sem ela — sem a capacidade de transformar informação de período em posições concentradas de probabilidade —, não haveria como extrair <span class="math notranslate nohighlight">\(r\)</span> de forma eficiente. É por isso que a Seção 7.5 precisava vir antes desta.</p>
+</div></blockquote>
+</section>
+<section id="ilustrando-a-busca-de-periodo">
+<h3>Ilustrando a busca de período<a class="headerlink" href="#ilustrando-a-busca-de-periodo" title="Link to this heading">¶</a></h3>
+<p>Implementar o oráculo completo de exponenciação modular está fora do escopo deste livro (exige, na prática, um circuito aritmético substancial). Mas podemos ilustrar exatamente o mecanismo de interferência que faz o algoritmo funcionar, construindo diretamente o “pente periódico” pós-medição e aplicando a QFT já implementada na Seção 7.5.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">N_factor</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">n_bits</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">n_bits</span>  <span class="c1"># 16</span>
+
+<span class="n">powers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">pow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">N_factor</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Q</span><span class="p">)]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">powers</span><span class="p">)</span>  <span class="c1"># [1, 7, 4, 13, 1, 7, 4, 13, 1, 7, 4, 13, 1, 7, 4, 13]</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span> <span class="k">if</span> <span class="n">powers</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;período r =&quot;</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>   <span class="c1"># 4</span>
+
+<span class="c1"># simula o colapso do primeiro registrador após &quot;medir&quot; a^x mod N = powers[1]</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="n">powers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">xs_compativeis</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span> <span class="k">if</span> <span class="n">powers</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="n">y0</span><span class="p">]</span>   <span class="c1"># [1, 5, 9, 13]</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs_compativeis</span><span class="p">:</span>
+    <span class="n">state</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="n">transformado</span> <span class="o">=</span> <span class="n">qft_circuit_matrix</span><span class="p">(</span><span class="n">n_bits</span><span class="p">)</span> <span class="o">@</span> <span class="n">state</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">transformado</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="n">picos</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span> <span class="k">if</span> <span class="n">probs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1e-6</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;picos após a QFT:&quot;</span><span class="p">,</span> <span class="n">picos</span><span class="p">)</span>   <span class="c1"># [0, 4, 8, 12]</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p><strong>💡 Exemplo — Da medição aos fatores de 15</strong></p>
+<p>Continuando o código acima, os picos observados (<span class="math notranslate nohighlight">\(0,4,8,12\)</span>) são exatamente os múltiplos de <span class="math notranslate nohighlight">\(Q/r=16/4=4\)</span> — confirmando, numericamente, a previsão teórica da subseção anterior. Suponha que a medição retorne o valor <span class="math notranslate nohighlight">\(4\)</span>. O pós-processamento <strong>clássico</strong> recupera <span class="math notranslate nohighlight">\(r\)</span> e, em seguida, os fatores:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">gcd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fractions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fraction</span>
+
+<span class="n">medido</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">r_estimado</span> <span class="o">=</span> <span class="n">Fraction</span><span class="p">(</span><span class="n">medido</span><span class="p">,</span> <span class="n">Q</span><span class="p">)</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">(</span><span class="n">N_factor</span><span class="p">)</span><span class="o">.</span><span class="n">denominator</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;r estimado:&quot;</span><span class="p">,</span> <span class="n">r_estimado</span><span class="p">)</span>  <span class="c1"># 4</span>
+
+<span class="n">fator1</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">a</span> <span class="o">**</span> <span class="p">(</span><span class="n">r_estimado</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N_factor</span><span class="p">)</span>
+<span class="n">fator2</span> <span class="o">=</span> <span class="n">gcd</span><span class="p">(</span><span class="n">a</span> <span class="o">**</span> <span class="p">(</span><span class="n">r_estimado</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N_factor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fatores:&quot;</span><span class="p">,</span> <span class="n">fator1</span><span class="p">,</span> <span class="n">fator2</span><span class="p">)</span>  <span class="c1"># 3 5</span>
+</pre></div>
+</div>
+<p>A partir de uma única medição quântica (simulada aqui de forma determinística, para clareza — na prática o resultado seria aleatório entre os picos <span class="math notranslate nohighlight">\(0,4,8,12\)</span>) e um pós-processamento clássico simples, recuperamos <span class="math notranslate nohighlight">\(15 = 3\times5\)</span>.</p>
+</div></blockquote>
+</section>
+<section id="complexidade">
+<h3>Complexidade<a class="headerlink" href="#complexidade" title="Link to this heading">¶</a></h3>
+<p>O algoritmo completo de Shor — incluindo a exponenciação modular quântica — resolve a fatoração de um número de <span class="math notranslate nohighlight">\(n\)</span> bits com aproximadamente <span class="math notranslate nohighlight">\(O(n^3)\)</span> operações quânticas, contra o melhor algoritmo clássico conhecido (o <em>general number field sieve</em>), que é <strong>sub-exponencial</strong>, mas ainda assim cresce muito mais rápido que qualquer polinômio em <span class="math notranslate nohighlight">\(n\)</span>. Essa é a vantagem exponencial (conjecturada, no sentido da Seção 7.1) que torna o algoritmo de Shor a ameaça mais conhecida à criptografia RSA — e uma das principais motivações para o desenvolvimento de hardware quântico em larga escala.</p>
+<details>
+<summary><strong>Exercícios 7.6</strong></summary>
+<ol class="arabic">
+<li><p>Repita o exemplo desta seção com <span class="math notranslate nohighlight">\(a=2\)</span> em vez de <span class="math notranslate nohighlight">\(a=7\)</span> (mesmo <span class="math notranslate nohighlight">\(N=15\)</span>). Qual é o novo período <span class="math notranslate nohighlight">\(r\)</span>? (Dica: calcule <code class="docutils literal notranslate"><span class="pre">[pow(2,</span> <span class="pre">x,</span> <span class="pre">15)</span> <span class="pre">for</span> <span class="pre">x</span> <span class="pre">in</span> <span class="pre">range(16)]</span></code>.)</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">([</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">16</span><span class="p">)])</span>
+<span class="c1"># [1, 2, 4, 8, 1, 2, 4, 8, ...]</span>
+</pre></div>
+</div>
+<p>O período é <span class="math notranslate nohighlight">\(r=4\)</span> novamente (coincidentemente o mesmo desta seção, mas por uma razão diferente — a ordem de 2 módulo 15 também é 4).</p>
+</details>
+</li>
+<li><p>Usando o <span class="math notranslate nohighlight">\(r=4\)</span> do exercício anterior e <span class="math notranslate nohighlight">\(a=2\)</span>, calcule os fatores de <span class="math notranslate nohighlight">\(15\)</span> pela mesma fórmula de <span class="math notranslate nohighlight">\(\gcd\)</span>. Eles ainda são <span class="math notranslate nohighlight">\(3\)</span> e <span class="math notranslate nohighlight">\(5\)</span>?</p>
+<details>
+<summary>Resolução</summary>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">gcd</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gcd</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">gcd</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>  <span class="c1"># 3, 5</span>
+</pre></div>
+</div>
+<p>Sim — como esperado, já que <span class="math notranslate nohighlight">\(15=3\times5\)</span> tem uma única fatoração em primos, qualquer escolha válida de <span class="math notranslate nohighlight">\(a\)</span> (com <span class="math notranslate nohighlight">\(r\)</span> par e <span class="math notranslate nohighlight">\(a^{r/2}\not\equiv-1\)</span>) leva aos mesmos fatores.</p>
+</details>
+</li>
+<li><p>Por que o algoritmo de Shor exige que <span class="math notranslate nohighlight">\(2^n\geq N^2\)</span> (e não apenas <span class="math notranslate nohighlight">\(2^n\geq N\)</span>) para o registrador de <span class="math notranslate nohighlight">\(x\)</span>? (Dica: pense na precisão necessária para que a fração continuada, na etapa de pós-processamento clássico, identifique <span class="math notranslate nohighlight">\(r\)</span> sem ambiguidade.)</p>
+<details>
+<summary>Resolução</summary>
+<p>A etapa de fração continuada precisa de precisão suficiente na fase medida para reconstruir <span class="math notranslate nohighlight">\(r\)</span> sem erro, e essa precisão precisa ser boa o bastante para distinguir frações com denominador até <span class="math notranslate nohighlight">\(N\)</span> — o que exige, por resultados de teoria dos números sobre aproximação por fração continuada, que o registrador tenha uma resolução da ordem de <span class="math notranslate nohighlight">\(N^2\)</span> (isto é, <span class="math notranslate nohighlight">\(2^n\geq N^2\)</span>) para garantir que a fração medida esteja suficientemente próxima de <span class="math notranslate nohighlight">\(k/r\)</span> e a reconstrua unicamente.</p>
+</details>
+</li>
+</ol>
+</details>
+</section>
+</section>
+<hr class="docutils" />
+<section id="juntando-tudo">
+<h2>7.7 Juntando Tudo<a class="headerlink" href="#juntando-tudo" title="Link to this heading">¶</a></h2>
+<p>Vamos revisar o caminho percorrido neste capítulo:</p>
+<ul class="simple">
+<li><p>Situamos os algoritmos quânticos dentro da <strong>teoria da computação</strong> clássica (classes <span class="math notranslate nohighlight">\(\textbf{P}\)</span>, <span class="math notranslate nohighlight">\(\textbf{NP}\)</span>, <span class="math notranslate nohighlight">\(\textbf{BQP}\)</span>) e do <strong>modelo de oráculo</strong>, no qual a maioria dos algoritmos deste capítulo é formulada.</p></li>
+<li><p>Estabelecemos vocabulário de <strong>análise de algoritmos</strong> — complexidade de consulta, notação <span class="math notranslate nohighlight">\(O(\cdot)\)</span> — e antecipamos as vantagens (exponencial, quadrática) que cada algoritmo demonstraria.</p></li>
+<li><p><strong>Deutsch–Jozsa</strong>: o primeiro algoritmo a separar computação clássica e quântica, usando interferência para decidir se uma função é constante ou balanceada com uma única consulta.</p></li>
+<li><p><strong>Grover</strong>: busca não estruturada com vantagem quadrática, via oráculo de fase e amplificação de amplitude (rotação geométrica repetida).</p></li>
+<li><p><strong>QFT</strong>: o análogo quântico da Transformada de Fourier, implementável com <span class="math notranslate nohighlight">\(O(n^2)\)</span> portas, e ingrediente essencial para estimativa de fase.</p></li>
+<li><p><strong>Shor</strong>: reduzimos a fatoração de inteiros à busca de período, resolvida eficientemente pela QFT, seguida de pós-processamento clássico (fração continuada e <span class="math notranslate nohighlight">\(\gcd\)</span>) para extrair os fatores.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Teoria da Computação   →  P, NP, BQP, modelo de oráculo
+Análise de Algoritmos  →  complexidade de consulta, O(·), tipos de vantagem
+Deutsch-Jozsa          →  interferência total  →  1 consulta, vantagem exponencial (oráculo)
+Grover                 →  amplificação de amplitude  →  O(√N), vantagem quadrática
+QFT                    →  análogo quântico da DFT  →  O(n²) portas
+Shor                   →  fatoração → busca de período → QFT → gcd  →  vantagem exponencial
+</pre></div>
+</div>
+<p>Com Deutsch–Jozsa, Grover, a QFT e Shor estabelecidos, cobrimos os algoritmos “canônicos” da computação quântica orientada a circuitos. O próximo capítulo muda de direção: em vez de algoritmos com garantias exatas rodando em computadores quânticos ideais, exploramos como usar computadores quânticos <strong>reais e ruidosos</strong> de hoje — através de algoritmos variacionais, otimização, e as primeiras conexões entre computação quântica e aprendizado de máquina.</p>
+</section>
+<hr class="docutils" />
+<section id="referencias">
+<h2>Referências<a class="headerlink" href="#referencias" title="Link to this heading">¶</a></h2>
+<p>[1] Nielsen, M. A., &amp; Chuang, I. L. (2010). <em>Quantum Computation and Quantum Information</em> (10th Anniversary ed.). Cambridge University Press.</p>
+<p>[2] Deutsch, D., &amp; Jozsa, R. (1992). Rapid Solution of Problems by Quantum Computation. <em>Proceedings of the Royal Society of London A</em>, 439(1907), 553–558.</p>
+<p>[3] Grover, L. K. (1996). A Fast Quantum Mechanical Algorithm for Database Search. <em>Proceedings of the 28th Annual ACM Symposium on Theory of Computing</em>, 212–219.</p>
+<p>[4] Shor, P. W. (1997). Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer. <em>SIAM Journal on Computing</em>, 26(5), 1484–1509.</p>
+<p>[5] Nielsen, M. A. (2010). <em>Quantum Computation and Quantum Information</em>, Capítulo 5 (Transformada Quântica de Fourier e suas aplicações).</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../../en/index.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Sumário</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="chapter_6_python_quantum_computing.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Capítulo 6 — Programação em Python para Computação Quântica</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2026, Leonardo Alves Santana
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Capítulo 7 — Algoritmos Quânticos</a><ul>
+<li><a class="reference internal" href="#teoria-da-computacao">7.1 Teoria da Computação</a><ul>
+<li><a class="reference internal" href="#problemas-de-decisao-e-classes-de-complexidade">Problemas de decisão e classes de complexidade</a></li>
+<li><a class="reference internal" href="#o-modelo-de-oraculo">O modelo de oráculo</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#analise-de-algoritmos">7.2 Análise de Algoritmos</a></li>
+<li><a class="reference internal" href="#deutschjozsa">7.3 Deutsch–Jozsa</a><ul>
+<li><a class="reference internal" href="#o-problema">O problema</a></li>
+<li><a class="reference internal" href="#o-circuito">O circuito</a></li>
+<li><a class="reference internal" href="#por-que-funciona">Por que funciona</a></li>
+<li><a class="reference internal" href="#implementacao">Implementação</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#algoritmo-de-grover">7.4 Algoritmo de Grover</a><ul>
+<li><a class="reference internal" href="#id1">O problema</a></li>
+<li><a class="reference internal" href="#as-duas-operacoes">As duas operações</a></li>
+<li><a class="reference internal" href="#interpretacao-geometrica">Interpretação geométrica</a></li>
+<li><a class="reference internal" href="#id2">Implementação</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transformada-quantica-de-fourier">7.5 Transformada Quântica de Fourier</a><ul>
+<li><a class="reference internal" href="#definicao">Definição</a></li>
+<li><a class="reference internal" href="#id3">O circuito</a></li>
+<li><a class="reference internal" href="#id4">Implementação</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#algoritmo-de-shor">7.6 Algoritmo de Shor</a><ul>
+<li><a class="reference internal" href="#reducao-de-fatoracao-a-busca-de-periodo">Redução: de fatoração a busca de período</a></li>
+<li><a class="reference internal" href="#a-parte-quantica-estimativa-de-fase">A parte quântica: estimativa de fase</a></li>
+<li><a class="reference internal" href="#ilustrando-a-busca-de-periodo">Ilustrando a busca de período</a></li>
+<li><a class="reference internal" href="#complexidade">Complexidade</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#juntando-tudo">7.7 Juntando Tudo</a></li>
+<li><a class="reference internal" href="#referencias">Referências</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    </body>
+</html>
